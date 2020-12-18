@@ -46,7 +46,7 @@ else
 }
 
 # Try to calculate semantic version based on GitFlow branching
-if ($CurrentBranch -match "master")
+if ($CurrentBranch -match "main")
 {
 	$SemVersion = [string]$MajorVersion + "." + [string]$MinorVersion + "." + [string]$PatchVersion
 }
