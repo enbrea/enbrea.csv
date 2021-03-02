@@ -5,7 +5,7 @@
     <IsPackable>false</IsPackable>
     <Authors>STÜBER SYSTEMS GmbH</Authors>
     <Company>STÜBER SYSTEMS GmbH</Company>
-    <Copyright>© 2020 STÜBER SYSTEMS GmbH</Copyright>
+    <Copyright>© 2021 STÜBER SYSTEMS GmbH</Copyright>
     <Product>ENBREA CSV</Product>
     <Description>Benchmarks for the ENBREA CSV library</Description>
     <Version>0.1.0</Version>

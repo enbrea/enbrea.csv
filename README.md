@@ -1,3 +1,6 @@
+[![NuGet Gallery](https://img.shields.io/badge/NuGet%20Gallery-enbrea.csv-blue.svg)](https://www.nuget.org/packages/Enbrea.Csv/)
+![GitHub](https://img.shields.io/github/license/stuebersystems/enbrea.csv)
+
 # ENBREA CSV
 
 A high performance .NET Core library for parsing and building [CSV](https://tools.ietf.org/html/rfc4180) strings, streams and files. 
