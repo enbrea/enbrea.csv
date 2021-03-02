@@ -1,8 +1,8 @@
-﻿#region ENBREA.CSV - Copyright (C) 2020 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2020 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
@@ -24,7 +24,7 @@ namespace Enbrea.Csv
     /// </remarks>
     public class CsvWriter : IDisposable
     {
-        private readonly char[] _charsToBeQuoted = new char[] { '\"', '\n', '\r' };
+        private readonly char[] _charsToBeQuoted = new char[] { '\n', '\r' };
         private TextWriter _textWriter;
         private bool _wasPreviousToken = false;
 
@@ -195,15 +195,16 @@ namespace Enbrea.Csv
 
             if (!string.IsNullOrEmpty(token))
             {
-                if (token.IndexOfAny(_charsToBeQuoted) != -1)
+                if (token.IndexOfAny(_charsToBeQuoted) != -1 || token.IndexOf(Configuration.Quote) != -1)
                 {
-                    _textWriter.Write("\"");
+                    _textWriter.Write(Configuration.Quote);
 
                     foreach (char c in token)
                     {
-                        if (c == '"')
+                        if (c == Configuration.Quote)
                         {
-                            _textWriter.Write("\"\"");
+                            _textWriter.Write(Configuration.Quote);
+                            _textWriter.Write(Configuration.Quote);
                         }
                         else
                         {
@@ -211,13 +212,13 @@ namespace Enbrea.Csv
                         }
                     }
 
-                    _textWriter.Write("\"");
+                    _textWriter.Write(Configuration.Quote);
                 }
                 else if ((Configuration.ForceQuotes) || (token.Contains(Configuration.Separator)))
                 {
-                    _textWriter.Write("\"");
+                    _textWriter.Write(Configuration.Quote);
                     _textWriter.Write(token);
-                    _textWriter.Write("\"");
+                    _textWriter.Write(Configuration.Quote);
                 }
                 else
                 {
@@ -228,7 +229,8 @@ namespace Enbrea.Csv
             {
                 if (Configuration.ForceQuotes)
                 {
-                    _textWriter.Write("\"\"");
+                    _textWriter.Write(Configuration.Quote);
+                    _textWriter.Write(Configuration.Quote);
                 }
             }
 
@@ -249,15 +251,16 @@ namespace Enbrea.Csv
 
             if (!string.IsNullOrEmpty(token))
             {
-                if (token.IndexOfAny(_charsToBeQuoted) != -1)
+                if (token.IndexOfAny(_charsToBeQuoted) != -1 || token.IndexOf(Configuration.Quote) != -1)
                 {
-                    await _textWriter.WriteAsync("\"");
+                    await _textWriter.WriteAsync(Configuration.Quote);
 
                     foreach (char c in token)
                     {
-                        if (c == '"')
+                        if (c == Configuration.Quote)
                         {
-                            await _textWriter.WriteAsync("\"\"");
+                            await _textWriter.WriteAsync(Configuration.Quote);
+                            await _textWriter.WriteAsync(Configuration.Quote);
                         }
                         else
                         {
@@ -265,13 +268,13 @@ namespace Enbrea.Csv
                         }
                     }
 
-                    await _textWriter.WriteAsync("\"");
+                    await _textWriter.WriteAsync(Configuration.Quote);
                 }
                 else if ((Configuration.ForceQuotes) || (token.Contains(Configuration.Separator)))
                 {
-                    await _textWriter.WriteAsync("\"");
+                    await _textWriter.WriteAsync(Configuration.Quote);
                     await _textWriter.WriteAsync(token);
-                    await _textWriter.WriteAsync("\"");
+                    await _textWriter.WriteAsync(Configuration.Quote);
                 }
                 else
                 {
@@ -282,7 +285,8 @@ namespace Enbrea.Csv
             {
                 if (Configuration.ForceQuotes)
                 {
-                    await _textWriter.WriteAsync("\"\"");
+                    await _textWriter.WriteAsync(Configuration.Quote);
+                    await _textWriter.WriteAsync(Configuration.Quote);
                 }
             }
 

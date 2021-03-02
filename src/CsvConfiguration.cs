@@ -1,8 +1,8 @@
-﻿#region ENBREA.CSV - Copyright (C) 2020 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2020 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
@@ -36,6 +36,11 @@ namespace Enbrea.Csv
         /// Specifies wether quotes should be ignored and handled as normal characters
         /// </summary>
         public bool IgnoreQuotes { get; set; } = false;
+
+        /// <summary>
+        /// Specifies the charactor for quoting values 
+        /// </summary>
+        public char Quote { get; set; } = '"';
 
         /// <summary>
         /// Specifies the charactor for seperating values

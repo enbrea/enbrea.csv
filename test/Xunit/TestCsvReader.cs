@@ -1,8 +1,8 @@
-﻿#region ENBREA.CSV - Copyright (C) 2020 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2020 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
@@ -148,13 +148,14 @@ namespace Enbrea.Csv.Tests
         }
 
         [Fact]
-        public async Task SupportQuotedFields()
+        public async Task SupportNonStandardQuotedFields()
         {
             var csvData =
-                "\"a a a\";\"b b b\";\"c c c\"" + Environment.NewLine +
-                "\"a\"\"a\"\"a\";\"b;b;b\";\"c c c\"";
+                "%a a a%;%b b b%;%c c c%" + Environment.NewLine +
+                "%a%%a%%a%;%b;b;b%;%c c c%";
 
             using var csvReader = new CsvReader(csvData);
+            csvReader.Configuration.Quote = '%';
 
             Assert.NotNull(csvReader);
 
@@ -170,7 +171,7 @@ namespace Enbrea.Csv.Tests
             await csvReader.ReadLineAsync(fields);
 
             Assert.Equal(3, fields.Count);
-            Assert.Equal("a\"a\"a", fields[0]);
+            Assert.Equal("a%a%a", fields[0]);
             Assert.Equal("b;b;b", fields[1]);
             Assert.Equal("c c c", fields[2]);
         }
@@ -205,6 +206,33 @@ namespace Enbrea.Csv.Tests
             Assert.Equal("aaa2;bbb2;ccc2", csvLine);
         }
 
+        [Fact]
+        public async Task SupportQuotedFields()
+        {
+            var csvData =
+                "\"a a a\";\"b b b\";\"c c c\"" + Environment.NewLine +
+                "\"a\"\"a\"\"a\";\"b;b;b\";\"c c c\"";
+
+            using var csvReader = new CsvReader(csvData);
+
+            Assert.NotNull(csvReader);
+
+            var fields = new List<string>();
+
+            await csvReader.ReadLineAsync(fields);
+
+            Assert.Equal(3, fields.Count);
+            Assert.Equal("a a a", fields[0]);
+            Assert.Equal("b b b", fields[1]);
+            Assert.Equal("c c c", fields[2]);
+
+            await csvReader.ReadLineAsync(fields);
+
+            Assert.Equal(3, fields.Count);
+            Assert.Equal("a\"a\"a", fields[0]);
+            Assert.Equal("b;b;b", fields[1]);
+            Assert.Equal("c c c", fields[2]);
+        }
         [Fact]
         public async Task SupportStrangeCases()
         {
