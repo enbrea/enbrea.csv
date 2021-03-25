@@ -118,7 +118,14 @@ namespace Enbrea.Csv
         {
             get
             {
-                return _csvValues[i];
+                if (i < _csvValues.Count)
+                {
+                    return _csvValues[i];
+                }
+                else
+                {
+                    throw new CsvValueNotFoundException($"CSV value at index {i} not found");
+                }
             }
         }
 
@@ -134,11 +141,18 @@ namespace Enbrea.Csv
                 var i = Headers.IndexOf(x => x == name);
                 if (i != -1)
                 {
-                    return _csvValues[i];
+                    if (i < _csvValues.Count)
+                    {
+                        return _csvValues[i];
+                    }
+                    else
+                    {
+                        throw new CsvValueNotFoundException($"CSV value for \"{name}\" not found");
+                    }
                 }
                 else
                 {
-                    throw new CsvHeaderNotFoundException($"CSV Header \"{name}\" not found"); 
+                    throw new CsvHeaderNotFoundException($"CSV header \"{name}\" not found"); 
                 }
             }
         }
