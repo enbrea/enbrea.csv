@@ -30,10 +30,10 @@ namespace Enbrea.Csv.Tests
                 "a1;b1;c1" + Environment.NewLine +
                 "a2;b2;c2";
 
-            var sb = new StringBuilder(); 
+            var sb = new StringBuilder();
 
             using var csvWriter = new CsvWriter(sb);
-            
+
             var csvTableWriter = new CsvTableWriter(csvWriter);
 
             await csvTableWriter.WriteHeadersAsync("A", "B", "C");
@@ -89,7 +89,7 @@ namespace Enbrea.Csv.Tests
         }
 
         [Fact]
-        public async Task TestTypedValues()
+        public async Task TestStronglyTypedValues()
         {
             var csvData =
                 "A;B;C;D" + Environment.NewLine +
@@ -130,6 +130,35 @@ namespace Enbrea.Csv.Tests
             Assert.True(csvTableWriter.TrySetValue("D", new DateTime(1971, 7, 31)));
 
             await csvTableWriter.WriteAsync();
+
+            Assert.Equal(csvData, sb.ToString());
+        }
+
+        [Fact]
+        public async Task TestStronglyTypedWriter()
+        {
+            var csvData =
+                "A;B;C;D" + Environment.NewLine +
+                "22;Text;true;01.01.2010" + Environment.NewLine +
+                "-31;A long text;false;20.01.2050" + Environment.NewLine +
+                "55;\"A text with ;\";;31.07.1971";
+
+            var sb = new StringBuilder();
+
+            using var csvWriter = new CsvWriter(sb);
+
+            var csvTableWriter = new CsvTableWriter(csvWriter);
+
+            csvTableWriter.SetFormats<DateTime>("dd.MM.yyyy");
+            csvTableWriter.SetTrueFalseString<bool>("true", "false");
+
+            await csvTableWriter.WriteHeadersAsync<SampleObject>(x => new { x.A, x.B, x.C, x.D });
+
+            Assert.Equal(4, csvTableWriter.Headers.Count);
+
+            await csvTableWriter.WriteAsync(new SampleObject() { A = 22, B = "Text", C = true, D = new DateTime(2010, 1, 1) });
+            await csvTableWriter.WriteAsync(new SampleObject() { A = -31, B = "A long text", C = false, D = new DateTime(2050, 1, 20) });
+            await csvTableWriter.WriteAsync(new SampleObject() { A = 55, B = "A text with ;", C = null, D = new DateTime(1971, 7, 31) });
 
             Assert.Equal(csvData, sb.ToString());
         }

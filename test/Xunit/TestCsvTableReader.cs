@@ -56,6 +56,72 @@ namespace Enbrea.Csv.Tests
         }
 
         [Fact]
+        public async Task TestEntityReader()
+        {
+            var csvData =
+                "A;B;C;D" + Environment.NewLine +
+                "22;Text;true;01.01.2010" + Environment.NewLine +
+                "-31;A long text;false;20.01.2050" + Environment.NewLine +
+                "55;\"A text with ;\";;31.07.1971";
+
+            using var csvReader = new CsvReader(csvData);
+
+            var csvTableReader = new CsvTableReader(csvReader);
+
+            csvTableReader.SetFormats<DateTime>("dd.MM.yyyy");
+            csvTableReader.SetTrueFalseString<bool>("true", "false");
+
+            Assert.NotNull(csvTableReader);
+
+            await csvTableReader.ReadHeadersAsync();
+            Assert.Equal(4, csvTableReader.Headers.Count);
+            Assert.Equal("A", csvTableReader.Headers[0]);
+            Assert.Equal("B", csvTableReader.Headers[1]);
+            Assert.Equal("C", csvTableReader.Headers[2]);
+            Assert.Equal("D", csvTableReader.Headers[3]);
+
+            await csvTableReader.ReadAsync();
+
+            Assert.Equal(new SampleObject() { A = 22, B = "Text", C = true, D = new DateTime(2010, 1, 1) }, csvTableReader.Get<SampleObject>());
+
+            await csvTableReader.ReadAsync();
+
+            Assert.Equal(new SampleObject() { A = -31, B = "A long text", C = false, D = new DateTime(2050, 1, 20) }, csvTableReader.Get<SampleObject>());
+
+            await csvTableReader.ReadAsync();
+
+            Assert.Equal(new SampleObject() { A = 55, B = "A text with ;", C = null, D = new DateTime(1971, 7, 31) }, csvTableReader.Get<SampleObject>());
+        }
+
+        [Fact]
+        public async Task TestEntityReaderWithAlternativeHeaders()
+        {
+            var csvData =
+                "A;B1;C2;D" + Environment.NewLine +
+                "22;Text;true;01.01.2010";
+
+            using var csvReader = new CsvReader(csvData);
+
+            var csvTableReader = new CsvTableReader(csvReader);
+
+            csvTableReader.SetFormats<DateTime>("dd.MM.yyyy");
+            csvTableReader.SetTrueFalseString<bool>("true", "false");
+
+            Assert.NotNull(csvTableReader);
+
+            await csvTableReader.ReadHeadersAsync();
+            Assert.Equal(4, csvTableReader.Headers.Count);
+            Assert.Equal("A", csvTableReader.Headers[0]);
+            Assert.Equal("B1", csvTableReader.Headers[1]);
+            Assert.Equal("C2", csvTableReader.Headers[2]);
+            Assert.Equal("D", csvTableReader.Headers[3]);
+
+            await csvTableReader.ReadAsync();
+
+            Assert.Equal(new SampleObject() { A = 22, B = "Text", C = true, D = new DateTime(2010, 1, 1) }, csvTableReader.Get<SampleObject>());
+        }
+
+        [Fact]
         public async Task TestJsonValues()
         {
             var csvData =
@@ -128,7 +194,6 @@ namespace Enbrea.Csv.Tests
             Assert.False(csvTableReader.TryGetValue("D", out string v8));
             Assert.Null(v8);
         }
-
         [Fact]
         public async Task TestTypedValues()
         {

@@ -43,6 +43,18 @@ namespace Enbrea.Csv
         {
             csvLineTableWriter.Write((IEnumerable<object>)values);
         }
+
+        /// <summary>
+        /// Writes a strongly typed csv object directly to the csv line.
+        /// </summary>
+        /// <typeparam name="TRecord">The csv object type</typeparam>
+        /// <param name="csvLineTableWriter">The <see cref="CsvLineTableWriter"/></param>
+        /// <param name="entity">The csv object</param>
+        public static void WriteEntity<TEntity>(this CsvLineTableWriter csvLineTableWriter, TEntity entity)
+        {
+            csvLineTableWriter.SetValues(entity);
+            csvLineTableWriter.Write();
+        }
     }
 }
 

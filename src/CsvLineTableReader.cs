@@ -144,6 +144,39 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
+        /// Creates a new strongly types csv opbject and tries to assign all values from the current csv record. 
+        /// </summary>
+        /// <returns>Pointer to the newly crfeated strongly typed csv object instance</returns>
+        public TEntity GetEntity<TEntity>()
+        {
+            var record = Activator.CreateInstance<TEntity>();
+            GetEntity(record);
+            return record;
+        }
+
+        /// <summary>
+        /// Tries to assign all values from the current csv record to the strongly types csv object. 
+        /// </summary>
+        /// <param name="entity">Pointer to the strongly typed csv object instance</param>
+        /// <returns>Number of assigned values</returns>
+        public int GetEntity<TEntity>(TEntity entity)
+        {
+            int c = 0;
+            foreach (var header in Headers)
+            {
+                if (CsvClassMapperResolverFactory.GetResolver().GetMapper<TEntity>().ContainsValue(header))
+                {
+                    if (TryGetValue(CsvClassMapperResolverFactory.GetResolver().GetMapper<TEntity>().GetValueType(header), header, out var value))
+                    {
+                        CsvClassMapperResolverFactory.GetResolver().GetMapper<TEntity>().SetValue(entity, header, value);
+                        c++;
+                    }
+                }
+            }
+            return c;
+        }
+
+        /// <summary>
         /// Reads the value of the current csv record at the posiiton of the specified header name. 
         /// </summary>
         /// <param name="name">Name of a header</param>
@@ -250,7 +283,6 @@ namespace Enbrea.Csv
         {
             return converter.FromString(this[index]);
         }
-
         /// <summary>
         /// Parses a CSV text line and stores the values
         /// </summary>
@@ -337,6 +369,24 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
+        /// Tries to read the typed value of the current csv record at the posiiton of the specified header name. 
+        /// </summary>
+        /// <param name="type">Type of value</param>
+        /// <param name="name">Name of a header</param>
+        /// <param name="value">If position within the cuurent csv record was found, contains the value. If not contains null</param>
+        /// <returns>true if position within the cuurent csv record was found; otherwise, false.</returns>
+        public bool TryGetValue(Type type, string name, out object value)
+        {
+            var i = Headers.IndexOf(x => x.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            if (i != -1)
+            {
+                return TryGetValue(type, i, out value);
+            }
+            value = default;
+            return false;
+        }
+
+        /// <summary>
         /// Tries to read the value of the current csv record at the specified index. 
         /// </summary>
         /// <param name="index">Index within the current csv record</param>
@@ -365,6 +415,24 @@ namespace Enbrea.Csv
             if (Enumerable.Range(0, _csvValues.Count).Contains(index))
             {
                 value = GetValue<T>(index);
+                return true;
+            }
+            value = default;
+            return false;
+        }
+
+        /// <summary>
+        /// Tries to read the typed value of the current csv record at the specified index. 
+        /// </summary>
+        /// <param name="type">Type of value</param>
+        /// <param name="index">Index within the current csv record</param>
+        /// <param name="value">If position within the current csv record was found, contains the value. If not contains null</param>
+        /// <returns>true if position within the current csv record was found; otherwise, false.</returns>
+        public bool TryGetValue(Type type, int index, out object value)
+        {
+            if (Enumerable.Range(0, _csvValues.Count).Contains(index))
+            {
+                value = GetValue(type, index);
                 return true;
             }
             value = default;

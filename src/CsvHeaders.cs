@@ -35,18 +35,17 @@ namespace Enbrea.Csv
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvHeaders"/> class.
         /// </summary>
-        public CsvHeaders() : this(new List<string>())
+        /// <param name="names">List of header names</param>
+        public CsvHeaders(params string[] names) : this(names.ToList())
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvHeaders"/> class.
         /// </summary>
-        /// <param name="names">List of header names</param>
-        public CsvHeaders(params string[] names) : this(names.ToList())
+        internal CsvHeaders() : this(new List<string>())
         {
         }
-
         /// <summary>
         /// Number of headers 
         /// </summary>
@@ -70,9 +69,9 @@ namespace Enbrea.Csv
         /// </summary>
         /// <param name="match">The delegate that defines the conditions to search for.</param>
         /// <returns>true if header is found; otherwise, false.</returns>
-        public bool Contains(Predicate<string> match) 
+        public bool Contains(Predicate<string> match)
         {
-            return IndexOf(match) != -1; 
+            return IndexOf(match) != -1;
         }
 
         /// <summary>
