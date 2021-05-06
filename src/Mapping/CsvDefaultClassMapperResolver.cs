@@ -1,5 +1,5 @@
 ﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
-/*    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+/*    
  *    ENBREA.CSV 
  *    
  *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
@@ -21,11 +21,21 @@ namespace Enbrea.Csv
     {
         private readonly Dictionary<Type, ICsvClassMapper> _mappers = new Dictionary<Type, ICsvClassMapper>();
 
+        /// <summary>
+        /// Registers a class mapper for a specifc type
+        /// </summary>
+        /// <param name="type">The type</param>
+        /// <param name="mapper">The class mapper</param>
         public void AddMapper(Type type, ICsvClassMapper mapper)
         {
             _mappers[type] = mapper;
         }
 
+        /// <summary>
+        /// Gives back the registered class mapper for a specifc type
+        /// </summary>
+        /// <param name="type">The type</param>
+        /// <returns>The registered class mapper</returns>
         public ICsvClassMapper GetMapper(Type type)
         {
             ICsvClassMapper mapper;
@@ -37,11 +47,18 @@ namespace Enbrea.Csv
             return mapper;
         }
 
+        /// <summary>
+        /// Removes all registered class mappers
+        /// </summary>
         public void RemoveAllMappers()
         {
             _mappers.Clear();
         }
 
+        /// <summary>
+        /// Removes the class mapper for a specifc type
+        /// </summary>
+        /// <param name="type">The type</param>
         public void RemoveMapper(Type type)
         {
             _mappers.Remove(type);

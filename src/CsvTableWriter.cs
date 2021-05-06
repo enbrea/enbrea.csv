@@ -402,15 +402,6 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Writes the csv header values to the stream.
-        /// </summary>
-        /// <param name="csvHeaders">List of csv headers as expression lambdas</param>
-        public void WriteHeaders<TEntity>(params Expression<Func<TEntity, object>>[] csvHeaders)
-        {
-            WriteHeaders(new CsvHeaders<TEntity>(csvHeaders));
-        }
-
-        /// <summary>
         /// Writes the csv headers to the stream.
         /// </summary>
         /// <returns>A task that represents the asynchronous operation.</returns>
@@ -463,16 +454,6 @@ namespace Enbrea.Csv
         /// <param name="csvHeaders">List of csv headers as expression lambda</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task WriteHeadersAsync<TEntity>(Expression<Func<TEntity, object>> csvHeaders)
-        {
-            await WriteHeadersAsync(new CsvHeaders<TEntity>(csvHeaders));
-        }
-
-        /// <summary>
-        /// Writes the csv headers to the stream.
-        /// </summary>
-        /// <param name="csvHeaders">List of csv headers as expression lambda</param>
-        /// <returns>A task that represents the asynchronous operation.</returns>
-        public async Task WriteHeadersAsync<TEntity>(params Expression<Func<TEntity, object>>[] csvHeaders)
         {
             await WriteHeadersAsync(new CsvHeaders<TEntity>(csvHeaders));
         }

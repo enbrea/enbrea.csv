@@ -353,15 +353,6 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Writes the csv header values to the stream.
-        /// </summary>
-        /// <param name="csvHeaders">List of csv headers as expression lambda</param>
-        public void WriteHeaders<TEntity>(params Expression<Func<TEntity, object>>[] csvHeaders)
-        {
-            WriteHeaders(new CsvHeaders<TEntity>(csvHeaders));
-        }
-
-        /// <summary>
         /// Applies all relvant values from the strongly typed csv object to the current csv record.
         /// </summary>
         /// <param name="entity">Pointer to the strongly typed csv object instance</param>

@@ -1,5 +1,5 @@
 ﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
-/*    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+/*    
  *    ENBREA.CSV 
  *    
  *    Copyright (C) 2021 STÜBER SYSTEMS GmbH

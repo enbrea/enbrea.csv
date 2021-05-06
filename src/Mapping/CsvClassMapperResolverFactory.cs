@@ -1,5 +1,5 @@
 ﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
-/*    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+/*    
  *    ENBREA.CSV 
  *    
  *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
@@ -12,7 +12,7 @@
 namespace Enbrea.Csv
 {
     /// <summary>
-    /// Static factory for <see cref="ICsvClassMapperResolver"/> implementations
+    /// A static factory for <see cref="ICsvClassMapperResolver"/> implementations
     /// </summary>
     public static class CsvClassMapperResolverFactory
     {

@@ -41,19 +41,6 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvHeaders{TEntity}"/> class.
-        /// </summary>
-        /// <param name="expressions">List of csv headers as expression lambdas</param>
-        public CsvHeaders(params Expression<Func<TEntity, object>>[] expressions)
-            : base()
-        {
-            foreach (var expression in expressions)
-            {
-                Add(expression);
-            }
-        }
-
-        /// <summary>
         /// Adds new headers to the list of headers
         /// </summary>
         /// <param name="expression">List of csv headers as expression lambda</param>
