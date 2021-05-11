@@ -234,6 +234,11 @@ namespace Enbrea.Csv
         /// <returns>Number of values applied</returns>
         public int SetValues<TEntity>(TEntity entity)
         {
+            if (entity == null)
+            {
+                throw new ArgumentNullException("entity");
+            }
+
             int c = 0;
             foreach (var header in Headers)
             {

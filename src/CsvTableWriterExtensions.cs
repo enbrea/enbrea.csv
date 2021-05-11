@@ -9,6 +9,7 @@
  */
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,6 +28,11 @@ namespace Enbrea.Csv
         /// <param name="values">List of values</param>
         public static void Write(this CsvTableWriter csvTableWriter, IEnumerable<object> values)
         {
+            if (values == null)
+            {
+                throw new ArgumentNullException("values");
+            }
+
             int i = 0;
             foreach (var value in values)
             {
@@ -66,6 +72,11 @@ namespace Enbrea.Csv
         /// <param name="entities">List of csv custom objects</param>
         public static void WriteAll<TEntity>(this CsvTableWriter csvTableWriter, IEnumerable<TEntity> entities)
         {
+            if (entities == null)
+            {
+                throw new ArgumentNullException("entities");
+            }
+
             foreach (var entity in entities)
             {
                 csvTableWriter.SetValues(entity);
@@ -83,6 +94,11 @@ namespace Enbrea.Csv
         /// <returns>A task that represents the asynchronous write operation.</returns>
         public static async Task WriteAllAsync<TEntity>(this CsvTableWriter csvTableWriter, IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
         {
+            if (entities == null)
+            {
+                throw new ArgumentNullException("entities");
+            }
+
             foreach (var entity in entities)
             {
                 cancellationToken.ThrowIfCancellationRequested();
@@ -100,6 +116,11 @@ namespace Enbrea.Csv
         /// <returns>A task that represents the asynchronous write operation.</returns>
         public static async Task WriteAsync(this CsvTableWriter csvTableWriter, IEnumerable<object> values)
         {
+            if (values == null)
+            {
+                throw new ArgumentNullException("values");
+            }
+
             int i = 0;
             foreach (var value in values)
             {

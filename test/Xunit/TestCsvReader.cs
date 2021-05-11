@@ -192,18 +192,18 @@ namespace Enbrea.Csv.Tests
 
             Assert.NotNull(csvReader);
 
-            var csvLine = csvReader.Normalize();
+            IAsyncEnumerator<string> enumerator = csvReader.NormalizeAllAsync().GetAsyncEnumerator();
 
             // 1. line: 2 simple field + 1 multiline field
+            Assert.True(await enumerator.MoveNextAsync());
             Assert.Equal("aaa1;bbb1;\"A long" + Environment.NewLine +
                          "multi line" + Environment.NewLine +
-                         "text\"", csvLine);
-
-            csvLine = await csvReader.NormalizeAsync();
+                         "text\"", enumerator.Current);
 
             // 2. line: comment
             // 3. line: 3 simple fields
-            Assert.Equal("aaa2;bbb2;ccc2", csvLine);
+            Assert.True(await enumerator.MoveNextAsync());
+            Assert.Equal("aaa2;bbb2;ccc2", enumerator.Current);
         }
 
         [Fact]
