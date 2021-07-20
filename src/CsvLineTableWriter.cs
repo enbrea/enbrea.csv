@@ -87,6 +87,7 @@ namespace Enbrea.Csv
             : base(csvHeaders, csvConverterResolver)
         {
             _csvLineBuilder = csvLineBuilder;
+            Array.Resize(ref _csvValues, csvHeaders.Count());
         }
 
         /// <summary>
