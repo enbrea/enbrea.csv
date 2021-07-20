@@ -65,6 +65,7 @@ namespace Enbrea.Csv
                 throw new CsvHeaderNotFoundException($"Header {name} does not exist.");
             }
         }
+
         public void SetValue(object entity, string name, object value)
         {
             if (_memberInfoMaps.TryGetValue(name, out var memberInfoMap))

@@ -43,6 +43,7 @@ namespace Enbrea.Csv
             : base(csvHeaders)
         {
             _csvLineBuilder = csvLineBuilder;
+            Array.Resize(ref _csvValues, csvHeaders.Count());
         }
 
         /// <summary>
@@ -302,6 +303,9 @@ namespace Enbrea.Csv
         /// <summary>
         /// Writes the current csv record to the stream and clears its cotnent
         /// </summary>
+        /// <returns>
+        /// A CSV formatted string if values are available; otherwise null.
+        /// </returns>
         public string Write()
         {
             var line = _csvLineBuilder.Write(_csvValues);
@@ -312,6 +316,9 @@ namespace Enbrea.Csv
         /// <summary>
         /// Writes the csv headers to the stream.
         /// </summary>
+        /// <returns>
+        /// A CSV formatted string if headers are available; otherwise null.
+        /// </returns>
         public string WriteHeaders()
         {
             int i = 0;
@@ -327,6 +334,9 @@ namespace Enbrea.Csv
         /// Writes the csv headers to the stream.
         /// </summary>
         /// <param name="csvHeaders">List of csv headers</param>
+        /// <returns>
+        /// A CSV formatted string if headers are available; otherwise null.
+        /// </returns>
         public string WriteHeaders(IEnumerable<string> csvHeaders)
         {
             Headers.Replace(csvHeaders);
@@ -338,6 +348,9 @@ namespace Enbrea.Csv
         /// Writes the csv header values to the stream.
         /// </summary>
         /// <param name="csvHeaders">List of csv headers</param>
+        /// <returns>
+        /// A CSV formatted string if headers are available; otherwise null.
+        /// </returns>
         public string WriteHeaders(params string[] csvHeaders)
         {
             return WriteHeaders((IEnumerable<string>)csvHeaders);
@@ -347,6 +360,9 @@ namespace Enbrea.Csv
         /// Writes the csv header values to the stream.
         /// </summary>
         /// <param name="csvHeaders">List of csv headers as expression lambda</param>
+        /// <returns>
+        /// A CSV formatted string if headers are available; otherwise null.
+        /// </returns>
         public void WriteHeaders<TEntity>(Expression<Func<TEntity, object>> csvHeaders)
         {
             WriteHeaders(new CsvHeaders<TEntity>(csvHeaders));

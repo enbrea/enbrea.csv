@@ -123,7 +123,7 @@ namespace Enbrea.Csv
             AddConverter(typeof(ulong), new CsvUInt64Converter());
             AddConverter(typeof(Uri), new CsvUriConverter());
             AddConverter(typeof(ushort?), new CsvUInt16Converter());
-            AddConverter(typeof( ushort), new CsvUInt16Converter());
+            AddConverter(typeof(ushort), new CsvUInt16Converter());
         }
     }
 }

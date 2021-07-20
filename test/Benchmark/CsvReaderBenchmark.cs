@@ -57,7 +57,7 @@ namespace Enbrea.Csv.Tests
         {
             using var csvReader = new CsvReader(_data);
             
-            foreach (var line in csvReader.NormalizeAll())
+            foreach (var line in csvReader.ReadAllLines())
             {
             }
         }

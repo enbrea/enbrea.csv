@@ -192,7 +192,7 @@ namespace Enbrea.Csv.Tests
 
             Assert.NotNull(csvReader);
 
-            IAsyncEnumerator<string> enumerator = csvReader.NormalizeAllAsync().GetAsyncEnumerator();
+            IAsyncEnumerator<string> enumerator = csvReader.ReadAllLinesAsync().GetAsyncEnumerator();
 
             // 1. line: 2 simple field + 1 multiline field
             Assert.True(await enumerator.MoveNextAsync());

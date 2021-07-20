@@ -107,4 +107,3 @@ steps:
     packagesToPush: '$(Build.Repository.LocalPath)/**/*.nupkg;!$(Build.Repository.LocalPath)/**/*.symbols.nupkg'
     nuGetFeedType: 'external'
     publishFeedCredentials: 'STUEBER SYSTEMS | nuget.org'
-
