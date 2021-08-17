@@ -73,7 +73,7 @@ namespace Enbrea.Csv
         {
             if (values == null)
             {
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException(nameof(values));
             }
             foreach (string value in values)
             {
@@ -101,7 +101,7 @@ namespace Enbrea.Csv
         {
             if (values == null)
             {
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException(nameof(values));
             }
             foreach (string value in values)
             {

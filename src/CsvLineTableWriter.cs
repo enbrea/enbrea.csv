@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Enbrea.Csv
 {
@@ -42,6 +43,7 @@ namespace Enbrea.Csv
             : base(csvHeaders)
         {
             _csvLineBuilder = csvLineBuilder;
+            Array.Resize(ref _csvValues, csvHeaders.Count());
         }
 
         /// <summary>
@@ -85,6 +87,7 @@ namespace Enbrea.Csv
             : base(csvHeaders, csvConverterResolver)
         {
             _csvLineBuilder = csvLineBuilder;
+            Array.Resize(ref _csvValues, csvHeaders.Count());
         }
 
         /// <summary>
@@ -162,26 +165,7 @@ namespace Enbrea.Csv
         /// <summary>
         /// Sets the value of the current csv record at the posiiton of the specified header name.
         /// </summary>
-        /// <param name="name">Name of a header</param>
-        /// <param name="value">A value</param>
-        public void SetValue(string name, string value)
-        {
-            this[name] = value;
-        }
-
-        /// <summary>
-        /// Sets the value of the current csv record at the specified index. 
-        /// </summary>
-        /// <param name="index">Index within the current csv record</param>
-        /// <param name="value">A value</param>
-        public void SetValue(int index, string value)
-        {
-            this[index] = value;
-        }
-
-        /// <summary>
-        /// Sets the value of the current csv record at the posiiton of the specified header name.
-        /// </summary>
+        /// <typeparam name="T">The type</typeparam>
         /// <param name="name">Name of a header</param>
         /// <param name="value">A value</param>
         public void SetValue<T>(string name, T value)
@@ -192,6 +176,7 @@ namespace Enbrea.Csv
         /// <summary>
         /// Sets the value of the current csv record at the posiiton of the specified header name.
         /// </summary>
+        /// <typeparam name="T">The type</typeparam>
         /// <param name="name">Name of a header</param>
         /// <param name="value">A value</param>
         public void SetValue<T>(string name, T value, ICsvConverter valueConverter)
@@ -202,6 +187,7 @@ namespace Enbrea.Csv
         /// <summary>
         /// Sets the value of the current csv record at the specified index. 
         /// </summary>
+        /// <typeparam name="T">The type</typeparam>
         /// <param name="index">Index within the current csv record</param>
         /// <param name="value">A value</param>
         public void SetValue<T>(int index, T value)
@@ -212,11 +198,34 @@ namespace Enbrea.Csv
         /// <summary>
         /// Sets the value of the current csv record at the specified index. 
         /// </summary>
+        /// <typeparam name="T">The type</typeparam>
         /// <param name="index">Index within the current csv record</param>
         /// <param name="value">A value</param>
         public void SetValue<T>(int index, T value, ICsvConverter valueConverter)
         {
             this[index] = valueConverter.ToString(value);
+        }
+
+        /// <summary>
+        /// Sets the value of the current csv record at the position of the specified header name.
+        /// </summary>
+        /// <param name="type">The type</param>
+        /// <param name="index">Index within the current csv record</param>
+        /// <param name="value">A value</param>
+        public void SetValue(Type type, string name, object value)
+        {
+            SetValue(name, value, ConverterResolver.GetConverter(type));
+        }
+
+        /// <summary>
+        /// Sets the value of the current csv record at the specified index. 
+        /// </summary>
+        /// <param name="type">The type</param>
+        /// <param name="index">Index within the current csv record</param>
+        /// <param name="value">A value</param>
+        public void SetValue(Type type, int index, object value)
+        {
+            SetValue(index, value, ConverterResolver.GetConverter(type));
         }
 
         /// <summary>
@@ -295,6 +304,9 @@ namespace Enbrea.Csv
         /// <summary>
         /// Writes the current csv record to the stream and clears its cotnent
         /// </summary>
+        /// <returns>
+        /// A CSV formatted string if values are available; otherwise null.
+        /// </returns>
         public string Write()
         {
             var line = _csvLineBuilder.Write(_csvValues);
@@ -305,6 +317,9 @@ namespace Enbrea.Csv
         /// <summary>
         /// Writes the csv headers to the stream.
         /// </summary>
+        /// <returns>
+        /// A CSV formatted string if headers are available; otherwise null.
+        /// </returns>
         public string WriteHeaders()
         {
             int i = 0;
@@ -320,6 +335,9 @@ namespace Enbrea.Csv
         /// Writes the csv headers to the stream.
         /// </summary>
         /// <param name="csvHeaders">List of csv headers</param>
+        /// <returns>
+        /// A CSV formatted string if headers are available; otherwise null.
+        /// </returns>
         public string WriteHeaders(IEnumerable<string> csvHeaders)
         {
             Headers.Replace(csvHeaders);
@@ -331,9 +349,45 @@ namespace Enbrea.Csv
         /// Writes the csv header values to the stream.
         /// </summary>
         /// <param name="csvHeaders">List of csv headers</param>
+        /// <returns>
+        /// A CSV formatted string if headers are available; otherwise null.
+        /// </returns>
         public string WriteHeaders(params string[] csvHeaders)
         {
             return WriteHeaders((IEnumerable<string>)csvHeaders);
         }
+
+        /// <summary>
+        /// Writes the csv header values to the stream.
+        /// </summary>
+        /// <param name="csvHeaders">List of csv headers as expression lambda</param>
+        /// <returns>
+        /// A CSV formatted string if headers are available; otherwise null.
+        /// </returns>
+        public void WriteHeaders<TEntity>(Expression<Func<TEntity, object>> csvHeaders)
+        {
+            WriteHeaders(new CsvHeaders<TEntity>(csvHeaders));
+        }
+
+        /// <summary>
+        /// Applies all relvant values from the strongly typed csv object to the current csv record.
+        /// </summary>
+        /// <param name="entity">Pointer to the strongly typed csv object instance</param>
+        /// <returns>Number of values applied</returns>
+        public int SetValues<TEntity>(TEntity entity)
+        {
+            int c = 0;
+            foreach (var header in Headers)
+            {
+                if (CsvClassMapperResolverFactory.GetResolver().GetMapper<TEntity>().ContainsValue(header))
+                {
+                    var value = CsvClassMapperResolverFactory.GetResolver().GetMapper<TEntity>().GetValue(entity, header);
+                    SetValue(CsvClassMapperResolverFactory.GetResolver().GetMapper<TEntity>().GetValueType(header), header, value);
+                    c++;
+                }
+            }
+            return c;
+        }
+
     }
 }

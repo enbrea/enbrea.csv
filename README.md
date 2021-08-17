@@ -3,7 +3,15 @@
 
 # ENBREA CSV
 
-A high performance .NET Core library for parsing and building [CSV](https://tools.ietf.org/html/rfc4180) strings, streams and files. 
+A .NET library for parsing and building [CSV](https://tools.ietf.org/html/rfc4180) strings, streams and files:
+
++ Supports .NET Core 3.1 and .NET 5
++ High performance parsing and generating of csv
++ Includes low level reader and writer for csv
++ Includes table based reader and writer for csv
++ Includes synchron and asynchron methods
++ Supports reading and writing of custom objects via reflection
++ Many helper methods and extensions 
 
 ## Installation
 

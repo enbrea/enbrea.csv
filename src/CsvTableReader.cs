@@ -118,7 +118,14 @@ namespace Enbrea.Csv
         {
             get
             {
-                return _csvValues[i];
+                if (i < _csvValues.Count)
+                {
+                    return _csvValues[i];
+                }
+                else
+                {
+                    throw new CsvValueNotFoundException($"CSV value at index {i} not found");
+                }
             }
         }
 
@@ -134,35 +141,53 @@ namespace Enbrea.Csv
                 var i = Headers.IndexOf(x => x == name);
                 if (i != -1)
                 {
-                    return _csvValues[i];
+                    if (i < _csvValues.Count)
+                    {
+                        return _csvValues[i];
+                    }
+                    else
+                    {
+                        throw new CsvValueNotFoundException($"CSV value for \"{name}\" not found");
+                    }
                 }
                 else
                 {
-                    throw new CsvHeaderNotFoundException($"CSV Header \"{name}\" not found"); 
+                    throw new CsvHeaderNotFoundException($"CSV header \"{name}\" not found"); 
                 }
             }
         }
 
         /// <summary>
-        /// Reads the typed value of the current csv record at the posiiton of the specified header name. 
+        /// Creates a new custom csv object and tries to assign all values from the current csv record. 
         /// </summary>
-        /// <typeparam name="T">The type</typeparam>
-        /// <param name="name">Name of a header</param>
-        /// <returns>A typed value</returns>
-        public T GetValue<T>(string name)
+        /// <returns>Pointer to the newly created custom csv object instance</returns>
+        public TEntity Get<TEntity>()
         {
-            return GetValue<T>(name, ConverterResolver.GetConverter<T>());
+            var entity = Activator.CreateInstance<TEntity>();
+            GetValues(entity);
+            return entity;       
         }
 
         /// <summary>
-        /// Reads the typed value of the current csv record at the posiiton of the specified header name. 
+        /// 
         /// </summary>
-        /// <typeparam name="T">The type</typeparam>
-        /// <param name="name">Name of a header</param>
-        /// <returns>A typed value</returns>
-        public T GetValue<T>(string name, ICsvConverter converter)
+        /// <param name="index"></param>
+        /// <param name="converter"></param>
+        /// <returns></returns>
+        public object GetValue(int index, ICsvConverter converter)
         {
-            return (T)GetValue(name, converter);
+            return converter.FromString(this[index]);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="converter"></param>
+        /// <returns></returns>
+        public object GetValue(string name, ICsvConverter converter)
+        {
+            return converter.FromString(this[name]);
         }
 
         /// <summary>
@@ -191,27 +216,29 @@ namespace Enbrea.Csv
         /// <summary>
         /// Reads the typed value of the current csv record at the posiiton of the specified header name. 
         /// </summary>
+        /// <typeparam name="T">The type</typeparam>
         /// <param name="name">Name of a header</param>
         /// <returns>A typed value</returns>
-        public object GetValue(Type type, string name)
+        public T GetValue<T>(string name)
         {
-            return GetValue(name, ConverterResolver.GetConverter(type));
+            return GetValue<T>(name, ConverterResolver.GetConverter<T>());
         }
 
         /// <summary>
-        /// 
+        /// Reads the typed value of the current csv record at the posiiton of the specified header name. 
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="converter"></param>
-        /// <returns></returns>
-        public object GetValue(string name, ICsvConverter converter)
+        /// <typeparam name="T">The type</typeparam>
+        /// <param name="name">Name of a header</param>
+        /// <returns>A typed value</returns>
+        public T GetValue<T>(string name, ICsvConverter converter)
         {
-            return converter.FromString(this[name]);
+            return (T)GetValue(name, converter);
         }
 
         /// <summary>
         /// Read the value of the current csv record at the specified index. 
         /// </summary>
+        /// <param name="type">Type of value</param>
         /// <param name="index">Index within the current csv record</param>
         /// <returns>A string value</returns>
         public object GetValue(Type type, int index)
@@ -220,14 +247,36 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// 
+        /// Reads the typed value of the current csv record at the posiiton of the specified header name. 
         /// </summary>
-        /// <param name="index"></param>
-        /// <param name="converter"></param>
-        /// <returns></returns>
-        public object GetValue(int index, ICsvConverter converter)
+        /// <param name="type">Type of value</param>
+        /// <param name="name">Name of a header</param>
+        /// <returns>A typed value</returns>
+        public object GetValue(Type type, string name)
         {
-            return converter.FromString(this[index]);
+            return GetValue(name, ConverterResolver.GetConverter(type));
+        }
+
+        /// <summary>
+        /// Tries to assign all values from the current csv record to a custom csv object. 
+        /// </summary>
+        /// <param name="entity">Pointer to the custom csv object instance</param>
+        /// <returns>Number of assigned values</returns>
+        public int GetValues<TEntity>(TEntity entity)
+        {
+            int c = 0;
+            foreach (var header in Headers)
+            {
+                if (CsvClassMapperResolverFactory.GetResolver().GetMapper<TEntity>().ContainsValue(header))
+                {
+                    if (TryGetValue(CsvClassMapperResolverFactory.GetResolver().GetMapper<TEntity>().GetValueType(header), header, out var value))
+                    {
+                        CsvClassMapperResolverFactory.GetResolver().GetMapper<TEntity>().SetValue(entity, header, value);
+                        c++;
+                    }
+                }
+            }
+            return c;
         }
 
         /// <summary>
@@ -376,6 +425,24 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
+        /// Tries to read the typed value of the current csv record at the posiiton of the specified header name. 
+        /// </summary>
+        /// <param name="type">Type of value</param>
+        /// <param name="name">Name of a header</param>
+        /// <param name="value">If position within the cuurent csv record was found, contains the value. If not contains null</param>
+        /// <returns>true if position within the cuurent csv record was found; otherwise, false.</returns>
+        public bool TryGetValue(Type type, string name, out object value)
+        {
+            var i = Headers.IndexOf(x => x.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            if (i != -1)
+            {
+                return TryGetValue(type, i, out value);
+            }
+            value = default;
+            return false;
+        }
+
+        /// <summary>
         /// Tries to read the value of the current csv record at the specified index. 
         /// </summary>
         /// <param name="index">Index within the current csv record</param>
@@ -411,6 +478,24 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
+        /// Tries to read the typed value of the current csv record at the specified index. 
+        /// </summary>
+        /// <param name="type">Type of value</param>
+        /// <param name="index">Index within the current csv record</param>
+        /// <param name="value">If position within the current csv record was found, contains the value. If not contains null</param>
+        /// <returns>true if position within the current csv record was found; otherwise, false.</returns>
+        public bool TryGetValue(Type type, int index, out object value)
+        {
+            if (Enumerable.Range(0, _csvValues.Count).Contains(index))
+            {
+                value = GetValue(type, index);
+                return true;
+            }
+            value = default;
+            return false;
+        }
+
+        /// <summary>
         /// Tries to read the value of the current csv record at the posiiton of the specified header name. 
         /// The value is used as param for the specified delegate. 
         /// </summary>
@@ -420,7 +505,7 @@ namespace Enbrea.Csv
         {
             if (useAction == null)
             {
-                throw new ArgumentNullException("useAction");
+                throw new ArgumentNullException(nameof(useAction));
             }
 
             if (TryGetValue(name, out string value))
@@ -440,7 +525,7 @@ namespace Enbrea.Csv
         {
             if (useAction == null)
             {
-                throw new ArgumentNullException("useAction");
+                throw new ArgumentNullException(nameof(useAction));
             }
 
             if (TryGetValue(name, out T value))
@@ -459,7 +544,7 @@ namespace Enbrea.Csv
         {
             if (useAction == null)
             {
-                throw new ArgumentNullException("useAction");
+                throw new ArgumentNullException(nameof(useAction));
             }
 
             if (TryGetValue(index, out string value))
@@ -480,7 +565,7 @@ namespace Enbrea.Csv
         {
             if (useAction == null)
             {
-                throw new ArgumentNullException("useAction");
+                throw new ArgumentNullException(nameof(useAction));
             }
 
             if (TryGetValue(index, out T value))

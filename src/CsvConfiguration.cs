@@ -43,7 +43,7 @@ namespace Enbrea.Csv
         public char Quote { get; set; } = '"';
 
         /// <summary>
-        /// Specifies the charactor for seperating values
+        /// Specifies the charactor for separating values
         /// </summary>
         public char Separator { get; set; } = ';';
    }

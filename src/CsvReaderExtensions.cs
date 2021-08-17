@@ -21,6 +21,86 @@ namespace Enbrea.Csv
     public static class CsvReaderExtensions 
     {
         /// <summary>
+        /// Reads all csv records out of the stream and gives back an enumerator. 
+        /// </summary>
+        /// <param name="csvReader">The <see cref="CsvReader"/></param>
+        /// <returns>
+        /// An enumerator of csv records. Each record is an array of parsed values.
+        /// </returns>
+        public static IEnumerable<string[]> ReadAll(this CsvReader csvReader)
+        {
+            var values = new List<string>();
+
+            while (csvReader.ReadLine((i, s) => { values.Add(s); }) > 0)
+            {
+                yield return values.ToArray();
+                values.Clear();
+            }
+        }
+
+        /// <summary>
+        /// Reads all csv records out of the stream and gives back an enumerator. 
+        /// </summary>
+        /// <returns>
+        /// An async enumerator of csv records. Each record is an array of parsed values.
+        /// <returns>
+        public async static IAsyncEnumerable<string[]> ReadAllAsync(this CsvReader csvReader)
+        {
+            var values = new List<string>();
+
+            while (await csvReader.ReadLineAsync((i, s) => { values.Add(s); }) > 0)
+            {
+                yield return values.ToArray();
+                values.Clear();
+            }
+        }
+
+        /// <summary>
+        /// Reads all csv records out of the stream and gives back an enumerator of newly encoded csv strings. 
+        /// This method can be used as a line by line syntax checker.
+        /// parsing and building
+        /// </summary>
+        /// <param name="csvReader">The <see cref="CsvReader"/></param>
+        /// <returns>
+        /// An enumerator of newly encoded csv strings
+        /// </returns>
+        public static IEnumerable<string> ReadAllLines(this CsvReader csvReader)
+        {
+            var csvLineBuilder = new CsvLineBuilder()
+            {
+                Configuration = csvReader.Configuration
+            };
+
+            while (csvReader.ReadLine((i, s) => { csvLineBuilder.Append(s); }) > 0)
+            {
+                yield return csvLineBuilder.ToString();
+                csvLineBuilder.Clear();
+            }
+        }
+
+        /// <summary>
+        /// Reads all csv records out of the stream and gives back an enumerator of newly encoded csv strings. 
+        /// This method can be used as a line by line syntax checker.
+        /// </summary>
+        /// <param name="csvReader">The <see cref="CsvReader"/></param>
+        /// <returns>
+        /// An async enumerator of newly encoded csv strings
+        /// </returns>
+        public static async IAsyncEnumerable<string> ReadAllLinesAsync(this CsvReader csvReader)
+        {
+            var csvLineBuilder = new CsvLineBuilder()
+            {
+                Configuration = csvReader.Configuration
+            };
+
+            while (await csvReader.ReadLineAsync((i, s) => { csvLineBuilder.Append(s); }) > 0)
+            {
+                yield return csvLineBuilder.ToString();
+                csvLineBuilder.Clear();
+            }
+        }
+
+        /// <summary>
         /// Reads out the next row out of the current CSV stream and gives back the values
         /// as string collection.
         /// </summary>
@@ -33,7 +113,7 @@ namespace Enbrea.Csv
         {
             if (values == null)
             {
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException(nameof(values));
             }
 
             values.Clear();
@@ -54,77 +134,12 @@ namespace Enbrea.Csv
         {
             if (values == null)
             {
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException(nameof(values));
             }
 
             values.Clear();
 
             return await csvReader.ReadLineAsync((i, s) => { values.Add(s); });
-        }
-
-        /// <summary>
-        /// Reads out the next row out of the current CSV stream and gives back the values
-        /// as string array.
-        /// </summary>
-        /// <param name="csvReader">The <see cref="CsvReader"/></param>
-        /// <returns>
-        /// Array of parsed values.
-        /// </returns>
-        public static string[] ReadLine(this CsvReader csvReader)
-        {
-            var values = new List<string>();
-
-            return (csvReader.ReadLine((i, s) => { values.Add(s); }) > 0) ? values.ToArray() : null;
-        }
-
-        /// <summary>
-        /// Reads out the next row out of the current CSV stream and gives back the values
-        /// as string array.
-        /// </summary>
-        /// <returns>A task that represents the asynchronous operation. The value of the TResult
-        //  parameter contains an array of parsed values.</returns>
-        /// <returns>
-        public static async Task<string[]> ReadLineAsync(this CsvReader csvReader)
-        {
-            var values = new List<string>();
-
-            return (await csvReader.ReadLineAsync((i, s) => { values.Add(s); }) > 0) ? values.ToArray() : null;
-        }
-
-        /// <summary>
-        /// Reads out the next row out of the current CSV stream and returns back again the 
-        /// complete row as CSV string. 
-        /// </summary>
-        /// <param name="csvReader">The <see cref="CsvReader"/></param>
-        /// <returns>
-        /// The complete row as CSV string if values are available; otherwise null.
-        /// </returns>
-        public static string Normalize(this CsvReader csvReader)
-        {
-            var csvLineBuilder = new CsvLineBuilder()
-            {
-                Configuration = csvReader.Configuration
-            };
-
-            return (csvReader.ReadLine((i, s) => { csvLineBuilder.Append(s); }) > 0) ? csvLineBuilder.ToString() : null;
-        }
-
-        /// <summary>
-        /// Reads out the next row out of the current CSV stream and returns back again the
-        /// complete row as CSV string. 
-        /// </summary>
-        /// <param name="csvReader">The <see cref="CsvReader"/></param>
-        /// <returns>A task that represents the asynchronous operation. The value of the TResult
-        //  parameter contains the complete row as CSV string if values are available; otherwise null.
-        /// </returns>
-        public static async Task<string> NormalizeAsync(this CsvReader csvReader)
-        {
-            var csvLineBuilder = new CsvLineBuilder()
-            {
-                Configuration = csvReader.Configuration
-            };
-
-            return (await csvReader.ReadLineAsync((i, s) => { csvLineBuilder.Append(s); }) > 0) ? csvLineBuilder.ToString() : null;
         }
     }
 }

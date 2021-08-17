@@ -46,7 +46,7 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvReader "/> class for the specified stream.
+        /// Initializes a new instance of the <see cref="CsvReader"/> class for the specified stream.
         /// </summary>
         /// <param name="stream">The stream to be read.</param>
         /// <param name="encoding">The character encoding to use.</param>
@@ -57,7 +57,7 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvReader "/> class for the specified stream.
+        /// Initializes a new instance of the <see cref="CsvReader"/> class for the specified stream.
         /// </summary>
         /// <param name="stream">The stream to be read.</param>
         /// <param name="encoding">The character encoding to use.</param>
@@ -71,7 +71,7 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvReader "/> class for the specified stream.
+        /// Initializes a new instance of the <see cref="CsvReader"/> class for the specified stream.
         /// </summary>
         /// <param name="stream">The stream to be read.</param>
         /// <param name="encoding">The character encoding to use.</param>
@@ -86,7 +86,7 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvReader "/> class for the specified file name.
+        /// Initializes a new instance of the <see cref="CsvReader"/> class for the specified file name.
         /// </summary>
         /// <param name="path">The complete file path to be read.</param>
         /// <param name="detectEncodingFromByteOrderMarks">
@@ -99,7 +99,7 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvReader "/> class for the specified file name.
+        /// Initializes a new instance of the <see cref="CsvReader"/> class for the specified file name.
         /// </summary>
         /// <param name="path">The complete file path to be read.</param>
         /// <param name="encoding">The character encoding to use.</param>
@@ -110,7 +110,7 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvReader "/> class for the specified file name.
+        /// Initializes a new instance of the <see cref="CsvReader"/> class for the specified file name.
         /// </summary>
         /// <param name="path">The complete file path to be read.</param>
         /// <param name="encoding">The character encoding to use.</param>
@@ -124,7 +124,7 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvReader "/> class for the specified file name.
+        /// Initializes a new instance of the <see cref="CsvReader"/> class for the specified file name.
         /// </summary>
         /// <param name="path">The complete file path to be read.</param>
         /// <param name="encoding">The character encoding to use.</param>
@@ -139,7 +139,7 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvReader "/> class for the specified text string.
+        /// Initializes a new instance of the <see cref="CsvReader"/> class for the specified text string.
         /// </summary>
         /// <param name="content">The complete text content to be read.</param>
         public CsvReader(string content)
@@ -186,7 +186,7 @@ namespace Enbrea.Csv
         {
             if (valueAction == null)
             {
-                throw new ArgumentNullException("valueAction");
+                throw new ArgumentNullException(nameof(valueAction));
             }
 
             var valueCount = 0;
@@ -217,7 +217,7 @@ namespace Enbrea.Csv
         {
             if (valueAction == null)
             {
-                throw new ArgumentNullException("valueAction");
+                throw new ArgumentNullException(nameof(valueAction));
             }
 
             var valueCount = 0;

@@ -50,17 +50,14 @@ namespace Enbrea.Csv.Tests
         [Fact]
         public void TestJsonValues()
         {
-            var csvLine1 = "A;B";
             var csvLine2 = "42;\"{\"\"IntValue\"\":42,\"\"StrValue\"\":\"\"Forty-Two\"\"}\"";
             var csvLine3 = "5;\"{\"\"IntValue\"\":5,\"\"StrValue\"\":\"\"Five\"\"}\"";
 
             var csvLineWriter = new CsvLineBuilder();
 
-            var csvTableWriter = new CsvLineTableWriter(csvLineWriter);
+            var csvTableWriter = new CsvLineTableWriter(csvLineWriter, "A", "B");
 
             csvTableWriter.AddConverter<CustomType>(new CustomTypeConverter());
-
-            Assert.Equal(csvLine1, csvTableWriter.WriteHeaders("A", "B"));
 
             Assert.Equal(2, csvTableWriter.Headers.Count);
 

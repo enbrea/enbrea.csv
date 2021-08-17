@@ -23,21 +23,21 @@ namespace Enbrea.Csv.Tests
         private string _data;
 
         [Benchmark]
-        public void ReadLineAsActionPerformance()
+        public void ReadAllPerformance()
         {
             using var csvReader = new CsvReader(_data);
-            
-            while (csvReader.ReadLine((i, s) => { }) > 0)
+
+            foreach (var line in csvReader.ReadAll())
             {
             }
         }
 
         [Benchmark]
-        public void ReadLineAsArrayPerformance()
+        public void ReadLineAsActionPerformance()
         {
             using var csvReader = new CsvReader(_data);
             
-            while ((csvReader.ReadLine() != null))
+            while (csvReader.ReadLine((i, s) => { }) > 0)
             {
             }
         }
@@ -54,11 +54,11 @@ namespace Enbrea.Csv.Tests
         }
 
         [Benchmark]
-        public void ReadNormalizePerformance()
+        public void ReadNormalizeAllPerformance()
         {
             using var csvReader = new CsvReader(_data);
             
-            while ((csvReader.Normalize() != null))
+            foreach (var line in csvReader.ReadAllLines())
             {
             }
         }
