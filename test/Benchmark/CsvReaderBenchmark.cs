@@ -41,6 +41,7 @@ namespace Enbrea.Csv.Tests
             {
             }
         }
+
         [Benchmark]
         public void ReadLineAsListPerformance()
         {

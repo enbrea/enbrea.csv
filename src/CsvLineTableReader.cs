@@ -344,7 +344,7 @@ namespace Enbrea.Csv
             var i = Headers.IndexOf(x => x.Equals(name, StringComparison.InvariantCultureIgnoreCase));
             if (i != -1)
             {
-                return TryGetValue(i, out value);
+                return TryGetValue(i, out value);   
             }
             value = null;
             return false;

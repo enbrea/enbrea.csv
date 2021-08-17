@@ -65,7 +65,7 @@ namespace Enbrea.Csv
         {
             if (valueAction == null)
             {
-                throw new ArgumentNullException("valueAction");
+                throw new ArgumentNullException(nameof(valueAction));
             }
 
             _line = line;

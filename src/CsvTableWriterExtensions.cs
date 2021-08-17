@@ -30,7 +30,7 @@ namespace Enbrea.Csv
         {
             if (values == null)
             {
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException(nameof(values));
             }
 
             int i = 0;
@@ -74,7 +74,7 @@ namespace Enbrea.Csv
         {
             if (entities == null)
             {
-                throw new ArgumentNullException("entities");
+                throw new ArgumentNullException(nameof(entities));
             }
 
             foreach (var entity in entities)
@@ -96,7 +96,7 @@ namespace Enbrea.Csv
         {
             if (entities == null)
             {
-                throw new ArgumentNullException("entities");
+                throw new ArgumentNullException(nameof(entities));
             }
 
             foreach (var entity in entities)
@@ -118,7 +118,7 @@ namespace Enbrea.Csv
         {
             if (values == null)
             {
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException(nameof(values));
             }
 
             int i = 0;

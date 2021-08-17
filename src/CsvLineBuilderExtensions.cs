@@ -31,7 +31,7 @@ namespace Enbrea.Csv
         {
             if (values == null)
             {
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException(nameof(values));
             }
             csvLineWriter.Clear();
             foreach (string value in values)

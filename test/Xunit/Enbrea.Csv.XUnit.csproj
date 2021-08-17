@@ -9,7 +9,7 @@
     <Copyright>© 2021 STÜBER SYSTEMS GmbH</Copyright>
     <Product>ENBREA CSV</Product>
     <Description>Unit tests for ENBREA CSV</Description>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <RootNamespace>Enbrea.Csv.XUnit</RootNamespace>
   </PropertyGroup>
 

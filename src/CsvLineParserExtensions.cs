@@ -32,7 +32,7 @@ namespace Enbrea.Csv
         {
             if (values == null)
             {
-                throw new ArgumentNullException("values");
+                throw new ArgumentNullException(nameof(values));
             }
 
             values.Clear();

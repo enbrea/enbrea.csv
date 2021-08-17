@@ -8,7 +8,7 @@
     <Copyright>© 2021 STÜBER SYSTEMS GmbH</Copyright>
     <Product>ENBREA CSV</Product>
     <Description>Benchmarks for the ENBREA CSV library</Description>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <OutputType>Exe</OutputType>
     <RootNamespace>Enbrea.Csv.Benchmark</RootNamespace>
   </PropertyGroup>
