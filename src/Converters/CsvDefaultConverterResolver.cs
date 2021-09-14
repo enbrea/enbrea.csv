@@ -47,6 +47,10 @@ namespace Enbrea.Csv
         /// <returns>The converter instance</returns>
         public ICsvConverter GetConverter(Type type)
         {
+            var underlyingType = Nullable.GetUnderlyingType(type);
+
+            if (underlyingType != null) type = underlyingType;
+
             if (_converters.TryGetValue(type, out ICsvConverter converter))
             {
                 return converter;
@@ -54,6 +58,7 @@ namespace Enbrea.Csv
             else
             {
                 ICsvConverter defaultConverter;
+
                 if (type.IsEnum)
                 {
                     defaultConverter = new CsvDefaultEnumConverter(type);
@@ -63,6 +68,7 @@ namespace Enbrea.Csv
                     defaultConverter = new CsvDefaultConverter(type);
                 }
                 _converters.Add(type, defaultConverter);
+
                 return defaultConverter;
             }
         }
@@ -90,39 +96,25 @@ namespace Enbrea.Csv
 
         protected virtual void RegisterDefaultConverters()
         {
-            AddConverter(typeof(bool?), new CsvBooleanConverter());
             AddConverter(typeof(bool), new CsvBooleanConverter());
-            AddConverter(typeof(byte?), new CsvByteConverter());
             AddConverter(typeof(byte), new CsvByteConverter());
-            AddConverter(typeof(char?), new CsvCharConverter());
             AddConverter(typeof(char), new CsvCharConverter());
-            AddConverter(typeof(DateTime?), new CsvDateTimeConverter());
             AddConverter(typeof(DateTime), new CsvDateTimeConverter());
-            AddConverter(typeof(DateTimeOffset?), new CsvDateTimeOffsetConverter());
             AddConverter(typeof(DateTimeOffset), new CsvDateTimeOffsetConverter());
-            AddConverter(typeof(decimal?), new CsvDecimalConverter());
             AddConverter(typeof(decimal), new CsvDecimalConverter());
-            AddConverter(typeof(double?), new CsvDoubleConverter());
             AddConverter(typeof(double), new CsvDoubleConverter());
-            AddConverter(typeof(Guid?), new CsvGuidConverter());
             AddConverter(typeof(Guid), new CsvGuidConverter());
-            AddConverter(typeof(int?), new CsvInt32Converter());
             AddConverter(typeof(int), new CsvInt32Converter());
-            AddConverter(typeof(long?), new CsvInt64Converter());
             AddConverter(typeof(long), new CsvInt64Converter());
-            AddConverter(typeof(sbyte?), new CsvSByteConverter());
             AddConverter(typeof(sbyte), new CsvSByteConverter());
-            AddConverter(typeof(short?), new CsvInt16Converter());
             AddConverter(typeof(short), new CsvInt16Converter());
             AddConverter(typeof(string), new CsvStringConverter());
-            AddConverter(typeof(TimeSpan?), new CsvTimeSpanConverter());
             AddConverter(typeof(TimeSpan), new CsvTimeSpanConverter());
             AddConverter(typeof(uint), new CsvUInt32Converter());
             AddConverter(typeof(uint), new CsvUInt32Converter());
             AddConverter(typeof(ulong), new CsvUInt64Converter());
             AddConverter(typeof(ulong), new CsvUInt64Converter());
             AddConverter(typeof(Uri), new CsvUriConverter());
-            AddConverter(typeof(ushort?), new CsvUInt16Converter());
             AddConverter(typeof(ushort), new CsvUInt16Converter());
         }
     }

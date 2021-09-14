@@ -59,10 +59,10 @@ namespace Enbrea.Csv.Tests
         public async Task TestEntityReader()
         {
             var csvData =
-                "A;B;C;D" + Environment.NewLine +
-                "22;Text;true;01.01.2010" + Environment.NewLine +
-                "-31;A long text;false;20.01.2050" + Environment.NewLine +
-                "55;\"A text with ;\";;31.07.1971";
+                "A;B;C;D;G" + Environment.NewLine +
+                "22;Text;true;01.01.2010;A" + Environment.NewLine +
+                "-31;A long text;false;20.01.2050;B" + Environment.NewLine +
+                "55;\"A text with ;\";;31.07.1971;C";
 
             using var csvReader = new CsvReader(csvData);
 
@@ -74,23 +74,24 @@ namespace Enbrea.Csv.Tests
             Assert.NotNull(csvTableReader);
 
             await csvTableReader.ReadHeadersAsync();
-            Assert.Equal(4, csvTableReader.Headers.Count);
+            Assert.Equal(5, csvTableReader.Headers.Count);
             Assert.Equal("A", csvTableReader.Headers[0]);
             Assert.Equal("B", csvTableReader.Headers[1]);
             Assert.Equal("C", csvTableReader.Headers[2]);
             Assert.Equal("D", csvTableReader.Headers[3]);
+            Assert.Equal("G", csvTableReader.Headers[4]);
 
             await csvTableReader.ReadAsync();
 
-            Assert.Equal(new SampleObject() { A = 22, B = "Text", C = true, D = new DateTime(2010, 1, 1) }, csvTableReader.Get<SampleObject>());
+            Assert.Equal(new SampleObject() { A = 22, B = "Text", C = true, D = new DateTime(2010, 1, 1), G = SampleEnum.A }, csvTableReader.Get<SampleObject>());
 
             await csvTableReader.ReadAsync();
 
-            Assert.Equal(new SampleObject() { A = -31, B = "A long text", C = false, D = new DateTime(2050, 1, 20) }, csvTableReader.Get<SampleObject>());
+            Assert.Equal(new SampleObject() { A = -31, B = "A long text", C = false, D = new DateTime(2050, 1, 20), G = SampleEnum.B }, csvTableReader.Get<SampleObject>());
 
             await csvTableReader.ReadAsync();
 
-            Assert.Equal(new SampleObject() { A = 55, B = "A text with ;", C = null, D = new DateTime(1971, 7, 31) }, csvTableReader.Get<SampleObject>());
+            Assert.Equal(new SampleObject() { A = 55, B = "A text with ;", C = null, D = new DateTime(1971, 7, 31), G = SampleEnum.C }, csvTableReader.Get<SampleObject>());
         }
 
         [Fact]
@@ -198,10 +199,10 @@ namespace Enbrea.Csv.Tests
         public async Task TestTypedValues()
         {
             var csvData =
-                "A;B;C;D" + Environment.NewLine +
-                "22;Text;true;01.01.2010" + Environment.NewLine +
-                "-31;A long text;false;20.01.2050" + Environment.NewLine +
-                "55;\"A text with ;\";;31.07.1971";
+                "A;B;C;D;E" + Environment.NewLine +
+                "22;Text;true;01.01.2010;A" + Environment.NewLine +
+                "-31;A long text;false;20.01.2050;B" + Environment.NewLine +
+                "55;\"A text with ;\";;31.07.1971;C";
 
             using var csvReader = new CsvReader(csvData);
 
@@ -212,23 +213,26 @@ namespace Enbrea.Csv.Tests
             csvTableReader.SetFormats<DateTime>("dd.MM.yyyy");
 
             await csvTableReader.ReadHeadersAsync();
-            Assert.Equal(4, csvTableReader.Headers.Count);
+            Assert.Equal(5, csvTableReader.Headers.Count);
             Assert.Equal("A", csvTableReader.Headers[0]);
             Assert.Equal("B", csvTableReader.Headers[1]);
             Assert.Equal("C", csvTableReader.Headers[2]);
             Assert.Equal("D", csvTableReader.Headers[3]);
+            Assert.Equal("E", csvTableReader.Headers[4]);
 
             await csvTableReader.ReadAsync();
             Assert.Equal(22, csvTableReader.GetValue<int>("A"));
             Assert.Equal("Text", csvTableReader.GetValue<string>("B"));
             Assert.True(csvTableReader.GetValue<bool>("C"));
             Assert.Equal(new DateTime(2010, 1, 1), csvTableReader.GetValue<DateTime>("D"));
+            Assert.Equal(SampleEnum.A, csvTableReader.GetValue<SampleEnum>("E"));
 
             await csvTableReader.ReadAsync();
             Assert.Equal(-31, csvTableReader.GetValue<int>("A"));
             Assert.Equal("A long text", csvTableReader.GetValue<string>("B"));
             Assert.False(csvTableReader.GetValue<bool>("C"));
             Assert.Equal(new DateTime(2050, 1, 20), csvTableReader.GetValue<DateTime>("D"));
+            Assert.Equal(SampleEnum.B, csvTableReader.GetValue<SampleEnum?>("E"));
 
             await csvTableReader.ReadAsync();
             Assert.True(csvTableReader.TryGetValue<int>("A", out var a));

@@ -13,6 +13,11 @@ using System;
 
 namespace Enbrea.Csv.Tests
 {
+    public enum SampleEnum
+    { 
+        A, B, C
+    }
+
     public class SampleObject
     {
         public int A;
@@ -25,6 +30,7 @@ namespace Enbrea.Csv.Tests
         public string E;
         [CsvNotMapped]
         public string F;
+        public SampleEnum G;
 
         public override bool Equals(object obj)
         {
@@ -34,7 +40,8 @@ namespace Enbrea.Csv.Tests
                 (C == ((SampleObject)obj).C) &&
                 (D == ((SampleObject)obj).D) &&
                 (E == ((SampleObject)obj).E) &&
-                (F == ((SampleObject)obj).F);
+                (F == ((SampleObject)obj).F) &&
+                (G == ((SampleObject)obj).G);
         }
 
         public override int GetHashCode()
