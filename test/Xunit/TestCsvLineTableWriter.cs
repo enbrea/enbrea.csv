@@ -10,6 +10,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Enbrea.Csv.Tests

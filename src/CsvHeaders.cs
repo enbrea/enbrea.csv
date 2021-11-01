@@ -46,6 +46,7 @@ namespace Enbrea.Csv
         internal CsvHeaders() : this(new List<string>())
         {
         }
+
         /// <summary>
         /// Number of headers 
         /// </summary>

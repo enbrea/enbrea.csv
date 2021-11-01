@@ -15,7 +15,7 @@ using System.Reflection;
 
 namespace Enbrea.Csv
 {
-    public class CsvHeadersBuilder<TEntity>
+    internal class CsvHeadersBuilder<TEntity>
     {
         public void Append(CsvHeaders<TEntity> csvHeaders, Expression expression)
         {

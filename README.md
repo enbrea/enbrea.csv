@@ -9,6 +9,8 @@ A .NET library for parsing and building [CSV](https://tools.ietf.org/html/rfc418
 + High performance parsing and generating of csv
 + Includes low level reader and writer for csv
 + Includes table based reader and writer for csv
++ Includes support for strongly typed values
++ Includes support for csv dictionaries
 + Includes synchron and asynchron methods
 + Supports reading and writing of custom objects via reflection
 + Many helper methods and extensions 
