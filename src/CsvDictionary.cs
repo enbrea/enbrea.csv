@@ -206,7 +206,10 @@ namespace Enbrea.Csv
 
             while (csvReader.ReadLine(csvValues) > 0)
             {
-                this[csvValues[0]] = csvValues[1];
+                if (csvValues.Count > 1)
+                {
+                    this[csvValues[0]] = csvValues[1];
+                }
                 c++;
             }
 
@@ -233,7 +236,10 @@ namespace Enbrea.Csv
 
             while (await csvReader.ReadLineAsync(csvValues) > 0)
             {
-                this[csvValues[0]] = csvValues[1];
+                if (csvValues.Count > 1)
+                {
+                    this[csvValues[0]] = csvValues[1];
+                }
                 c++;
             }
 

@@ -55,6 +55,21 @@ namespace Enbrea.Csv.Tests
         }
 
         [Fact]
+        public async Task TestEmpty()
+        {
+            var csvData = "";
+
+            using var csvReader = new CsvReader(csvData);
+
+            var csvDictionary = new CsvDictionary();
+
+            Assert.NotNull(csvDictionary);
+
+            await csvDictionary.LoadAsync(csvReader);
+            Assert.Equal(0, csvDictionary.Count);
+        }
+
+        [Fact]
         public async Task TestEntity()
         {
             var csvData =
@@ -119,7 +134,6 @@ namespace Enbrea.Csv.Tests
             Assert.Equal(new DateTime(2010, 1, 1), csvDictionary.GetValue<DateTime>("D"));
             Assert.Equal(SampleEnum.A, csvDictionary.GetValue<SampleEnum>("E"));
         }
-
         [Fact]
         public async Task TestSetTypedValues()
         {
