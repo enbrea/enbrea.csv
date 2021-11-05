@@ -66,7 +66,7 @@ namespace Enbrea.Csv.Tests
             Assert.NotNull(csvDictionary);
 
             await csvDictionary.LoadAsync(csvReader);
-            Assert.Null(csvDictionary[""]);
+            Assert.Equal(0, csvDictionary.Count);
         }
 
         [Fact]
