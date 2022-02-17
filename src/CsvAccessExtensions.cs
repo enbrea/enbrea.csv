@@ -1,8 +1,8 @@
-﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
@@ -44,6 +44,16 @@ namespace Enbrea.Csv
             {
                 dateTimeOffsetConverter.DateTimeStyle = dateTimeStyle;
             }
+#if NET6_0_OR_GREATER
+            else if (converter is CsvDateOnlyConverter dateOnlyConverter)
+            {
+                dateOnlyConverter.DateTimeStyle = dateTimeStyle;
+            }
+            else if (converter is CsvTimeOnlyConverter timeOnlyConverter)
+            {
+                timeOnlyConverter.DateTimeStyle = dateTimeStyle;
+            }
+#endif
         }
 
         public static void SetFormats<T>(this CsvAccess csvAccess, params string[] formats)

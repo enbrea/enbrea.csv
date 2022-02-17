@@ -1,8 +1,8 @@
-﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
@@ -116,6 +116,10 @@ namespace Enbrea.Csv
             AddConverter(typeof(ulong), new CsvUInt64Converter());
             AddConverter(typeof(Uri), new CsvUriConverter());
             AddConverter(typeof(ushort), new CsvUInt16Converter());
+#if NET6_0_OR_GREATER
+            AddConverter(typeof(DateOnly), new CsvDateOnlyConverter());
+            AddConverter(typeof(TimeOnly), new CsvTimeOnlyConverter());
+#endif
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
@@ -141,7 +141,11 @@ namespace Enbrea.Csv.Tests
 
             Assert.NotNull(csvTableReader);
 
+#if NET6_0_OR_GREATER
+            csvTableReader.SetFormats<DateOnly>("dd.MM.yyyy");
+#else
             csvTableReader.SetFormats<DateTime>("dd.MM.yyyy");
+#endif
 
             csvTableReader.ReadHeaders(csvLine1);
 
@@ -156,14 +160,22 @@ namespace Enbrea.Csv.Tests
             Assert.Equal(22, csvTableReader.GetValue<int>("A"));
             Assert.Equal("Text", csvTableReader.GetValue<string>("B"));
             Assert.True(csvTableReader.GetValue<bool>("C"));
+#if NET6_0_OR_GREATER
+            Assert.Equal(new DateOnly(2010, 1, 1), csvTableReader.GetValue<DateOnly>("D"));
+#else
             Assert.Equal(new DateTime(2010, 1, 1), csvTableReader.GetValue<DateTime>("D"));
+#endif
 
             csvTableReader.Read(csvLine3);
 
             Assert.Equal(-31, csvTableReader.GetValue<int>("A"));
             Assert.Equal("A long text", csvTableReader.GetValue<string>("B"));
             Assert.False(csvTableReader.GetValue<bool>("C"));
+#if NET6_0_OR_GREATER
+            Assert.Equal(new DateOnly(2050, 1, 20), csvTableReader.GetValue<DateOnly>("D"));
+#else
             Assert.Equal(new DateTime(2050, 1, 20), csvTableReader.GetValue<DateTime>("D"));
+#endif
 
             csvTableReader.Read(csvLine4);
 
@@ -173,8 +185,13 @@ namespace Enbrea.Csv.Tests
             Assert.Equal("A text with ;", b);
             Assert.True(csvTableReader.TryGetValue<bool?>("C", out var c));
             Assert.Null(c);
+#if NET6_0_OR_GREATER
+            Assert.True(csvTableReader.TryGetValue<DateOnly>("D", out var d));
+            Assert.Equal(new DateOnly(1971, 7, 31), d);
+#else
             Assert.True(csvTableReader.TryGetValue<DateTime>("D", out var d));
             Assert.Equal(new DateTime(1971, 7, 31), d);
+#endif
         }
     }
 }
