@@ -10,6 +10,7 @@
 #endregion
 
 using System;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -83,6 +84,7 @@ namespace Enbrea.Csv
         /// <param name="nextChar">A method which gives back the next char 
         /// from a CSV source</param>
         /// <returns>true if token could be read; otherwise false.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool NextToken(Func<char> nextChar)
         {
             Token.Clear();
@@ -105,6 +107,7 @@ namespace Enbrea.Csv
         /// from a CSV source</param>
         /// <returns>A task that represents the asynchronous operation. The value of the 
         /// TResult parameter is true if token could be read; otherwise false.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public async ValueTask<bool> NextTokenAsync(Func<ValueTask<char>> nextCharAsync)
         {
             Token.Clear();
@@ -123,6 +126,7 @@ namespace Enbrea.Csv
         /// <summary>
         /// Resets the tokenizer state
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ResetState()
         {
             State = TokenizerState.IsSeekingStart;
@@ -133,6 +137,7 @@ namespace Enbrea.Csv
         /// </summary>
         /// <param name="c">The character.</param>
         /// <returns>Category of the character.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private CharCategory Categorise(char c)
         {
             if (c == '\0')
@@ -170,6 +175,7 @@ namespace Enbrea.Csv
         /// </summary>
         /// <param name="c">The character</param>
         /// <returns>Next workflow</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private TokenizerWorkflow Parse(char c)
         {
             switch (State)

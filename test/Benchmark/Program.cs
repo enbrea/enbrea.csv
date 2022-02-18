@@ -9,6 +9,7 @@
  */
 #endregion
 
+using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Running;
 
 namespace Enbrea.Csv.Tests
@@ -17,7 +18,13 @@ namespace Enbrea.Csv.Tests
     {
         public static void Main()
         {
-            _ = BenchmarkRunner.Run<CsvReaderBenchmark>();
+            IConfig config = null;
+#if DEBUG
+            config = new DebugInProcessConfig();
+#else
+            config = null;
+#endif            
+            _ = BenchmarkRunner.Run<CsvReaderBenchmark>(config);
         }
     }
 }

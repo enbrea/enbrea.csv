@@ -24,7 +24,7 @@ namespace Enbrea.Csv
     /// </remarks>
     public class CsvReader : IDisposable
     {
-        private const int _bufferSize = 64;
+        private const int _bufferSize = 512;
         private readonly char[] _buffer;
         private readonly CsvParser _csvParser;
         private readonly TextReader _textReader;
