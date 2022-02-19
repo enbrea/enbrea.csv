@@ -192,10 +192,12 @@ namespace Enbrea.Csv
                 throw new ArgumentNullException(nameof(values));
             }
 
+            Func<char> nextCharAction = () => NextChar();
+
             var valueCount = 0;
             do
             {
-                if (_csvParser.NextToken(() => NextChar()))
+                if (_csvParser.NextToken(nextCharAction))
                 {
                     if (values.Length > valueCount)
                     {
@@ -226,10 +228,12 @@ namespace Enbrea.Csv
                 throw new ArgumentNullException(nameof(valueAction));
             }
 
+            Func<char> nextCharAction = () => NextChar();
+
             var valueCount = 0;
             do
             {
-                if (_csvParser.NextToken(() => NextChar()))
+                if (_csvParser.NextToken(nextCharAction))
                 {
                     valueAction(valueCount, _csvParser.Token.ToString());
                     valueCount++;
@@ -259,10 +263,12 @@ namespace Enbrea.Csv
                 throw new ArgumentNullException(nameof(values));
             }
 
+            Func<ValueTask<char>> nextCharAction = () => NextCharAsync();
+
             var valueCount = 0;
             do
             {
-                if (await _csvParser.NextTokenAsync(() => NextCharAsync()))
+                if (await _csvParser.NextTokenAsync(nextCharAction))
                 {
                     if (values.Length > valueCount)
                     {
@@ -293,10 +299,12 @@ namespace Enbrea.Csv
                 throw new ArgumentNullException(nameof(valueAction));
             }
 
+            Func<ValueTask<char>> nextCharAction = () => NextCharAsync();
+
             var valueCount = 0;
             do
             {
-                if (await _csvParser.NextTokenAsync(() => NextCharAsync()))
+                if (await _csvParser.NextTokenAsync(nextCharAction))
                 {
                     valueAction(valueCount, _csvParser.Token.ToString());
                     valueCount++;
