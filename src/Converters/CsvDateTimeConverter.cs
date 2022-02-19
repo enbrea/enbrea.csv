@@ -15,7 +15,7 @@ using System.Globalization;
 namespace Enbrea.Csv
 {
     /// <summary>
-    /// Implementation of a DateTime converter to or from CSV
+    /// Implementation of a <see cref="DateTime"/> converter to or from CSV
     /// </summary>
     public class CsvDateTimeConverter : CsvDefaultFormattableConverter
     {

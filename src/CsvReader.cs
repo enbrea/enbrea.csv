@@ -11,6 +11,7 @@
 
 using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,7 +25,7 @@ namespace Enbrea.Csv
     /// </remarks>
     public class CsvReader : IDisposable
     {
-        private const int _bufferSize = 512;
+        private const int _bufferSize = 1024;
         private readonly char[] _buffer;
         private readonly CsvParser _csvParser;
         private readonly TextReader _textReader;
@@ -175,6 +176,42 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
+        /// Reads out the next row out of the current CSV stream and fills the values
+        /// of a given string array.
+        /// </summary>
+        /// <param name="csvReader">The <see cref="CsvReader"/></param>
+        /// <param name="values">Array of parsed values.</param>
+        /// <returns>
+        /// Number of parsed values
+        /// <returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public int ReadLine(string[] values)
+        {
+            if (values == null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            var valueCount = 0;
+            do
+            {
+                if (_csvParser.NextToken(() => NextChar()))
+                {
+                    if (values.Length > valueCount)
+                    {
+                        values[valueCount] = _csvParser.Token.ToString();
+                    }
+                    valueCount++;
+                }
+            }
+            while (_csvParser.State != CsvParser.TokenizerState.IsEndOfLine);
+
+            _lineCount++;
+
+            return valueCount;
+        }
+
+        /// <summary>
         /// Reads out the next row out of the current CSV stream and calls for every detected
         /// field value the given action.
         /// </summary>
@@ -195,6 +232,42 @@ namespace Enbrea.Csv
                 if (_csvParser.NextToken(() => NextChar()))
                 {
                     valueAction(valueCount, _csvParser.Token.ToString());
+                    valueCount++;
+                }
+            }
+            while (_csvParser.State != CsvParser.TokenizerState.IsEndOfLine);
+
+            _lineCount++;
+
+            return valueCount;
+        }
+
+        /// <summary>
+        /// Reads out the next row out of the current CSV stream and fills the values
+        /// of a given string array.
+        /// </summary>
+        /// <param name="csvReader">The <see cref="CsvReader"/></param>
+        /// <param name="values">Array of parsed values.</param>
+        /// <returns>A task that represents the asynchronous operation. The value of the TResult
+        /// parameter contains the number of parsed values.</returns>
+        /// <returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public async Task<int> ReadLineAsync(string[] values)
+        {
+            if (values == null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            var valueCount = 0;
+            do
+            {
+                if (await _csvParser.NextTokenAsync(() => NextCharAsync()))
+                {
+                    if (values.Length > valueCount)
+                    {
+                        values[valueCount] = _csvParser.Token.ToString();
+                    }
                     valueCount++;
                 }
             }

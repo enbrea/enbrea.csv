@@ -16,7 +16,7 @@ using System.Globalization;
 namespace Enbrea.Csv
 {
     /// <summary>
-    /// Implementation of a Guid converter to or from CSV
+    /// Implementation of a <see cref="Guid"/> converter to or from CSV
     /// </summary>
     public class CsvGuidConverter : CsvDefaultFormattableConverter
     {

@@ -15,7 +15,7 @@ using System.Globalization;
 namespace Enbrea.Csv
 {
     /// <summary>
-    /// Implementation of a double converter to or from CSV
+    /// Implementation of a <see cref="double"/> converter to or from CSV
     /// </summary>
     public class CsvDoubleConverter : CsvDefaultNumberConverter
     {

@@ -14,7 +14,7 @@ using System.Globalization;
 namespace Enbrea.Csv
 {
     /// <summary>
-    /// Implementation of a byte converter to or from CSV
+    /// Implementation of a <see cref="byte"/>  converter to or from CSV
     /// </summary>
     public class CsvByteConverter : CsvDefaultNumberConverter
     {

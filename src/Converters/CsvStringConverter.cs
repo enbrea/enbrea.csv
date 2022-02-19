@@ -12,7 +12,7 @@
 namespace Enbrea.Csv
 {
     /// <summary>
-    /// Implementation of a string converter to or from CSV
+    /// Implementation of a <see cref="string"/> converter to or from CSV
     /// </summary>
     public class CsvStringConverter : CsvDefaultConverter
     {

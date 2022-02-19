@@ -16,7 +16,7 @@ namespace Enbrea.Csv
 {
 #if NET6_0_OR_GREATER
     /// <summary>
-    /// Implementation of a DateOnly converter to or from CSV
+    /// Implementation of a <see cref="TimeOnly"/> converter to or from CSV
     /// </summary>
     public class CsvTimeOnlyConverter : CsvDefaultFormattableConverter
     {

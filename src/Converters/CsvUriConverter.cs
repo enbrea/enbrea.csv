@@ -15,7 +15,7 @@ using System;
 namespace Enbrea.Csv
 {
     /// <summary>
-    /// Implementation of a URI converter to or from CSV
+    /// Implementation of a <see cref="Uri"/> converter to or from CSV
     /// </summary>
     public class CsvUriConverter : CsvDefaultConverter
     {

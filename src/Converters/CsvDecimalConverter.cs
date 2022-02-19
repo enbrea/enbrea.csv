@@ -15,7 +15,7 @@ using System.Globalization;
 namespace Enbrea.Csv
 {
     /// <summary>
-    /// Implementation of a decimal converter to or from CSV
+    /// Implementation of a <see cref="decimal"/> converter to or from CSV
     /// </summary>
     public class CsvDecimalConverter : CsvDefaultNumberConverter
     {

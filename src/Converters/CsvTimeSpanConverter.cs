@@ -16,7 +16,7 @@ using System.Globalization;
 namespace Enbrea.Csv
 {
     /// <summary>
-    /// Implementation of a TimeSpan converter to or from CSV
+    /// Implementation of a <see cref="TimeSpan"/> converter to or from CSV
     /// </summary>
     public class CsvTimeSpanConverter : CsvDefaultFormattableConverter
     {

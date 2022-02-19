@@ -15,7 +15,7 @@ using System.Globalization;
 namespace Enbrea.Csv
 {
     /// <summary>
-    /// Implementation of a Int32 converter to or from CSV
+    /// Implementation of a <see cref="int"/> converter to or from CSV
     /// </summary>
     public class CsvInt32Converter : CsvDefaultNumberConverter
     {

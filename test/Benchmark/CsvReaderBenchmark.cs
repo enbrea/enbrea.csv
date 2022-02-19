@@ -60,10 +60,9 @@ namespace Enbrea.Csv.Tests
 
             csvReader.Configuration.Separator = ';';
 
-            while (csvReader.ReadLine((i, s) => { a[i] = s; }) > 0)
+            while (csvReader.ReadLine(a) > 0)
             {
                 l.Add((string[])a.Clone());
-                a = new string[3];
             }
 
             if (l.Count != NumberOfCsvRecords) throw new Exception("Wrong number of records");

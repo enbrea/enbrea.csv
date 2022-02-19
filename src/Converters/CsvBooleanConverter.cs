@@ -15,7 +15,7 @@ using System.Globalization;
 namespace Enbrea.Csv
 {
     /// <summary>
-    /// Implementation of a bool converter to or from CSV
+    /// Implementation of a <see cref="bool"/> converter to or from CSV
     /// </summary>
     public class CsvBooleanConverter : CsvDefaultConverter
     {
