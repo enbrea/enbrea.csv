@@ -20,11 +20,15 @@ namespace Enbrea.Csv
     /// <summary>
     /// A CSV parser which parses values from an abstract stream of characters.
     /// </summary>
+    /// <remarks>
+    /// We are using Knuth's Multiplicative Hash for string hashing. Implementation is 
+    /// borrowed from https://stackoverflow.com/a/9545731/18161314
+    /// </remarks>
     public class CsvParser
     {
         private readonly StringBuilder _token;
-        private readonly Dictionary<ulong, string> _tokenCache;
-        private ulong _tokenHash;
+        private readonly Dictionary<uint, string> _tokenCache;
+        private uint _tokenHash;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvParser"/> class.
@@ -32,7 +36,7 @@ namespace Enbrea.Csv
         public CsvParser(Func<string, Exception> throwException)
         {
             _token = new StringBuilder();
-            _tokenCache = new Dictionary<ulong, string>();
+            _tokenCache = new Dictionary<uint, string>();
             ThrowException = throwException;
         }
 
@@ -114,7 +118,7 @@ namespace Enbrea.Csv
         public bool NextToken(Func<char> nextChar)
         {
             _token.Clear();
-            _tokenHash = 3074457345618258791ul;
+            _tokenHash = 17;// 3074457345618258791ul;
             while (true)
             {
                 switch (Parse(nextChar()))
@@ -138,7 +142,7 @@ namespace Enbrea.Csv
         public async ValueTask<bool> NextTokenAsync(Func<ValueTask<char>> nextCharAsync)
         {
             _token.Clear();
-            _tokenHash = 3074457345618258791ul;
+            _tokenHash = 17;// 3074457345618258791ul;
             while (true)
             {
                 switch (Parse(await nextCharAsync()))
@@ -171,7 +175,7 @@ namespace Enbrea.Csv
                 unchecked
                 {
                     _tokenHash += c;
-                    _tokenHash *= 3074457345618258799ul;
+                    _tokenHash *= 31;// 3074457345618258799ul;
                 }
             }
             _token.Append(c);
