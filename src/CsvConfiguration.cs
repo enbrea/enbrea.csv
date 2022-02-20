@@ -23,6 +23,11 @@ namespace Enbrea.Csv
         public bool AllowComments { get; set; } = false;
 
         /// <summary>
+        /// Specifies whether values should be cached and reused
+        /// </summary>
+        public bool CacheValues { get; set; } = true;
+
+        /// <summary>
         /// Specifies the character for signaling a comment
         /// </summary>
         public char Comment { get; set; } = '#';

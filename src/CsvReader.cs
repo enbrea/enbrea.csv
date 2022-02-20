@@ -201,7 +201,7 @@ namespace Enbrea.Csv
                 {
                     if (values.Length > valueCount)
                     {
-                        values[valueCount] = _csvParser.Token.ToString();
+                        values[valueCount] = _csvParser.GetToken();
                     }
                     valueCount++;
                 }
@@ -235,7 +235,7 @@ namespace Enbrea.Csv
             {
                 if (_csvParser.NextToken(nextCharAction))
                 {
-                    valueAction(valueCount, _csvParser.Token.ToString());
+                    valueAction(valueCount, _csvParser.GetToken());
                     valueCount++;
                 }
             }
@@ -272,7 +272,7 @@ namespace Enbrea.Csv
                 {
                     if (values.Length > valueCount)
                     {
-                        values[valueCount] = _csvParser.Token.ToString();
+                        values[valueCount] = _csvParser.GetToken();
                     }
                     valueCount++;
                 }
@@ -306,7 +306,7 @@ namespace Enbrea.Csv
             {
                 if (await _csvParser.NextTokenAsync(nextCharAction))
                 {
-                    valueAction(valueCount, _csvParser.Token.ToString());
+                    valueAction(valueCount, _csvParser.GetToken());
                     valueCount++;
                 }
             }
@@ -321,6 +321,7 @@ namespace Enbrea.Csv
         /// Asks for the next character from the CSV source.
         /// </summary>
         /// <returns>The next character from the CSV source or EoF if nothing to read.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private char NextChar()
         {
             if (_bufferPosition >= _bufferEnd - 1)
@@ -348,6 +349,7 @@ namespace Enbrea.Csv
         /// </summary>
         /// <returns>A task that represents the asynchronous operation. The value of the TResult
         /// parameter contains the next character from the CSV source or EoF if nothing to read.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private async ValueTask<char> NextCharAsync()
         {
             if (_bufferPosition >= _bufferEnd - 1)

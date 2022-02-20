@@ -10,6 +10,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,12 +22,17 @@ namespace Enbrea.Csv
     /// </summary>
     public class CsvParser
     {
+        private readonly StringBuilder _token;
+        private readonly Dictionary<ulong, string> _tokenCache;
+        private ulong _tokenHash;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvParser"/> class.
         /// </summary>
         public CsvParser(Func<string, Exception> throwException)
         {
-            Token = new StringBuilder();
+            _token = new StringBuilder();
+            _tokenCache = new Dictionary<ulong, string>();
             ThrowException = throwException;
         }
 
@@ -72,11 +78,31 @@ namespace Enbrea.Csv
         /// <returns>The newly craeted Exception instance</returns>
         /// <remarks>This method must be overwritten in derived classes.</remarks>
         public Func<string, Exception> ThrowException { get; }
-
+        
         /// <summary>
-        /// Current token
+        /// Get current token
         /// </summary>
-        public StringBuilder Token { get; }
+        /// <returns></returns>
+        public string GetToken()
+        {
+            if (Configuration.CacheValues)
+            {
+                if (_tokenCache.TryGetValue(_tokenHash, out var cachedToken))
+                {
+                    return cachedToken;
+                }
+                else
+                {
+                    var newToken = _token.ToString();
+                    _tokenCache.Add(_tokenHash, newToken);
+                    return newToken;
+                }
+            }
+            else
+            {
+                return _token.ToString();
+            }
+        }
 
         /// <summary>
         /// Parses CSV source for next token.
@@ -87,7 +113,8 @@ namespace Enbrea.Csv
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool NextToken(Func<char> nextChar)
         {
-            Token.Clear();
+            _token.Clear();
+            _tokenHash = 3074457345618258791ul;
             while (true)
             {
                 switch (Parse(nextChar()))
@@ -110,7 +137,8 @@ namespace Enbrea.Csv
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public async ValueTask<bool> NextTokenAsync(Func<ValueTask<char>> nextCharAsync)
         {
-            Token.Clear();
+            _token.Clear();
+            _tokenHash = 3074457345618258791ul;
             while (true)
             {
                 switch (Parse(await nextCharAsync()))
@@ -122,7 +150,6 @@ namespace Enbrea.Csv
                 }
             }
         }
-
         /// <summary>
         /// Resets the tokenizer state
         /// </summary>
@@ -130,6 +157,24 @@ namespace Enbrea.Csv
         public void ResetState()
         {
             State = TokenizerState.IsSeekingStart;
+        }
+
+        /// <summary>
+        /// Appends given character to current token.
+        /// </summary>
+        /// <param name="c">The character</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void AppendToToken(char c)
+        {
+            if (Configuration.CacheValues)
+            {
+                unchecked
+                {
+                    _tokenHash += c;
+                    _tokenHash *= 3074457345618258799ul;
+                }
+            }
+            _token.Append(c);
         }
 
         /// <summary>
@@ -187,7 +232,7 @@ namespace Enbrea.Csv
                             case CharCategory.IsOrdinary:
                             case CharCategory.IsWhitespace:
                                 State = TokenizerState.IsInPlain;
-                                Token.Append(c);
+                                AppendToToken(c);
                                 return TokenizerWorkflow.Continue;
                             case CharCategory.IsQuote:
                                 State = TokenizerState.IsInQuoted;
@@ -212,7 +257,7 @@ namespace Enbrea.Csv
                             case CharCategory.IsOrdinary:
                             case CharCategory.IsWhitespace:
                                 State = TokenizerState.IsInPlain;
-                                Token.Append(c);
+                                AppendToToken(c);
                                 return TokenizerWorkflow.Continue;
                             case CharCategory.IsQuote:
                                 State = TokenizerState.IsInQuoted;
@@ -248,7 +293,7 @@ namespace Enbrea.Csv
                         {
                             case CharCategory.IsOrdinary:
                                 State = TokenizerState.IsInPlain;
-                                Token.Append(c);
+                                AppendToToken(c);
                                 return TokenizerWorkflow.Continue;
                             case CharCategory.IsWhitespace:
                                 State = TokenizerState.IsSeekingStart;
@@ -278,7 +323,7 @@ namespace Enbrea.Csv
                             case CharCategory.IsOrdinary:
                             case CharCategory.IsComment:
                             case CharCategory.IsWhitespace:
-                                Token.Append(c);
+                                AppendToToken(c);
                                 return TokenizerWorkflow.Continue;
                             case CharCategory.IsQuote:
                                 throw ThrowException($"CSV quote is missing at the begining.");
@@ -301,10 +346,10 @@ namespace Enbrea.Csv
                             case CharCategory.IsSeparator:
                             case CharCategory.IsComment:
                             case CharCategory.IsEndOfLine:
-                                Token.Append(c);
+                                AppendToToken(c);
                                 return TokenizerWorkflow.Continue;
                             case CharCategory.IsWhitespace:
-                                Token.Append(" ");
+                                AppendToToken(' ');
                                 return TokenizerWorkflow.Continue;
                             case CharCategory.IsQuote:
                                 State = TokenizerState.IsAfterEndQuote;
@@ -327,7 +372,7 @@ namespace Enbrea.Csv
                                 return TokenizerWorkflow.Continue;
                             case CharCategory.IsQuote:
                                 State = TokenizerState.IsInQuoted;
-                                Token.Append(c);
+                                AppendToToken(c);
                                 return TokenizerWorkflow.Continue;
                             case CharCategory.IsSeparator:
                                 State = TokenizerState.IsSeekingStart;

@@ -10,6 +10,7 @@
 #endregion
 
 using System;
+using System.Runtime.CompilerServices;
 
 namespace Enbrea.Csv
 {
@@ -72,12 +73,14 @@ namespace Enbrea.Csv
             _position = 0;
             _csvParser.ResetState();
 
+            Func<char> nextCharAction = () => NextChar();
+
             var valueCount = 0;
             do
             {
-                if (_csvParser.NextToken(() => NextChar()))
+                if (_csvParser.NextToken(nextCharAction))
                 {
-                    valueAction(valueCount, _csvParser.Token.ToString());
+                    valueAction(valueCount, _csvParser.GetToken());
                     valueCount++;
                 }
             }
@@ -90,6 +93,7 @@ namespace Enbrea.Csv
         /// Asks for the next character from the CSV source.
         /// </summary>
         /// <returns>The next character from the CSV source or EoF if nothing to read.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private char NextChar()
         {
             if (_position < _line.Length)

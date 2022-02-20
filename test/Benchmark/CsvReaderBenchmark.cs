@@ -33,7 +33,8 @@ namespace Enbrea.Csv.Tests
 
             var config = new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture)
             {
-                Delimiter = ";"
+                Delimiter = ";",
+                CacheFields = true
             };
 
             using var strReader = new StringReader(_data);
