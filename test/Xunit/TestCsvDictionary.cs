@@ -10,6 +10,7 @@
 #endregion
 
 using System;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -31,7 +32,8 @@ namespace Enbrea.Csv.Tests
 
             var sb = new StringBuilder();
 
-            using var csvWriter = new CsvWriter(sb);
+            using var strWriter = new StringWriter(sb);
+            var csvWriter = new CsvWriter(strWriter);
 
             var csvDictionary = new CsvDictionary();
 
@@ -43,7 +45,8 @@ namespace Enbrea.Csv.Tests
 
             Assert.Equal(csvData, sb.ToString());
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+            var csvReader = new CsvReader(strReader);
 
             Assert.NotNull(csvDictionary);
 
@@ -59,7 +62,8 @@ namespace Enbrea.Csv.Tests
         {
             var csvData = "";
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+            var csvReader = new CsvReader(strReader);
 
             var csvDictionary = new CsvDictionary();
 
@@ -82,7 +86,8 @@ namespace Enbrea.Csv.Tests
 
             var sb = new StringBuilder();
 
-            using var csvWriter = new CsvWriter(sb);
+            using var strWriter = new StringWriter(sb);
+            var csvWriter = new CsvWriter(strWriter);
 
             var csvDictionary = new CsvDictionary();
 
@@ -100,7 +105,8 @@ namespace Enbrea.Csv.Tests
 
             Assert.Equal(csvData, sb.ToString());
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+            var csvReader = new CsvReader(strReader);
 
             Assert.NotNull(csvDictionary);
 
@@ -119,7 +125,8 @@ namespace Enbrea.Csv.Tests
                 "D;01.01.2010" + Environment.NewLine +
                 "E;A";
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+            var csvReader = new CsvReader(strReader);
 
             var csvDictionary = new CsvDictionary();
 
@@ -145,7 +152,8 @@ namespace Enbrea.Csv.Tests
 
             var sb = new StringBuilder();
 
-            using var csvWriter = new CsvWriter(sb);
+            using var strWriter = new StringWriter(sb);
+            var csvWriter = new CsvWriter(strWriter);
 
             var csvDictionary = new CsvDictionary();
 
@@ -170,7 +178,8 @@ namespace Enbrea.Csv.Tests
                 "B;b" + Environment.NewLine +
                 "C;c";
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+            var csvReader = new CsvReader(strReader);
 
             var csvDictionary = new CsvDictionary();
 
@@ -196,7 +205,8 @@ namespace Enbrea.Csv.Tests
                 "B;b" + Environment.NewLine +
                 "C;c";
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+            var csvReader = new CsvReader(strReader);
 
             var csvDictionary = new CsvDictionary();
 

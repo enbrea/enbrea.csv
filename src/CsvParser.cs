@@ -27,27 +27,20 @@ namespace Enbrea.Csv
     public class CsvParser
     {
         private readonly StringBuilder _token;
-        private readonly Dictionary<uint, string> _tokenCache;
-        private uint _tokenHash;
+        private readonly Dictionary<ulong, string> _tokenCache;
+        private ulong _tokenHash;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvParser"/> class.
         /// </summary>
-        public CsvParser(Func<string, Exception> throwException)
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="throwException">A method which generates a new Exception</param>
+        public CsvParser(CsvConfiguration configuration, Func<string, Exception> throwException)
         {
             _token = new StringBuilder();
-            _tokenCache = new Dictionary<uint, string>();
+            _tokenCache = new Dictionary<ulong, string>();
+            Configuration = configuration;
             ThrowException = throwException;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CsvParser"/> class.
-        /// </summary>
-        /// <param name="separator">Specifies the charactor for seperating values</param>
-        public CsvParser(char separator, Func<string, Exception> throwException)
-            : this(throwException)
-        {
-            Configuration.Separator = separator;
         }
 
         /// <summary>
@@ -68,7 +61,7 @@ namespace Enbrea.Csv
         /// <summary>
         /// Configuration parameter
         /// </summary>
-        public CsvConfiguration Configuration { get; set; } = new CsvConfiguration();
+        public CsvConfiguration Configuration { get; }
 
         /// <summary>
         /// Current tokenizer state
@@ -118,7 +111,7 @@ namespace Enbrea.Csv
         public bool NextToken(Func<char> nextChar)
         {
             _token.Clear();
-            _tokenHash = 17;// 3074457345618258791ul;
+            _tokenHash = 3074457345618258791ul;
             while (true)
             {
                 switch (Parse(nextChar()))
@@ -138,11 +131,11 @@ namespace Enbrea.Csv
         /// from a CSV source</param>
         /// <returns>A task that represents the asynchronous operation. The value of the 
         /// TResult parameter is true if token could be read; otherwise false.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         public async ValueTask<bool> NextTokenAsync(Func<ValueTask<char>> nextCharAsync)
         {
             _token.Clear();
-            _tokenHash = 17;// 3074457345618258791ul;
+            _tokenHash = 3074457345618258791ul;
             while (true)
             {
                 switch (Parse(await nextCharAsync()))
@@ -154,6 +147,7 @@ namespace Enbrea.Csv
                 }
             }
         }
+
         /// <summary>
         /// Resets the tokenizer state
         /// </summary>
@@ -175,7 +169,7 @@ namespace Enbrea.Csv
                 unchecked
                 {
                     _tokenHash += c;
-                    _tokenHash *= 31;// 3074457345618258799ul;
+                    _tokenHash *= 3074457345618258799ul;
                 }
             }
             _token.Append(c);

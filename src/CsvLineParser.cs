@@ -30,9 +30,18 @@ namespace Enbrea.Csv
         /// Initializes a new instance of the <see cref="CsvLineParser"/> class.
         /// </summary>
         public CsvLineParser()
+            : this(new CsvConfiguration())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvLineParser"/> class.
+        /// </summary>
+        /// <param name="configuration">Configuration parameters</param>
+        public CsvLineParser(CsvConfiguration configuration)
             : base()
         {
-            _csvParser = new CsvParser(ThrowException);
+            _csvParser = new CsvParser(configuration, ThrowException);
         }
 
         /// <summary>
@@ -46,12 +55,11 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Configuration parameter
+        /// Configuration parameters
         /// </summary>
         public CsvConfiguration Configuration
         {
             get { return _csvParser.Configuration; }
-            set { _csvParser.Configuration = value; }
         }
 
         /// <summary>

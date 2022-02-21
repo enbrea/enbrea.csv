@@ -10,6 +10,7 @@
 #endregion
 
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -28,7 +29,8 @@ namespace Enbrea.Csv.Tests
                 "a1;b1;c1" + Environment.NewLine +
                 "a2;b2;c2";
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+            var csvReader = new CsvReader(strReader);
 
             var csvTableReader = new CsvTableReader(csvReader);
 
@@ -64,7 +66,8 @@ namespace Enbrea.Csv.Tests
                 "-31;A long text;false;20.01.2050;B" + Environment.NewLine +
                 "55;\"A text with ;\";;31.07.1971;C";
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+            var csvReader = new CsvReader(strReader);
 
             var csvTableReader = new CsvTableReader(csvReader);
 
@@ -101,7 +104,8 @@ namespace Enbrea.Csv.Tests
                 "A;B1;C2;D" + Environment.NewLine +
                 "22;Text;true;01.01.2010";
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+            var csvReader = new CsvReader(strReader);
 
             var csvTableReader = new CsvTableReader(csvReader);
 
@@ -130,7 +134,8 @@ namespace Enbrea.Csv.Tests
                 "42;\"{\"\"IntValue\"\":42,\"\"StrValue\"\":\"\"Forty-Two\"\"}\"" + Environment.NewLine +
                 "5;\"{\"\"IntValue\"\":5,\"\"StrValue\"\":\"\"Five\"\"}\"";
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+            var csvReader = new CsvReader(strReader);
 
             var csvTableReader = new CsvTableReader(csvReader);
 
@@ -164,7 +169,8 @@ namespace Enbrea.Csv.Tests
                 "a1;b1;c1" + Environment.NewLine +
                 "a2;b2;c2";
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+            var csvReader = new CsvReader(strReader);
 
             var csvTableReader = new CsvTableReader(csvReader);
 
@@ -204,7 +210,8 @@ namespace Enbrea.Csv.Tests
                 "-31;A long text;false;20.01.2050;B" + Environment.NewLine +
                 "55;\"A text with ;\";;31.07.1971;C";
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+            var csvReader = new CsvReader(strReader);
 
             var csvTableReader = new CsvTableReader(csvReader);
 
@@ -253,7 +260,8 @@ namespace Enbrea.Csv.Tests
                 "a1;b1;c1" + Environment.NewLine +
                 "a2;b2;c2";
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+            var csvReader = new CsvReader(strReader);
 
             var csvTableReader = new CsvTableReader(csvReader);
 
