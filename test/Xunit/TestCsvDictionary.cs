@@ -33,7 +33,6 @@ namespace Enbrea.Csv.Tests
             var sb = new StringBuilder();
 
             using var strWriter = new StringWriter(sb);
-            var csvWriter = new CsvWriter(strWriter);
 
             var csvDictionary = new CsvDictionary();
 
@@ -41,16 +40,15 @@ namespace Enbrea.Csv.Tests
             csvDictionary["B"] = "b";
             csvDictionary["C"] = "c";
 
-            await csvDictionary.StoreAsync(csvWriter);
+            await csvDictionary.StoreAsync(strWriter);
 
             Assert.Equal(csvData, sb.ToString());
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
 
             Assert.NotNull(csvDictionary);
 
-            await csvDictionary.LoadAsync(csvReader);
+            await csvDictionary.LoadAsync(strReader);
 
             Assert.Equal("a", csvDictionary["A"]);
             Assert.Equal("b", csvDictionary["B"]);
@@ -63,13 +61,12 @@ namespace Enbrea.Csv.Tests
             var csvData = "";
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
 
             var csvDictionary = new CsvDictionary();
 
             Assert.NotNull(csvDictionary);
 
-            await csvDictionary.LoadAsync(csvReader);
+            await csvDictionary.LoadAsync(strReader);
             Assert.Equal(0, csvDictionary.Count);
         }
 
@@ -87,7 +84,6 @@ namespace Enbrea.Csv.Tests
             var sb = new StringBuilder();
 
             using var strWriter = new StringWriter(sb);
-            var csvWriter = new CsvWriter(strWriter);
 
             var csvDictionary = new CsvDictionary();
 
@@ -101,16 +97,15 @@ namespace Enbrea.Csv.Tests
             csvDictionary["e"] = null;
             csvDictionary["G"] = null;
 
-            await csvDictionary.StoreAsync(csvWriter, new SampleObject() { A = 22, B = "Text", C = true, D = new DateTime(2010, 1, 1) });
+            await csvDictionary.StoreAsync(strWriter, new SampleObject() { A = 22, B = "Text", C = true, D = new DateTime(2010, 1, 1) });
 
             Assert.Equal(csvData, sb.ToString());
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
 
             Assert.NotNull(csvDictionary);
 
-            await csvDictionary.LoadAsync(csvReader);
+            await csvDictionary.LoadAsync(strReader);
 
             Assert.Equal(new SampleObject() { A = 22, B = "Text", C = true, D = new DateTime(2010, 1, 1), E = "", G = SampleEnum.A }, csvDictionary.CreateAndGetValues<SampleObject>());
         }
@@ -126,7 +121,6 @@ namespace Enbrea.Csv.Tests
                 "E;A";
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
 
             var csvDictionary = new CsvDictionary();
 
@@ -134,7 +128,7 @@ namespace Enbrea.Csv.Tests
 
             csvDictionary.SetFormats<DateTime>("dd.MM.yyyy");
 
-            await csvDictionary.LoadAsync(csvReader);
+            await csvDictionary.LoadAsync(strReader);
             Assert.Equal(22, csvDictionary.GetValue<int>("A"));
             Assert.Equal("Text", csvDictionary.GetValue<string>("B"));
             Assert.True(csvDictionary.GetValue<bool>("C"));
@@ -153,7 +147,6 @@ namespace Enbrea.Csv.Tests
             var sb = new StringBuilder();
 
             using var strWriter = new StringWriter(sb);
-            var csvWriter = new CsvWriter(strWriter);
 
             var csvDictionary = new CsvDictionary();
 
@@ -165,7 +158,7 @@ namespace Enbrea.Csv.Tests
             csvDictionary.SetValue("C", true);
             csvDictionary.SetValue("D", new DateTime(2010, 1, 1));
 
-            await csvDictionary.StoreAsync(csvWriter);
+            await csvDictionary.StoreAsync(strWriter);
 
             Assert.Equal(csvData, sb.ToString());
         }
@@ -179,13 +172,12 @@ namespace Enbrea.Csv.Tests
                 "C;c";
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
 
             var csvDictionary = new CsvDictionary();
 
             Assert.NotNull(csvDictionary);
 
-            await csvDictionary.LoadAsync(csvReader);
+            await csvDictionary.LoadAsync(strReader);
 
             Assert.True(csvDictionary.TryGetValue("A", out string v1));
             Assert.Equal("a", v1);
@@ -206,13 +198,12 @@ namespace Enbrea.Csv.Tests
                 "C;c";
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
 
             var csvDictionary = new CsvDictionary();
 
             Assert.NotNull(csvDictionary);
 
-            await csvDictionary.LoadAsync(csvReader);
+            await csvDictionary.LoadAsync(strReader);
 
             csvDictionary.UseValue("A", s => Assert.Equal("a", s));
             csvDictionary.UseValue("B", s => Assert.Equal("b", s));

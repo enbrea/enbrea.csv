@@ -23,7 +23,7 @@ namespace Enbrea.Csv
         public bool AllowComments { get; set; } = false;
 
         /// <summary>
-        /// Specifies whether values should be cached and reused
+        /// Specifies whether parsed values should be cached and reused
         /// </summary>
         public bool CacheValues { get; set; } = true;
 

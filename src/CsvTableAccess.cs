@@ -12,8 +12,8 @@
 namespace Enbrea.Csv
 {
     /// <summary>
-    /// An abstract base class for <see cref="CsvTableReader"/> <see cref="CsvTableWriter"/>, <see cref="CsvLineTableReader"/>
-    /// and <see cref="CsvDictionary"/>
+    /// An abstract base class for <see cref="CsvTableReader"/> <see cref="CsvTableWriter"/>, <see cref="CsvLineTableReader"/>,
+    /// <see cref="CsvLineTableWriter"/> and <see cref="CsvDictionary"/>
     /// </summary>
     public abstract class CsvTableAccess : CsvAccess
     {

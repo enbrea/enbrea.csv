@@ -67,10 +67,7 @@ namespace Enbrea.Csv
         /// </returns>
         public static IEnumerable<string> ReadAllLines(this CsvReader csvReader)
         {
-            var csvLineBuilder = new CsvLineBuilder()
-            {
-                Configuration = csvReader.Configuration
-            };
+            var csvLineBuilder = new CsvLineBuilder(csvReader.Configuration);
 
             while (csvReader.ReadLine((i, s) => { csvLineBuilder.Append(s); }) > 0)
             {
@@ -89,10 +86,7 @@ namespace Enbrea.Csv
         /// </returns>
         public static async IAsyncEnumerable<string> ReadAllLinesAsync(this CsvReader csvReader)
         {
-            var csvLineBuilder = new CsvLineBuilder()
-            {
-                Configuration = csvReader.Configuration
-            };
+            var csvLineBuilder = new CsvLineBuilder(csvReader.Configuration);
 
             while (await csvReader.ReadLineAsync((i, s) => { csvLineBuilder.Append(s); }) > 0)
             {

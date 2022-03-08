@@ -26,9 +26,7 @@ namespace Enbrea.Csv.Tests
             var csvLine2 = "a1;b1;c1";
             var csvLine3 = "a2;b2;c2";
 
-            var csvLineWriter = new CsvLineBuilder();
-            
-            var csvTableWriter = new CsvLineTableWriter(csvLineWriter);
+            var csvTableWriter = new CsvLineTableWriter();
 
             Assert.Equal(csvLine1, csvTableWriter.WriteHeaders("A", "B", "C"));
 
@@ -53,9 +51,7 @@ namespace Enbrea.Csv.Tests
             var csvLine2 = "42;\"{\"\"IntValue\"\":42,\"\"StrValue\"\":\"\"Forty-Two\"\"}\"";
             var csvLine3 = "5;\"{\"\"IntValue\"\":5,\"\"StrValue\"\":\"\"Five\"\"}\"";
 
-            var csvLineWriter = new CsvLineBuilder();
-
-            var csvTableWriter = new CsvLineTableWriter(csvLineWriter, "A", "B");
+            var csvTableWriter = new CsvLineTableWriter("A", "B");
 
             csvTableWriter.AddConverter<CustomType>(new CustomTypeConverter());
 
@@ -80,9 +76,7 @@ namespace Enbrea.Csv.Tests
             var csvLine3 = "-31;A long text;false;20.01.2050";
             var csvLine4 = "55;\"A text with ;\";;31.07.1971";
 
-            var csvLineWriter = new CsvLineBuilder();
-
-            var csvTableWriter = new CsvLineTableWriter(csvLineWriter);
+            var csvTableWriter = new CsvLineTableWriter();
 
 #if NET6_0_OR_GREATER
             csvTableWriter.SetFormats<DateOnly>("dd.MM.yyyy");

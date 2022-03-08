@@ -34,9 +34,8 @@ namespace Enbrea.Csv.Tests
             var sb = new StringBuilder();
 
             using var strWriter = new StringWriter(sb);
-            var csvWriter = new CsvWriter(strWriter);
 
-            var csvTableWriter = new CsvTableWriter(csvWriter);
+            var csvTableWriter = new CsvTableWriter(strWriter);
 
             await csvTableWriter.WriteHeadersAsync("A", "B", "C");
 
@@ -68,9 +67,8 @@ namespace Enbrea.Csv.Tests
             var sb = new StringBuilder();
 
             using var strWriter = new StringWriter(sb);
-            var csvWriter = new CsvWriter(strWriter);
 
-            var csvTableWriter = new CsvTableWriter(csvWriter);
+            var csvTableWriter = new CsvTableWriter(strWriter);
 
             csvTableWriter.AddConverter<CustomType>(new CustomTypeConverter());
 
@@ -103,9 +101,8 @@ namespace Enbrea.Csv.Tests
             var sb = new StringBuilder();
 
             using var strWriter = new StringWriter(sb);
-            var csvWriter = new CsvWriter(strWriter);
 
-            var csvTableWriter = new CsvTableWriter(csvWriter);
+            var csvTableWriter = new CsvTableWriter(strWriter);
 
             csvTableWriter.SetFormats<DateTime>("dd.MM.yyyy");
             csvTableWriter.SetTrueFalseString<bool>("true", "false");
@@ -150,9 +147,8 @@ namespace Enbrea.Csv.Tests
             var sb = new StringBuilder();
 
             using var strWriter = new StringWriter(sb);
-            var csvWriter = new CsvWriter(strWriter);
 
-            var csvTableWriter = new CsvTableWriter(csvWriter);
+            var csvTableWriter = new CsvTableWriter(strWriter);
 
             csvTableWriter.SetFormats<DateTime>("dd.MM.yyyy");
             csvTableWriter.SetTrueFalseString<bool>("true", "false");

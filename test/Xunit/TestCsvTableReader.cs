@@ -30,9 +30,8 @@ namespace Enbrea.Csv.Tests
                 "a2;b2;c2";
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
 
-            var csvTableReader = new CsvTableReader(csvReader);
+            var csvTableReader = new CsvTableReader(strReader);
 
             Assert.NotNull(csvTableReader);
 
@@ -67,9 +66,8 @@ namespace Enbrea.Csv.Tests
                 "55;\"A text with ;\";;31.07.1971;C";
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
 
-            var csvTableReader = new CsvTableReader(csvReader);
+            var csvTableReader = new CsvTableReader(strReader);
 
             csvTableReader.SetFormats<DateTime>("dd.MM.yyyy");
             csvTableReader.SetTrueFalseString<bool>("true", "false");
@@ -105,9 +103,8 @@ namespace Enbrea.Csv.Tests
                 "22;Text;true;01.01.2010";
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
 
-            var csvTableReader = new CsvTableReader(csvReader);
+            var csvTableReader = new CsvTableReader(strReader);
 
             csvTableReader.SetFormats<DateTime>("dd.MM.yyyy");
             csvTableReader.SetTrueFalseString<bool>("true", "false");
@@ -135,9 +132,8 @@ namespace Enbrea.Csv.Tests
                 "5;\"{\"\"IntValue\"\":5,\"\"StrValue\"\":\"\"Five\"\"}\"";
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
 
-            var csvTableReader = new CsvTableReader(csvReader);
+            var csvTableReader = new CsvTableReader(strReader);
 
             Assert.NotNull(csvTableReader);
 
@@ -170,9 +166,8 @@ namespace Enbrea.Csv.Tests
                 "a2;b2;c2";
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
 
-            var csvTableReader = new CsvTableReader(csvReader);
+            var csvTableReader = new CsvTableReader(strReader);
 
             Assert.NotNull(csvTableReader);
 
@@ -211,9 +206,8 @@ namespace Enbrea.Csv.Tests
                 "55;\"A text with ;\";;31.07.1971;C";
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
 
-            var csvTableReader = new CsvTableReader(csvReader);
+            var csvTableReader = new CsvTableReader(strReader);
 
             Assert.NotNull(csvTableReader);
 
@@ -261,9 +255,8 @@ namespace Enbrea.Csv.Tests
                 "a2;b2;c2";
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
 
-            var csvTableReader = new CsvTableReader(csvReader);
+            var csvTableReader = new CsvTableReader(strReader);
 
             Assert.NotNull(csvTableReader);
 

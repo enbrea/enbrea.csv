@@ -26,86 +26,164 @@ namespace Enbrea.Csv
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvLineTableReader"/> class.
         /// </summary>
-        /// <param name="csvLineParser">The <see cref="CsvLineParser"/> as string parser</param>
-        public CsvLineTableReader(CsvLineParser csvLineParser)
+        public CsvLineTableReader()
             : base()
         {
-            _csvLineParser = csvLineParser;
+            _csvLineParser = new CsvLineParser();
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvLineTableReader"/> class.
         /// </summary>
-        /// <param name="csvLineParser">The <see cref="CsvLineParser"/> as string parser</param>
+        /// <param name="configuration">Configuration parameters</param>
+        public CsvLineTableReader(CsvConfiguration configuration)
+            : base()
+        {
+            _csvLineParser = new CsvLineParser(configuration);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvLineTableReader"/> class.
+        /// </summary>
         /// <param name="csvHeaders">List of csv headers</param>
-        public CsvLineTableReader(CsvLineParser csvLineParser, CsvHeaders csvHeaders)
+        public CsvLineTableReader(CsvHeaders csvHeaders)
             : base(csvHeaders)
         {
-            _csvLineParser = csvLineParser;
+            _csvLineParser = new CsvLineParser();
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvLineTableReader"/> class.
         /// </summary>
-        /// <param name="csvLineParser">The <see cref="CsvLineParser"/> as string parser</param>
-        /// <param name="csvHeaders">List of csv headers</param>
-        public CsvLineTableReader(CsvLineParser csvLineParser, params string[] csvHeaders)
-            : this(csvLineParser, new CsvHeaders(csvHeaders))
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvLineTableReader(CsvConfiguration configuration, CsvHeaders headers)
+            : base(headers)
+        {
+            _csvLineParser = new CsvLineParser(configuration);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvLineTableReader"/> class.
+        /// </summary>
+        /// <param name="headers">List of csv headers</param>
+        public CsvLineTableReader(params string[] headers)
+            : this(new CsvHeaders(headers))
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvLineTableReader"/> class.
         /// </summary>
-        /// <param name="csvLineParser">The <see cref="CsvLineParser"/> as string parser</param>
-        /// <param name="csvHeaders">List of csv headers</param>
-        public CsvLineTableReader(CsvLineParser csvLineParser, IList<string> csvHeaders)
-            : this(csvLineParser, new CsvHeaders(csvHeaders))
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvLineTableReader(CsvConfiguration configuration, params string[] headers)
+            : this(configuration, new CsvHeaders(headers))
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvLineTableReader"/> class.
         /// </summary>
-        /// <param name="csvLineParser">The <see cref="CsvLineParser"/> as string parser</param>
-        /// <param name="csvConverterResolver">Your own implementation of a value converter resolver</param>
-        public CsvLineTableReader(CsvLineParser csvLineParser, ICsvConverterResolver csvConverterResolver)
-            : base(csvConverterResolver)
-        {
-            _csvLineParser = csvLineParser;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CsvLineTableReader"/> class.
-        /// </summary>
-        /// <param name="csvLineParser">The <see cref="CsvLineParser"/> as string parser</param>
-        /// <param name="csvConverterResolver">Your own implementation of a value converter resolver</param>
         /// <param name="csvHeaders">List of csv headers</param>
-        public CsvLineTableReader(CsvLineParser csvLineParser, ICsvConverterResolver csvConverterResolver, CsvHeaders csvHeaders)
-            : base(csvHeaders, csvConverterResolver)
-        {
-            _csvLineParser = csvLineParser;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CsvLineTableReader"/> class.
-        /// </summary>
-        /// <param name="csvLineParser">The <see cref="CsvLineParser"/> as string parser</param>
-        /// <param name="csvConverterResolver">Your own implementation of a value converter resolver</param>
-        /// <param name="csvHeaders">List of csv headers</param>
-        public CsvLineTableReader(CsvLineParser csvLineParser, ICsvConverterResolver csvConverterResolver, params string[] csvHeaders)
-            : this(csvLineParser, csvConverterResolver, new CsvHeaders(csvHeaders))
+        public CsvLineTableReader(IList<string> csvHeaders)
+            : this(new CsvHeaders(csvHeaders))
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvLineTableReader"/> class.
         /// </summary>
-        /// <param name="csvLineParser">The <see cref="CsvLineParser"/> as string parser</param>
-        /// <param name="csvConverterResolver">Your own implementation of a value converter resolver</param>
-        /// <param name="csvHeaders">List of csv headers</param>
-        public CsvLineTableReader(CsvLineParser csvLineParser, ICsvConverterResolver csvConverterResolver, IList<string> csvHeaders)
-            : this(csvLineParser, csvConverterResolver, new CsvHeaders(csvHeaders))
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvLineTableReader(CsvConfiguration configuration, IList<string> headers)
+            : this(configuration, new CsvHeaders(headers))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvLineTableReader"/> class.
+        /// </summary>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        public CsvLineTableReader(ICsvConverterResolver converterResolver)
+            : base(converterResolver)
+        {
+            _csvLineParser = new CsvLineParser();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvLineTableReader"/> class.
+        /// </summary>
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        public CsvLineTableReader(CsvConfiguration configuration, ICsvConverterResolver converterResolver)
+            : base(converterResolver)
+        {
+            _csvLineParser = new CsvLineParser(configuration); 
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvLineTableReader"/> class.
+        /// </summary>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvLineTableReader(ICsvConverterResolver converterResolver, CsvHeaders headers)
+            : base(headers, converterResolver)
+        {
+            _csvLineParser = new CsvLineParser();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvLineTableReader"/> class.
+        /// </summary>
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvLineTableReader(CsvConfiguration configuration, ICsvConverterResolver converterResolver, CsvHeaders headers)
+            : base(headers, converterResolver)
+        {
+            _csvLineParser = new CsvLineParser(configuration); 
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvLineTableReader"/> class.
+        /// </summary>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvLineTableReader(ICsvConverterResolver converterResolver, params string[] headers)
+            : this(converterResolver, new CsvHeaders(headers))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvLineTableReader"/> class.
+        /// </summary>
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvLineTableReader(CsvConfiguration configuration, ICsvConverterResolver converterResolver, params string[] headers)
+            : this(configuration, converterResolver, new CsvHeaders(headers))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvLineTableReader"/> class.
+        /// </summary>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvLineTableReader(ICsvConverterResolver converterResolver, IList<string> headers)
+            : this(converterResolver, new CsvHeaders(headers))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvLineTableReader"/> class.
+        /// </summary>
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvLineTableReader(CsvConfiguration configuration, ICsvConverterResolver converterResolver, IList<string> headers)
+            : this(configuration, converterResolver, new CsvHeaders(headers))
         {
         }
 
