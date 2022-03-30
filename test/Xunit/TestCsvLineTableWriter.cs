@@ -51,7 +51,7 @@ namespace Enbrea.Csv.Tests
             var csvLine2 = "42;\"{\"\"IntValue\"\":42,\"\"StrValue\"\":\"\"Forty-Two\"\"}\"";
             var csvLine3 = "5;\"{\"\"IntValue\"\":5,\"\"StrValue\"\":\"\"Five\"\"}\"";
 
-            var csvTableWriter = new CsvLineTableWriter("A", "B");
+            var csvTableWriter = new CsvLineTableWriter(new CsvConfiguration() { Separator = ';'}, "A", "B");
 
             csvTableWriter.AddConverter<CustomType>(new CustomTypeConverter());
 

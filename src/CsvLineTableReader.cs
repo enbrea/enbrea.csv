@@ -188,6 +188,14 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
+        /// Configuration parameter
+        /// </summary>
+        public CsvConfiguration Configuration
+        {
+            get { return _csvLineParser.Configuration; }
+        }
+
+        /// <summary>
         /// Gets the value of the current csv record at the specified index.
         /// </summary>
         /// <param name="i">Index of the value</param>

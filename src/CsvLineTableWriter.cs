@@ -193,6 +193,14 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
+        /// Configuration parameter
+        /// </summary>
+        public CsvConfiguration Configuration
+        {
+            get { return _csvLineBuilder.Configuration; }
+        }
+
+        /// <summary>
         /// Gets and sets the value of the current csv record at the specified index.
         /// </summary>
         /// <param name="i">Index of the value</param>
@@ -309,6 +317,26 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
+        /// Applies all relvant values from the strongly typed csv object to the current csv record.
+        /// </summary>
+        /// <param name="entity">Pointer to the strongly typed csv object instance</param>
+        /// <returns>Number of values applied</returns>
+        public int SetValues<TEntity>(TEntity entity)
+        {
+            int c = 0;
+            foreach (var header in Headers)
+            {
+                if (CsvClassMapperResolverFactory.GetResolver().GetMapper<TEntity>().ContainsValue(header))
+                {
+                    var value = CsvClassMapperResolverFactory.GetResolver().GetMapper<TEntity>().GetValue(entity, header);
+                    SetValue(CsvClassMapperResolverFactory.GetResolver().GetMapper<TEntity>().GetValueType(header), header, value);
+                    c++;
+                }
+            }
+            return c;
+        }
+
+        /// <summary>
         /// The current csv record as list of values
         /// </summary>
         /// <returns>List of values</returns>
@@ -382,7 +410,7 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Writes the current csv record to the stream and clears its cotnent
+        /// Writes the current csv record to the stream and clears its content
         /// </summary>
         /// <returns>
         /// A CSV formatted string if values are available; otherwise null.
@@ -448,26 +476,5 @@ namespace Enbrea.Csv
         {
             WriteHeaders(new CsvHeaders<TEntity>(csvHeaders));
         }
-
-        /// <summary>
-        /// Applies all relvant values from the strongly typed csv object to the current csv record.
-        /// </summary>
-        /// <param name="entity">Pointer to the strongly typed csv object instance</param>
-        /// <returns>Number of values applied</returns>
-        public int SetValues<TEntity>(TEntity entity)
-        {
-            int c = 0;
-            foreach (var header in Headers)
-            {
-                if (CsvClassMapperResolverFactory.GetResolver().GetMapper<TEntity>().ContainsValue(header))
-                {
-                    var value = CsvClassMapperResolverFactory.GetResolver().GetMapper<TEntity>().GetValue(entity, header);
-                    SetValue(CsvClassMapperResolverFactory.GetResolver().GetMapper<TEntity>().GetValueType(header), header, value);
-                    c++;
-                }
-            }
-            return c;
-        }
-
     }
 }
