@@ -1,8 +1,8 @@
-﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
@@ -12,6 +12,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Enbrea.Csv
@@ -21,23 +22,49 @@ namespace Enbrea.Csv
     /// </summary>
     public class CsvDictionary : CsvAccess, IEnumerable<KeyValuePair<string, string>>
     {
-        private readonly List<KeyValuePair<string, string>> _keyValuePairs = new List<KeyValuePair<string, string>>(); 
+        private readonly List<KeyValuePair<string, string>> _keyValuePairs = new List<KeyValuePair<string, string>>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvDictionary"/> class.
         /// </summary>
         public CsvDictionary()
+            : this(new CsvConfiguration())
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvDictionary"/> class.
         /// </summary>
-        /// <param name="csvConverterResolver">Your own implementation of a value converter resolver</param>
-        public CsvDictionary(ICsvConverterResolver csvConverterResolver)
-            : base(csvConverterResolver)
+        /// <param name="configuration">Configuration parameters</param>
+        public CsvDictionary(CsvConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvDictionary"/> class.
+        /// </summary>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        public CsvDictionary(ICsvConverterResolver converterResolver)
+            : this(new CsvConfiguration(), converterResolver)
         {
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvDictionary"/> class.
+        /// </summary>
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        public CsvDictionary(CsvConfiguration configuration, ICsvConverterResolver converterResolver)
+            : base(converterResolver)
+        {
+            Configuration = configuration;
+        }
+
+        /// <summary>
+        /// Configuration parameter
+        /// </summary>
+        public CsvConfiguration Configuration { get; }
 
         /// <summary>
         /// Number of key/value pairs 
@@ -188,21 +215,22 @@ namespace Enbrea.Csv
         /// <summary>
         /// Reads the csv dictionary out of a CSV source
         /// </summary>
-        /// <param name="csvReader">A <see cref="CsvReader"/></param>
+        /// <param name="textReader">The text reader to be used.</param>
         /// <returns>
         /// Number of key/value pairs read
         /// </returns>
-        public int Load(CsvReader csvReader)
+        public int Load(TextReader textReader)
         {
-            if (csvReader == null)
+            if (textReader == null)
             {
-                throw new ArgumentNullException(nameof(csvReader));
+                throw new ArgumentNullException(nameof(textReader));
             }
 
             _keyValuePairs.Clear();
 
             var c = 0;
             var csvValues = new List<string>();
+            var csvReader = new CsvReader(textReader, Configuration);
 
             while (csvReader.ReadLine(csvValues) > 0)
             {
@@ -219,20 +247,21 @@ namespace Enbrea.Csv
         /// <summary>
         /// Reads the csv dictionary out of a CSV source
         /// </summary>
-        /// <param name="csvReader">A <see cref="CsvReader"/></param>
+        /// <param name="textReader">The text reader to be used.</param>
         /// <returns>A task that represents the asynchronous operation. The value of the TResult
         //  parameter contains the number of key/value pairs read.</returns>
-        public async Task<int> LoadAsync(CsvReader csvReader)
+        public async Task<int> LoadAsync(TextReader textReader)
         {
-            if (csvReader == null)
+            if (textReader == null)
             {
-                throw new ArgumentNullException(nameof(csvReader));
+                throw new ArgumentNullException(nameof(textReader));
             }
 
             _keyValuePairs.Clear();
 
             var c = 0;
             var csvValues = new List<string>();
+            var csvReader = new CsvReader(textReader, Configuration);
 
             while (await csvReader.ReadLineAsync(csvValues) > 0)
             {
@@ -256,7 +285,6 @@ namespace Enbrea.Csv
         {
             SetValue(key, value, ConverterResolver.GetConverter<T>());
         }
-
         /// <summary>
         /// Sets the value of the specified key.
         /// </summary>
@@ -310,17 +338,19 @@ namespace Enbrea.Csv
         /// <summary>
         /// Writes the csv dictionary to a CSV target
         /// </summary>
-        /// <param name="csvWriter">A <see cref="CsvWriter"/></param>
+        /// <param name="textWriter">A <see cref="TextWriter"/></param>
         /// <returns>Number of key/value pairs written</returns>
-        public int Store(CsvWriter csvWriter)
+        public int Store(TextWriter textWriter)
         {
-            if (csvWriter == null)
+            if (textWriter == null)
             {
-                throw new ArgumentNullException(nameof(csvWriter));
+                throw new ArgumentNullException(nameof(textWriter));
             }
 
             var c = 0;
             var wasPreviousWrite = false;
+            var csvWriter = new CsvWriter(textWriter, Configuration);
+
             foreach (var keyValuePair in _keyValuePairs)
             {
                 if (wasPreviousWrite)
@@ -337,18 +367,20 @@ namespace Enbrea.Csv
         /// <summary>
         /// Writes the csv dictionary to a CSV target
         /// </summary>
-        /// <param name="csvWriter">A <see cref="CsvWriter"/></param>
+        /// <param name="textWriter">A <see cref="TextWriter"/></param>
         /// <returns>A task that represents the asynchronous operation. The value of the TResult
         //  parameter contains the number of key/value pairs written.</returns>
-        public async Task<int> StoreAsync(CsvWriter csvWriter)
+        public async Task<int> StoreAsync(TextWriter textWriter)
         {
-            if (csvWriter == null)
+            if (textWriter == null)
             {
-                throw new ArgumentNullException(nameof(csvWriter));
+                throw new ArgumentNullException(nameof(textWriter));
             }
 
             var c = 0;
             var wasPreviousWrite = false;
+            var csvWriter = new CsvWriter(textWriter, Configuration);
+
             foreach (var keyValuePair in _keyValuePairs)
             {
                 if (wasPreviousWrite)

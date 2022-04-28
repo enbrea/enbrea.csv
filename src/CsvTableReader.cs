@@ -1,8 +1,8 @@
-﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
-/*    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
+/*    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -27,86 +28,189 @@ namespace Enbrea.Csv
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvTableReader"/> class.
         /// </summary>
-        /// <param name="csvReader">The <see cref="CsvReader"/> as source</param>
-        public CsvTableReader(CsvReader csvReader)
+        /// <param name="textReader">The text reader to be used.</param>
+        public CsvTableReader(TextReader textReader)
+            : base()
         {
-            _csvReader = csvReader;
+            _csvReader = new CsvReader(textReader);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvTableReader"/> class.
         /// </summary>
-        /// <param name="csvReader">The <see cref="CsvReader"/> as source</param>
-        /// <param name="csvHeaders">List of csv headers</param>
-        public CsvTableReader(CsvReader csvReader, CsvHeaders csvHeaders)
-            : base(csvHeaders)
+        /// <param name="textReader">The text reader to be used.</param>
+        /// <param name="configuration">Configuration parameters</param>
+        public CsvTableReader(TextReader textReader, CsvConfiguration configuration)
+            : base()
         {
-            _csvReader = csvReader;
+            _csvReader = new CsvReader(textReader, configuration);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvTableReader"/> class.
         /// </summary>
-        /// <param name="csvReader">The <see cref="CsvReader"/> as source</param>
-        /// <param name="csvHeaders">List of csv headers</param>
-        public CsvTableReader(CsvReader csvReader, params string[] csvHeaders)
-            : this(csvReader, new CsvHeaders(csvHeaders))
+        /// <param name="textReader">The text reader to be used.</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableReader(TextReader textReader, CsvHeaders headers)
+            : base(headers)
         {
+            _csvReader = new CsvReader(textReader);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvTableReader"/> class.
         /// </summary>
-        /// <param name="csvReader">The <see cref="CsvReader"/> as source</param>
-        /// <param name="csvHeaders">List of csv headers</param>
-        public CsvTableReader(CsvReader csvReader, IList<string> csvHeaders)
-            : this(csvReader, new CsvHeaders(csvHeaders))
+        /// <param name="textReader">The text reader to be used.</param>
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableReader(TextReader textReader, CsvConfiguration configuration, CsvHeaders headers)
+            : base(headers)
         {
+            _csvReader = new CsvReader(textReader, configuration);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvTableReader"/> class.
         /// </summary>
-        /// <param name="csvReader">The <see cref="CsvReader"/> as source</param>
-        /// <param name="csvConverterResolver">Your own implementation of a value converter resolver</param>
-        public CsvTableReader(CsvReader csvReader, ICsvConverterResolver csvConverterResolver)
-            : base(csvConverterResolver)
-        {
-            _csvReader = csvReader;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CsvTableReader"/> class.
-        /// </summary>
-        /// <param name="csvReader">The <see cref="CsvReader"/> as source</param>
-        /// <param name="csvConverterResolver">Your own implementation of a value converter resolver</param>
-        /// <param name="csvHeaders">List of csv headers</param>
-        public CsvTableReader(CsvReader csvReader, ICsvConverterResolver csvConverterResolver, CsvHeaders csvHeaders)
-            : base(csvHeaders, csvConverterResolver)
-        {
-            _csvReader = csvReader;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CsvTableReader"/> class.
-        /// </summary>
-        /// <param name="csvReader">The <see cref="CsvReader"/> as source</param>
-        /// <param name="csvConverterResolver">Your own implementation of a value converter resolver</param>
-        /// <param name="csvHeaders">List of csv headers</param>
-        public CsvTableReader(CsvReader csvReader, ICsvConverterResolver csvConverterResolver, params string[] csvHeaders)
-            : this(csvReader, csvConverterResolver, new CsvHeaders(csvHeaders))
+        /// <param name="textReader">The text reader to be used.</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableReader(TextReader textReader, params string[] headers)
+            : this(textReader, new CsvHeaders(headers))
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvTableReader"/> class.
         /// </summary>
-        /// <param name="csvReader">The <see cref="CsvReader"/> as source</param>
-        /// <param name="csvConverterResolver">Your own implementation of a value converter resolver</param>
-        /// <param name="csvHeaders">List of csv headers</param>
-        public CsvTableReader(CsvReader csvReader, ICsvConverterResolver csvConverterResolver, IList<string> csvHeaders)
-            : this(csvReader, csvConverterResolver, new CsvHeaders(csvHeaders))
+        /// <param name="textReader">The text reader to be used.</param>
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableReader(TextReader textReader, CsvConfiguration configuration, params string[] headers)
+            : this(textReader, configuration, new CsvHeaders(headers))
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvTableReader"/> class.
+        /// </summary>
+        /// <param name="textReader">The text reader to be used.</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableReader(TextReader textReader, IList<string> headers)
+            : this(textReader, new CsvHeaders(headers))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvTableReader"/> class.
+        /// </summary>
+        /// <param name="textReader">The text reader to be used.</param>
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableReader(TextReader textReader, CsvConfiguration configuration, IList<string> headers)
+            : this(textReader, configuration, new CsvHeaders(headers))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvTableReader"/> class.
+        /// </summary>
+        /// <param name="textReader">The text reader to be used.</param>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        public CsvTableReader(TextReader textReader, ICsvConverterResolver converterResolver)
+            : base(converterResolver)
+        {
+            _csvReader = new CsvReader(textReader);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvTableReader"/> class.
+        /// </summary>
+        /// <param name="textReader">The text reader to be used.</param>
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        public CsvTableReader(TextReader textReader, CsvConfiguration configuration, ICsvConverterResolver converterResolver)
+            : base(converterResolver)
+        {
+            _csvReader = new CsvReader(textReader, configuration);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvTableReader"/> class.
+        /// </summary>
+        /// <param name="textReader">The text reader to be used.</param>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableReader(TextReader textReader, ICsvConverterResolver converterResolver, CsvHeaders headers)
+            : base(headers, converterResolver)
+        {
+            _csvReader = new CsvReader(textReader);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvTableReader"/> class.
+        /// </summary>
+        /// <param name="textReader">The text reader to be used.</param>
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableReader(TextReader textReader, CsvConfiguration configuration, ICsvConverterResolver converterResolver, CsvHeaders headers)
+            : base(headers, converterResolver)
+        {
+            _csvReader = new CsvReader(textReader, configuration);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvTableReader"/> class.
+        /// </summary>
+        /// <param name="textReader">The text reader to be used.</param>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableReader(TextReader textReader, ICsvConverterResolver converterResolver, params string[] headers)
+            : this(textReader, converterResolver, new CsvHeaders(headers))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvTableReader"/> class.
+        /// </summary>
+        /// <param name="textReader">The text reader to be used.</param>
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableReader(TextReader textReader, CsvConfiguration configuration, ICsvConverterResolver converterResolver, params string[] headers)
+            : this(textReader, configuration, converterResolver, new CsvHeaders(headers))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvTableReader"/> class.
+        /// </summary>
+        /// <param name="textReader">The text reader to be used.</param>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableReader(TextReader textReader, ICsvConverterResolver converterResolver, IList<string> headers)
+            : this(textReader, converterResolver, new CsvHeaders(headers))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvTableReader"/> class.
+        /// </summary>
+        /// <param name="textReader">The text reader to be used.</param>
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableReader(TextReader textReader, CsvConfiguration configuration, ICsvConverterResolver converterResolver, IList<string> headers)
+            : this(textReader, configuration, converterResolver, new CsvHeaders(headers))
+        {
+        }
+
+        /// <summary>
+        /// Configuration parameter
+        /// </summary>
+        public CsvConfiguration Configuration
+        {
+            get { return _csvReader.Configuration; }
         }
 
         /// <summary>
@@ -169,29 +273,29 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// 
+        /// Reads the typed value of the current csv record at the specified index. 
         /// </summary>
-        /// <param name="index"></param>
-        /// <param name="converter"></param>
-        /// <returns></returns>
+        /// <param name="index">Index within the current csv record</param>
+        /// <param name="converter">The value converter</param>
+        /// <returns>A typed value</returns>
         public object GetValue(int index, ICsvConverter converter)
         {
             return converter.FromString(this[index]);
         }
 
         /// <summary>
-        /// 
+        /// Reads the typed value of the current csv record at the posiiton of the specified header name. 
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="converter"></param>
-        /// <returns></returns>
+        /// <param name="name">Name of a header</param>
+        /// <param name="converter">The value converter</param>
+        /// <returns>A typed value</returns>
         public object GetValue(string name, ICsvConverter converter)
         {
             return converter.FromString(this[name]);
         }
 
         /// <summary>
-        /// Read the typed value of the current csv record at the specified index. 
+        /// Reads the typed value of the current csv record at the specified index. 
         /// </summary>
         /// <typeparam name="T">The type</typeparam>
         /// <param name="index">Index within the current csv record</param>
@@ -202,7 +306,7 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Read the typed value of the current csv record at the specified index. 
+        /// Reads the typed value of the current csv record at the specified index. 
         /// </summary>
         /// <typeparam name="T">The type</typeparam>
         /// <param name="index">Index within the current csv record</param>
@@ -264,6 +368,11 @@ namespace Enbrea.Csv
         /// <returns>Number of assigned values</returns>
         public int GetValues<TEntity>(TEntity entity)
         {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
+
             int c = 0;
             foreach (var header in Headers)
             {
@@ -277,6 +386,26 @@ namespace Enbrea.Csv
                 }
             }
             return c;
+        }
+
+        /// <summary>
+        /// Gives back whether the value of the current csv record at the specified index is empty. 
+        /// </summary>
+        /// <param name="index">Index within the current csv record</param>
+        /// <returns>TRUE, value is empty</returns>
+        public bool IsEmpty(int index)
+        {
+            return string.IsNullOrEmpty(this[index]);
+        }
+
+        /// <summary>
+        /// Gives back whether the value of the current csv record at the posiiton of the specified header name is empty. 
+        /// </summary>
+        /// <param name="name">Name of a header</param>
+        /// <returns>TRUE, value is empty</returns>
+        public bool IsEmpty(string name)
+        {
+            return string.IsNullOrEmpty(this[name]);
         }
 
         /// <summary>

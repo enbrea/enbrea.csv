@@ -1,8 +1,8 @@
-﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
@@ -10,6 +10,7 @@
 #endregion
 
 using System;
+using System.Runtime.CompilerServices;
 
 namespace Enbrea.Csv
 {
@@ -29,9 +30,18 @@ namespace Enbrea.Csv
         /// Initializes a new instance of the <see cref="CsvLineParser"/> class.
         /// </summary>
         public CsvLineParser()
+            : this(new CsvConfiguration())
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvLineParser"/> class.
+        /// </summary>
+        /// <param name="configuration">Configuration parameters</param>
+        public CsvLineParser(CsvConfiguration configuration)
             : base()
         {
-            _csvParser = new CsvParser(ThrowException);
+            _csvParser = new CsvParser(configuration, ThrowException);
         }
 
         /// <summary>
@@ -45,12 +55,11 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Configuration parameter
+        /// Configuration parameters
         /// </summary>
         public CsvConfiguration Configuration
         {
             get { return _csvParser.Configuration; }
-            set { _csvParser.Configuration = value; }
         }
 
         /// <summary>
@@ -72,12 +81,14 @@ namespace Enbrea.Csv
             _position = 0;
             _csvParser.ResetState();
 
+            Func<char> nextCharAction = () => NextChar();
+
             var valueCount = 0;
             do
             {
-                if (_csvParser.NextToken(() => NextChar()))
+                if (_csvParser.NextToken(nextCharAction))
                 {
-                    valueAction(valueCount, _csvParser.Token.ToString());
+                    valueAction(valueCount, _csvParser.GetToken());
                     valueCount++;
                 }
             }
@@ -90,6 +101,7 @@ namespace Enbrea.Csv
         /// Asks for the next character from the CSV source.
         /// </summary>
         /// <returns>The next character from the CSV source or EoF if nothing to read.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private char NextChar()
         {
             if (_position < _line.Length)

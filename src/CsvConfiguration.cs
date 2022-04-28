@@ -1,8 +1,8 @@
-﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
@@ -21,6 +21,11 @@ namespace Enbrea.Csv
         /// Specifies whether comments are allowed or not inside a CSV line
         /// </summary>
         public bool AllowComments { get; set; } = false;
+
+        /// <summary>
+        /// Specifies whether parsed values should be cached and reused
+        /// </summary>
+        public bool CacheValues { get; set; } = true;
 
         /// <summary>
         /// Specifies the character for signaling a comment
@@ -45,6 +50,6 @@ namespace Enbrea.Csv
         /// <summary>
         /// Specifies the character for separating values
         /// </summary>
-        public char Separator { get; set; } = ';';
+        public char Separator { get; set; } = ',';
     }
 }

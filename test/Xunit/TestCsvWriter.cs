@@ -1,8 +1,8 @@
-﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
@@ -10,6 +10,7 @@
 #endregion
 
 using System;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -26,7 +27,8 @@ namespace Enbrea.Csv.Tests
         {
             var sb = new StringBuilder();
 
-            using var csvWriter = new CsvWriter(sb);
+            using var strWriter = new StringWriter(sb);
+            var csvWriter = new CsvWriter(strWriter, new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvWriter);
 
@@ -50,8 +52,9 @@ namespace Enbrea.Csv.Tests
         {
             var sb = new StringBuilder();
 
-            using var csvWriter = new CsvWriter(sb);
-            
+            using var strWriter = new StringWriter(sb);
+            var csvWriter = new CsvWriter(strWriter, new CsvConfiguration { Separator = ';' });
+
             Assert.NotNull(csvWriter);
 
             csvWriter.WriteValue("aaa1");

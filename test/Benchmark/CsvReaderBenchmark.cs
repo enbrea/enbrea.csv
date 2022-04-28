@@ -1,8 +1,8 @@
-#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
+#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
@@ -10,57 +10,126 @@
 #endregion
 
 using BenchmarkDotNet.Attributes;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Enbrea.Csv.Tests
 {
     public class CsvReaderBenchmark
     {
-        [Params(1000)]
+        [Params(1000000)]
         public int NumberOfCsvRecords;
 
         private string _data;
 
         [Benchmark]
-        public void ReadAllPerformance()
+        public void TestCsvHelper()
         {
-            using var csvReader = new CsvReader(_data);
+            var l = new List<string[]>();
 
-            foreach (var line in csvReader.ReadAll())
+            var config = new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture)
             {
+                Delimiter = ";",
+                CacheFields = true
+            };
+
+            using var strReader = new StringReader(_data);
+            using var csvReader = new CsvHelper.CsvReader(strReader, config);
+
+            while (csvReader.Read())
+            {
+                var a = new string[3];
+                a[0] = csvReader.GetField(0);
+                a[1] = csvReader.GetField(1);
+                a[2] = csvReader.GetField(2);
+                l.Add(a);
             }
+
+            if (l.Count != NumberOfCsvRecords) throw new Exception("Wrong number of records");
         }
 
         [Benchmark]
-        public void ReadLineAsActionPerformance()
+        public async Task TestCsvHelperAsync()
         {
-            using var csvReader = new CsvReader(_data);
-            
-            while (csvReader.ReadLine((i, s) => { }) > 0)
+            var l = new List<string[]>();
+
+            var config = new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture)
             {
+                Delimiter = ";",
+                CacheFields = true
+            };
+
+            using var strReader = new StringReader(_data);
+            using var csvReader = new CsvHelper.CsvReader(strReader, config);
+
+            while (await csvReader.ReadAsync())
+            {
+                var a = new string[3];
+                a[0] = csvReader.GetField(0);
+                a[1] = csvReader.GetField(1);
+                a[2] = csvReader.GetField(2);
+                l.Add(a);
             }
+
+            if (l.Count != NumberOfCsvRecords) throw new Exception("Wrong number of records");
         }
 
         [Benchmark]
-        public void ReadLineAsListPerformance()
+        public void TestEnbreaCsv()
         {
-            var fields = new List<string>();
-            using var csvReader = new CsvReader(_data);
-            
-            while (csvReader.ReadLine(fields) > 0)
+            var c = new string[3];
+            var l = new List<string[]>();
+
+            var config = new CsvConfiguration()
             {
+                Separator = ';',
+                CacheValues = true
+            };
+
+            using var strReader = new StringReader(_data);
+            var csvReader = new CsvReader(strReader, config);
+
+            while (csvReader.ReadLine(c) > 0)
+            {
+                var a = new string[3];
+                a[0] = c[0];
+                a[1] = c[1];
+                a[2] = c[2];
+                l.Add(a);
             }
+
+            if (l.Count != NumberOfCsvRecords) throw new Exception("Wrong number of records");
         }
 
         [Benchmark]
-        public void ReadNormalizeAllPerformance()
+        public async Task TestEnbreaCsvAsync()
         {
-            using var csvReader = new CsvReader(_data);
-            
-            foreach (var line in csvReader.ReadAllLines())
+            var c = new string[3];
+            var l = new List<string[]>();
+
+            var config = new CsvConfiguration()
             {
+                Separator = ';',
+                CacheValues = true
+            };
+
+            using var strReader = new StringReader(_data);
+            var csvReader = new CsvReader(strReader, config);
+
+            while (await csvReader.ReadLineAsync(c) > 0)
+            {
+                var a = new string[3];
+                a[0] = c[0];
+                a[1] = c[1];
+                a[2] = c[2];
+                l.Add(a);
             }
+
+            if (l.Count != NumberOfCsvRecords) throw new Exception("Wrong number of records");
         }
 
         [GlobalSetup]
@@ -69,7 +138,7 @@ namespace Enbrea.Csv.Tests
             var sb = new StringBuilder();
             for (int i = 0; i < NumberOfCsvRecords; i++)
             {
-                sb.Append("aaa;bbb;ccc;ddd;eee;fff");
+                sb.Append("aaa;bbb;ccc\n");
             }
             _data = sb.ToString();
         }

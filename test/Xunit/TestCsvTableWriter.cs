@@ -1,8 +1,8 @@
-﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
@@ -10,6 +10,7 @@
 #endregion
 
 using System;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -32,9 +33,9 @@ namespace Enbrea.Csv.Tests
 
             var sb = new StringBuilder();
 
-            using var csvWriter = new CsvWriter(sb);
+            using var strWriter = new StringWriter(sb);
 
-            var csvTableWriter = new CsvTableWriter(csvWriter);
+            var csvTableWriter = new CsvTableWriter(strWriter, new CsvConfiguration { Separator = ';' });
 
             await csvTableWriter.WriteHeadersAsync("A", "B", "C");
 
@@ -65,9 +66,9 @@ namespace Enbrea.Csv.Tests
 
             var sb = new StringBuilder();
 
-            using var csvWriter = new CsvWriter(sb);
+            using var strWriter = new StringWriter(sb);
 
-            var csvTableWriter = new CsvTableWriter(csvWriter);
+            var csvTableWriter = new CsvTableWriter(strWriter, new CsvConfiguration { Separator = ';' });
 
             csvTableWriter.AddConverter<CustomType>(new CustomTypeConverter());
 
@@ -99,9 +100,9 @@ namespace Enbrea.Csv.Tests
 
             var sb = new StringBuilder();
 
-            using var csvWriter = new CsvWriter(sb);
+            using var strWriter = new StringWriter(sb);
 
-            var csvTableWriter = new CsvTableWriter(csvWriter);
+            var csvTableWriter = new CsvTableWriter(strWriter, new CsvConfiguration { Separator = ';' });
 
             csvTableWriter.SetFormats<DateTime>("dd.MM.yyyy");
             csvTableWriter.SetTrueFalseString<bool>("true", "false");
@@ -145,9 +146,9 @@ namespace Enbrea.Csv.Tests
 
             var sb = new StringBuilder();
 
-            using var csvWriter = new CsvWriter(sb);
+            using var strWriter = new StringWriter(sb);
 
-            var csvTableWriter = new CsvTableWriter(csvWriter);
+            var csvTableWriter = new CsvTableWriter(strWriter, new CsvConfiguration { Separator = ';' });
 
             csvTableWriter.SetFormats<DateTime>("dd.MM.yyyy");
             csvTableWriter.SetTrueFalseString<bool>("true", "false");

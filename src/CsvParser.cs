@@ -1,8 +1,8 @@
-﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
@@ -10,6 +10,8 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,25 +20,27 @@ namespace Enbrea.Csv
     /// <summary>
     /// A CSV parser which parses values from an abstract stream of characters.
     /// </summary>
+    /// <remarks>
+    /// We are using Knuth's Multiplicative Hash for string hashing. Implementation is 
+    /// borrowed from https://stackoverflow.com/a/9545731/18161314
+    /// </remarks>
     public class CsvParser
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CsvParser"/> class.
-        /// </summary>
-        public CsvParser(Func<string, Exception> throwException)
-        {
-            Token = new StringBuilder();
-            ThrowException = throwException;
-        }
+        private readonly StringBuilder _token;
+        private readonly Dictionary<ulong, string> _tokenCache;
+        private ulong _tokenHash;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvParser"/> class.
         /// </summary>
-        /// <param name="separator">Specifies the charactor for seperating values</param>
-        public CsvParser(char separator, Func<string, Exception> throwException)
-            : this(throwException)
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="throwException">A method which generates a new Exception</param>
+        public CsvParser(CsvConfiguration configuration, Func<string, Exception> throwException)
         {
-            Configuration.Separator = separator;
+            _token = new StringBuilder();
+            _tokenCache = new Dictionary<ulong, string>();
+            Configuration = configuration;
+            ThrowException = throwException;
         }
 
         /// <summary>
@@ -57,7 +61,7 @@ namespace Enbrea.Csv
         /// <summary>
         /// Configuration parameter
         /// </summary>
-        public CsvConfiguration Configuration { get; set; } = new CsvConfiguration();
+        public CsvConfiguration Configuration { get; }
 
         /// <summary>
         /// Current tokenizer state
@@ -71,11 +75,31 @@ namespace Enbrea.Csv
         /// <returns>The newly craeted Exception instance</returns>
         /// <remarks>This method must be overwritten in derived classes.</remarks>
         public Func<string, Exception> ThrowException { get; }
-
+        
         /// <summary>
-        /// Current token
+        /// Get current token
         /// </summary>
-        public StringBuilder Token { get; }
+        /// <returns></returns>
+        public string GetToken()
+        {
+            if (Configuration.CacheValues)
+            {
+                if (_tokenCache.TryGetValue(_tokenHash, out var cachedToken))
+                {
+                    return cachedToken;
+                }
+                else
+                {
+                    var newToken = _token.ToString();
+                    _tokenCache.Add(_tokenHash, newToken);
+                    return newToken;
+                }
+            }
+            else
+            {
+                return _token.ToString();
+            }
+        }
 
         /// <summary>
         /// Parses CSV source for next token.
@@ -83,9 +107,11 @@ namespace Enbrea.Csv
         /// <param name="nextChar">A method which gives back the next char 
         /// from a CSV source</param>
         /// <returns>true if token could be read; otherwise false.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool NextToken(Func<char> nextChar)
         {
-            Token.Clear();
+            _token.Clear();
+            _tokenHash = 3074457345618258791ul;
             while (true)
             {
                 switch (Parse(nextChar()))
@@ -105,9 +131,11 @@ namespace Enbrea.Csv
         /// from a CSV source</param>
         /// <returns>A task that represents the asynchronous operation. The value of the 
         /// TResult parameter is true if token could be read; otherwise false.</returns>
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         public async ValueTask<bool> NextTokenAsync(Func<ValueTask<char>> nextCharAsync)
         {
-            Token.Clear();
+            _token.Clear();
+            _tokenHash = 3074457345618258791ul;
             while (true)
             {
                 switch (Parse(await nextCharAsync()))
@@ -123,9 +151,28 @@ namespace Enbrea.Csv
         /// <summary>
         /// Resets the tokenizer state
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void ResetState()
         {
             State = TokenizerState.IsSeekingStart;
+        }
+
+        /// <summary>
+        /// Appends given character to current token.
+        /// </summary>
+        /// <param name="c">The character</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void AppendToToken(char c)
+        {
+            if (Configuration.CacheValues)
+            {
+                unchecked
+                {
+                    _tokenHash += c;
+                    _tokenHash *= 3074457345618258799ul;
+                }
+            }
+            _token.Append(c);
         }
 
         /// <summary>
@@ -133,6 +180,7 @@ namespace Enbrea.Csv
         /// </summary>
         /// <param name="c">The character.</param>
         /// <returns>Category of the character.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private CharCategory Categorise(char c)
         {
             if (c == '\0')
@@ -170,6 +218,7 @@ namespace Enbrea.Csv
         /// </summary>
         /// <param name="c">The character</param>
         /// <returns>Next workflow</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private TokenizerWorkflow Parse(char c)
         {
             switch (State)
@@ -181,7 +230,7 @@ namespace Enbrea.Csv
                             case CharCategory.IsOrdinary:
                             case CharCategory.IsWhitespace:
                                 State = TokenizerState.IsInPlain;
-                                Token.Append(c);
+                                AppendToToken(c);
                                 return TokenizerWorkflow.Continue;
                             case CharCategory.IsQuote:
                                 State = TokenizerState.IsInQuoted;
@@ -206,7 +255,7 @@ namespace Enbrea.Csv
                             case CharCategory.IsOrdinary:
                             case CharCategory.IsWhitespace:
                                 State = TokenizerState.IsInPlain;
-                                Token.Append(c);
+                                AppendToToken(c);
                                 return TokenizerWorkflow.Continue;
                             case CharCategory.IsQuote:
                                 State = TokenizerState.IsInQuoted;
@@ -242,7 +291,7 @@ namespace Enbrea.Csv
                         {
                             case CharCategory.IsOrdinary:
                                 State = TokenizerState.IsInPlain;
-                                Token.Append(c);
+                                AppendToToken(c);
                                 return TokenizerWorkflow.Continue;
                             case CharCategory.IsWhitespace:
                                 State = TokenizerState.IsSeekingStart;
@@ -272,7 +321,7 @@ namespace Enbrea.Csv
                             case CharCategory.IsOrdinary:
                             case CharCategory.IsComment:
                             case CharCategory.IsWhitespace:
-                                Token.Append(c);
+                                AppendToToken(c);
                                 return TokenizerWorkflow.Continue;
                             case CharCategory.IsQuote:
                                 throw ThrowException($"CSV quote is missing at the begining.");
@@ -295,10 +344,10 @@ namespace Enbrea.Csv
                             case CharCategory.IsSeparator:
                             case CharCategory.IsComment:
                             case CharCategory.IsEndOfLine:
-                                Token.Append(c);
+                                AppendToToken(c);
                                 return TokenizerWorkflow.Continue;
                             case CharCategory.IsWhitespace:
-                                Token.Append(" ");
+                                AppendToToken(' ');
                                 return TokenizerWorkflow.Continue;
                             case CharCategory.IsQuote:
                                 State = TokenizerState.IsAfterEndQuote;
@@ -321,7 +370,7 @@ namespace Enbrea.Csv
                                 return TokenizerWorkflow.Continue;
                             case CharCategory.IsQuote:
                                 State = TokenizerState.IsInQuoted;
-                                Token.Append(c);
+                                AppendToToken(c);
                                 return TokenizerWorkflow.Continue;
                             case CharCategory.IsSeparator:
                                 State = TokenizerState.IsSeekingStart;

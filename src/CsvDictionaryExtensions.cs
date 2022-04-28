@@ -1,14 +1,15 @@
-﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
  */
 #endregion
 
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Enbrea.Csv
@@ -24,11 +25,11 @@ namespace Enbrea.Csv
         /// </summary>
         /// <typeparam name="TEntity">The custom object type</typeparam>
         /// <param name="csvDictionary">The <see cref="CsvDictionary"/></param>
-        /// <param name="csvReader">A <see cref="CsvReader"/></param>
+        /// <param name="textReader">A <see cref="TextReader"/></param>
         /// <returns>Pointer to the newly created object instance</returns>
-        public static TEntity Load<TEntity>(this CsvDictionary csvDictionary, CsvReader csvReader)
+        public static TEntity Load<TEntity>(this CsvDictionary csvDictionary, TextReader textReader)
         {
-            if (csvDictionary.Load(csvReader) > 0)
+            if (csvDictionary.Load(textReader) > 0)
             {
                 return csvDictionary.CreateAndGetValues<TEntity>();
             }
@@ -44,11 +45,11 @@ namespace Enbrea.Csv
         /// </summary>
         /// <typeparam name="TEntity">The custom object type</typeparam>
         /// <param name="csvDictionary">The <see cref="CsvDictionary"/></param>
-        /// <param name="csvReader">A <see cref="CsvReader"/></param>
+        /// <param name="textReader">A <see cref="TextReader"/></param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public static async Task<TEntity> LoadAsync<TEntity>(this CsvDictionary csvDictionary, CsvReader csvReader)
+        public static async Task<TEntity> LoadAsync<TEntity>(this CsvDictionary csvDictionary, TextReader textReader)
         {
-            if (await csvDictionary.LoadAsync(csvReader) > 0)
+            if (await csvDictionary.LoadAsync(textReader) > 0)
             {
                 return csvDictionary.CreateAndGetValues<TEntity>();
             }
@@ -64,12 +65,12 @@ namespace Enbrea.Csv
         /// </summary>
         /// <typeparam name="TEntity">The custom object type</typeparam>
         /// <param name="csvDictionary">The <see cref="CsvDictionary"/></param>
-        /// <param name="csvWriter">A <see cref="CsvWriter"/></param>
+        /// <param name="textWriter">A <see cref="TextWriter"/></param>
         /// <param name="entity">The object instance</param>
-        public static void Store<TEntity>(this CsvDictionary csvDictionary, CsvWriter csvWriter, TEntity entity)
+        public static void Store<TEntity>(this CsvDictionary csvDictionary, TextWriter textWriter, TEntity entity)
         {
             csvDictionary.SetValues(entity);
-            csvDictionary.Store(csvWriter);
+            csvDictionary.Store(textWriter);
         }
 
         /// <summary>
@@ -78,13 +79,13 @@ namespace Enbrea.Csv
         /// </summary>
         /// <typeparam name="TEntity">The custom object type</typeparam>
         /// <param name="csvDictionary">The <see cref="CsvDictionary"/></param>
-        /// <param name="csvWriter">A <see cref="CsvWriter"/></param>
+        /// <param name="textWriter">A <see cref="TextWriter"/></param>
         /// <param name="entity">The object instance</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public static async Task StoreAsync<TEntity>(this CsvDictionary csvDictionary, CsvWriter csvWriter, TEntity entity)
+        public static async Task StoreAsync<TEntity>(this CsvDictionary csvDictionary, TextWriter textWriter, TEntity entity)
         {
             csvDictionary.SetValues(entity);
-            await csvDictionary.StoreAsync(csvWriter);
+            await csvDictionary.StoreAsync(textWriter);
         }
 
     }

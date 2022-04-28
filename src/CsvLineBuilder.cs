@@ -1,8 +1,8 @@
-﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
@@ -29,8 +29,19 @@ namespace Enbrea.Csv
         /// Initializes a new instance of the <see cref="CsvLineBuilder"/> class.
         /// </summary>
         public CsvLineBuilder()
+            : this(new CsvConfiguration())
         {
             _strBuilder = new StringBuilder();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvLineParser"/> class.
+        /// </summary>
+        /// <param name="configuration">Configuration parameters</param>
+        public CsvLineBuilder(CsvConfiguration configuration)
+        {
+            _strBuilder = new StringBuilder();
+            Configuration = configuration;
         }
 
         /// <summary>
@@ -38,7 +49,7 @@ namespace Enbrea.Csv
         /// </summary>
         /// <param name="separator">Specifies the charactor for seperating values</param>
         public CsvLineBuilder(char separator)
-            : this()
+            : this(new CsvConfiguration())
         {
             Configuration.Separator = separator;
         }
@@ -46,7 +57,7 @@ namespace Enbrea.Csv
         /// <summary>
         /// Configuration parameter
         /// </summary>
-        public CsvConfiguration Configuration { get; set; } = new CsvConfiguration();
+        public CsvConfiguration Configuration { get; }
 
         /// <summary>
         /// Appends a value to the internal csv line.

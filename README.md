@@ -5,7 +5,7 @@
 
 A .NET library for parsing and building [CSV](https://tools.ietf.org/html/rfc4180) strings, streams and files:
 
-+ Supports .NET Core 3.1 and .NET 5
++ Supports .NET Core 3.1, .NET 5 and .NET 6
 + High performance parsing and generating of csv
 + Includes low level reader and writer for csv
 + Includes table based reader and writer for csv

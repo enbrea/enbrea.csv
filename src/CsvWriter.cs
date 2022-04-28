@@ -1,17 +1,15 @@
-﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
  */
 #endregion
 
-using System;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Enbrea.Csv
@@ -22,96 +20,36 @@ namespace Enbrea.Csv
     /// <remarks>
     /// Common Format and MIME Type for Comma-Separated Values (CSV) Files: https://www.ietf.org/rfc/rfc4180.txt
     /// </remarks>
-    public class CsvWriter : IDisposable
+    public class CsvWriter
     {
         private readonly char[] _charsToBeQuoted = new char[] { '\n', '\r' };
         private TextWriter _textWriter;
         private bool _wasPreviousToken = false;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvWriter"/> class for the specified stream.
+        /// Initializes a new instance of the <see cref="CsvWriter"/> class for the specified text writert.
         /// </summary>
-        /// <param name="stream">The stream to write to.</param>
-        /// <param name="encoding">The character encoding to use.</param>
-        public CsvWriter(Stream stream, Encoding encoding)
+        /// <param name="textWriter">The text writer to be used.</param>
+        public CsvWriter(TextWriter textWriter)
+            : this(textWriter, new CsvConfiguration())
         {
-            _textWriter = new StreamWriter(stream, encoding);
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvWriter"/> class for the specified stream.
+        /// Initializes a new instance of the <see cref="CsvWriter"/> class for the specified text writert.
         /// </summary>
-        /// <param name="stream">The stream to write to.</param>
-        /// <param name="encoding">The character encoding to use.</param>
-        /// <param name="bufferSize">The buffer size, in bytes.</param>
-        public CsvWriter(Stream stream, Encoding encoding, int bufferSize)
+        /// <param name="textWriter">The text writer to be used.</param>
+        /// <param name="configuration">Configuration parameters</param>
+        public CsvWriter(TextWriter textWriter, CsvConfiguration configuration)
         {
-            _textWriter = new StreamWriter(stream, encoding, bufferSize);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CsvWriter "/> class for the specified file name.
-        /// </summary>
-        /// <param name="path">The complete file path to write to.</param>
-        /// <param name="append">
-        /// true to append data to the file; false to overwrite the file. If the specified file does not exist, 
-        /// this parameter has no effect, and the constructor creates a new file.
-        /// </param>
-        public CsvWriter(string path, bool append)
-        {
-            _textWriter = new StreamWriter(path, append);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CsvWriter "/> class for the specified file name.
-        /// </summary>
-        /// <param name="path">The complete file path to write to.</param>
-        /// <param name="append">
-        /// true to append data to the file; false to overwrite the file. If the specified file does not exist, 
-        /// this parameter has no effect, and the constructor creates a new file.
-        /// </param>
-        /// <param name="encoding">The character encoding to use.</param>
-        public CsvWriter(string path, bool append, Encoding encoding)
-        {
-            _textWriter = new StreamWriter(path, append, encoding);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CsvWriter "/> class for the specified file name.
-        /// </summary>
-        /// <param name="path">The complete file path to write to.</param>
-        /// <param name="append">
-        /// true to append data to the file; false to overwrite the file. If the specified file does not exist, 
-        /// this parameter has no effect, and the constructor creates a new file.
-        /// </param>
-        /// <param name="encoding">The character encoding to use.</param>
-        /// <param name="bufferSize">The buffer size, in bytes.</param>
-        public CsvWriter(string path, bool append, Encoding encoding, int bufferSize)
-        {
-            _textWriter = new StreamWriter(path, append, encoding, bufferSize);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CsvWriter "/> class for the specified string builder.
-        /// </summary>
-        /// <param name="sb">The string builder to write to.</param>
-        public CsvWriter(StringBuilder sb)
-        {
-            _textWriter = new StringWriter(sb);
+            _textWriter = textWriter;
+            Configuration = configuration;
         }
 
         /// <summary>
         /// Configuration parameter
         /// </summary>
-        public CsvConfiguration Configuration { get; set; } = new CsvConfiguration();
-
-        /// <summary>
-        /// Closes the internal text writer.
-        /// </summary>
-        public void Dispose()
-        {
-            _textWriter.Close();
-        }
+        public CsvConfiguration Configuration { get; }
 
         /// <summary>
         /// Writes a comment row to the CSV stream

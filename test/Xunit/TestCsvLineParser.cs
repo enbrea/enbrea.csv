@@ -1,8 +1,8 @@
-﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
@@ -25,7 +25,7 @@ namespace Enbrea.Csv.Tests
         {
             var textLine = "aaa1;bbb1;ccc1";
 
-            var csvParser = new CsvLineParser();
+            var csvParser = new CsvLineParser(new CsvConfiguration { Separator = ';' });
             {
                 Assert.NotNull(csvParser);
 
@@ -43,7 +43,7 @@ namespace Enbrea.Csv.Tests
         {
             var textLine = "aaa1;bbb1;ccc1";
 
-            var csvParser = new CsvLineParser();
+            var csvParser = new CsvLineParser(new CsvConfiguration { Separator = ';' });
             {
                 Assert.NotNull(csvParser);
 
@@ -63,7 +63,7 @@ namespace Enbrea.Csv.Tests
         {
             var textLine = "";
 
-            var csvParser = new CsvLineParser();
+            var csvParser = new CsvLineParser(new CsvConfiguration { Separator = ';' });
             {
                 Assert.NotNull(csvParser);
 

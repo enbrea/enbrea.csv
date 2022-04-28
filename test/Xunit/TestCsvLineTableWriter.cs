@@ -1,8 +1,8 @@
-﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
@@ -10,7 +10,6 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace Enbrea.Csv.Tests
@@ -27,9 +26,7 @@ namespace Enbrea.Csv.Tests
             var csvLine2 = "a1;b1;c1";
             var csvLine3 = "a2;b2;c2";
 
-            var csvLineWriter = new CsvLineBuilder();
-            
-            var csvTableWriter = new CsvLineTableWriter(csvLineWriter);
+            var csvTableWriter = new CsvLineTableWriter(new CsvConfiguration { Separator = ';' });
 
             Assert.Equal(csvLine1, csvTableWriter.WriteHeaders("A", "B", "C"));
 
@@ -54,9 +51,7 @@ namespace Enbrea.Csv.Tests
             var csvLine2 = "42;\"{\"\"IntValue\"\":42,\"\"StrValue\"\":\"\"Forty-Two\"\"}\"";
             var csvLine3 = "5;\"{\"\"IntValue\"\":5,\"\"StrValue\"\":\"\"Five\"\"}\"";
 
-            var csvLineWriter = new CsvLineBuilder();
-
-            var csvTableWriter = new CsvLineTableWriter(csvLineWriter, "A", "B");
+            var csvTableWriter = new CsvLineTableWriter(new CsvConfiguration() { Separator = ';'}, "A", "B");
 
             csvTableWriter.AddConverter<CustomType>(new CustomTypeConverter());
 
@@ -81,11 +76,13 @@ namespace Enbrea.Csv.Tests
             var csvLine3 = "-31;A long text;false;20.01.2050";
             var csvLine4 = "55;\"A text with ;\";;31.07.1971";
 
-            var csvLineWriter = new CsvLineBuilder();
+            var csvTableWriter = new CsvLineTableWriter(new CsvConfiguration { Separator = ';' });
 
-            var csvTableWriter = new CsvLineTableWriter(csvLineWriter);
-
+#if NET6_0_OR_GREATER
+            csvTableWriter.SetFormats<DateOnly>("dd.MM.yyyy");
+#else
             csvTableWriter.SetFormats<DateTime>("dd.MM.yyyy");
+#endif
             csvTableWriter.SetTrueFalseString<bool>("true", "false");
 
             Assert.Equal(csvLine1, csvTableWriter.WriteHeaders("A", "B", "C", "D"));
@@ -95,21 +92,33 @@ namespace Enbrea.Csv.Tests
             csvTableWriter.SetValue("A", 22);
             csvTableWriter.SetValue("B", "Text");
             csvTableWriter.SetValue("C", true);
+#if NET6_0_OR_GREATER
+            csvTableWriter.SetValue("D", new DateOnly(2010, 1, 1));
+#else
             csvTableWriter.SetValue("D", new DateTime(2010, 1, 1));
+#endif
 
             Assert.Equal(csvLine2, csvTableWriter.Write());
 
             csvTableWriter.SetValue("A", -31);
             csvTableWriter.SetValue("B", "A long text");
             csvTableWriter.SetValue("C", false);
+#if NET6_0_OR_GREATER
+            csvTableWriter.SetValue("D", new DateOnly(2050, 1, 20));
+#else
             csvTableWriter.SetValue("D", new DateTime(2050, 1, 20));
+#endif
 
             Assert.Equal(csvLine3, csvTableWriter.Write());
 
             Assert.True(csvTableWriter.TrySetValue("A", 55));
             Assert.True(csvTableWriter.TrySetValue("B", "A text with ;"));
             Assert.True(csvTableWriter.TrySetValue("C", null));
+#if NET6_0_OR_GREATER
+            Assert.True(csvTableWriter.TrySetValue("D", new DateOnly(1971, 7, 31)));
+#else
             Assert.True(csvTableWriter.TrySetValue("D", new DateTime(1971, 7, 31)));
+#endif
 
             Assert.Equal(csvLine4, csvTableWriter.Write());
         }

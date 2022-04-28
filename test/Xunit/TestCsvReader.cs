@@ -1,8 +1,8 @@
-﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -31,7 +32,9 @@ namespace Enbrea.Csv.Tests
                 "# Comment 3" + Environment.NewLine +
                 "a2;b2;c2# No comment";
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+            
+            var csvReader = new CsvReader(strReader, new CsvConfiguration { Separator = ';' });
 
             csvReader.Configuration.AllowComments = true;
 
@@ -67,7 +70,9 @@ namespace Enbrea.Csv.Tests
                 "aaa2;bbb2;ccc2" + Environment.NewLine +
                 "aaa3;bbb3";
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+            
+            var csvReader = new CsvReader(strReader, new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvReader);
 
@@ -102,7 +107,9 @@ namespace Enbrea.Csv.Tests
 
             var fields = new List<string>();
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+
+            var csvReader = new CsvReader(strReader, new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvReader);
 
@@ -122,7 +129,9 @@ namespace Enbrea.Csv.Tests
                 "text\"" + Environment.NewLine +
                 "aaa2;bbb2;ccc2";
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+
+            var csvReader = new CsvReader(strReader, new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvReader);
 
@@ -154,7 +163,10 @@ namespace Enbrea.Csv.Tests
                 "%a a a%;%b b b%;%c c c%" + Environment.NewLine +
                 "%a%%a%%a%;%b;b;b%;%c c c%";
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+
+            var csvReader = new CsvReader(strReader, new CsvConfiguration { Separator = ';' });
+
             csvReader.Configuration.Quote = '%';
 
             Assert.NotNull(csvReader);
@@ -186,7 +198,9 @@ namespace Enbrea.Csv.Tests
                 "# A comment" + Environment.NewLine +
                 "aaa2;bbb2;ccc2";
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+
+            var csvReader = new CsvReader(strReader, new CsvConfiguration { Separator = ';' });
 
             csvReader.Configuration.AllowComments = true;
 
@@ -209,11 +223,14 @@ namespace Enbrea.Csv.Tests
         [Fact]
         public async Task SupportQuotedFields()
         {
+
             var csvData =
                 "\"a a a\";\"b b b\";\"c c c\"" + Environment.NewLine +
                 "\"a\"\"a\"\"a\";\"b;b;b\";\"c c c\"";
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+
+            var csvReader = new CsvReader(strReader, new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvReader);
 
@@ -242,7 +259,9 @@ namespace Enbrea.Csv.Tests
                 "\"   \" " + Environment.NewLine +
                 "   ";
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+
+            var csvReader = new CsvReader(strReader, new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvReader);
 
@@ -280,7 +299,9 @@ namespace Enbrea.Csv.Tests
 
             var fields = new List<string>();
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+
+            var csvReader = new CsvReader(strReader, new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvReader);
 
@@ -304,7 +325,9 @@ namespace Enbrea.Csv.Tests
                 "1 ; 2 ; 3" + Environment.NewLine +
                 " ;  ;   ";
 
-            using var csvReader = new CsvReader(csvData);
+            using var strReader = new StringReader(csvData);
+
+            var csvReader = new CsvReader(strReader, new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvReader);
 

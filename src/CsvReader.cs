@@ -1,8 +1,8 @@
-﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
@@ -11,20 +11,21 @@
 
 using System;
 using System.IO;
-using System.Text;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Enbrea.Csv
 {
     /// <summary>
-    /// A raw stream based CSV parser/reader.
+    /// Implementation of a raw CSV Reader.
     /// </summary>
     /// <remarks>
     /// Common Format and MIME Type for Comma-Separated Values (CSV) Files: https://www.ietf.org/rfc/rfc4180.txt
     /// </remarks>
-    public class CsvReader : IDisposable
+    public class CsvReader
     {
-        private const int _bufferSize = 64;
+        private const int _bufferSize = 1024;
         private readonly char[] _buffer;
         private readonly CsvParser _csvParser;
         private readonly TextReader _textReader;
@@ -33,128 +34,24 @@ namespace Enbrea.Csv
         private int _lineCount = 0;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvReader"/> class for the specified stream.
+        /// Initializes a new instance of the <see cref="CsvReader"/> class for the specified text reader.
         /// </summary>
-        /// <param name="stream">The stream to be read.</param>
-        /// <param name="detectEncodingFromByteOrderMarks">
-        /// Indicates whether to look for byte order marks at the beginning of the file.
-        /// </param>
-        public CsvReader(Stream stream, bool detectEncodingFromByteOrderMarks)
-            : this()
+        /// <param name="textReader">The text reader to be used.</param>
+        public CsvReader(TextReader textReader)
+            : this(textReader, new CsvConfiguration())
         {
-            _textReader = new StreamReader(stream, detectEncodingFromByteOrderMarks);
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvReader"/> class for the specified stream.
+        /// Initializes a new instance of the <see cref="CsvReader"/> class for the specified text reader.
         /// </summary>
-        /// <param name="stream">The stream to be read.</param>
-        /// <param name="encoding">The character encoding to use.</param>
-        public CsvReader(Stream stream, Encoding encoding)
-            : this()
-        {
-            _textReader = new StreamReader(stream, encoding);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CsvReader"/> class for the specified stream.
-        /// </summary>
-        /// <param name="stream">The stream to be read.</param>
-        /// <param name="encoding">The character encoding to use.</param>
-        /// <param name="detectEncodingFromByteOrderMarks">
-        /// Indicates whether to look for byte order marks at the beginning of the file.
-        /// </param>
-        public CsvReader(Stream stream, Encoding encoding, bool detectEncodingFromByteOrderMarks)
-            : this()
-        {
-            _textReader = new StreamReader(stream, encoding, detectEncodingFromByteOrderMarks);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CsvReader"/> class for the specified stream.
-        /// </summary>
-        /// <param name="stream">The stream to be read.</param>
-        /// <param name="encoding">The character encoding to use.</param>
-        /// <param name="detectEncodingFromByteOrderMarks">
-        /// Indicates whether to look for byte order marks at the beginning of the file.
-        /// </param>
-        /// <param name="bufferSize">The minimum buffer size.</param>
-        public CsvReader(Stream stream, Encoding encoding, bool detectEncodingFromByteOrderMarks, int bufferSize)
-            : this()
-        {
-            _textReader = new StreamReader(stream, encoding, detectEncodingFromByteOrderMarks, bufferSize);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CsvReader"/> class for the specified file name.
-        /// </summary>
-        /// <param name="path">The complete file path to be read.</param>
-        /// <param name="detectEncodingFromByteOrderMarks">
-        /// Indicates whether to look for byte order marks at the beginning of the file.
-        /// </param>
-        public CsvReader(string path, bool detectEncodingFromByteOrderMarks)
-            : this()
-        {
-            _textReader = new StreamReader(path, detectEncodingFromByteOrderMarks);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CsvReader"/> class for the specified file name.
-        /// </summary>
-        /// <param name="path">The complete file path to be read.</param>
-        /// <param name="encoding">The character encoding to use.</param>
-        public CsvReader(string path, Encoding encoding)
-            : this()
-        {
-            _textReader = new StreamReader(path, encoding);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CsvReader"/> class for the specified file name.
-        /// </summary>
-        /// <param name="path">The complete file path to be read.</param>
-        /// <param name="encoding">The character encoding to use.</param>
-        /// <param name="detectEncodingFromByteOrderMarks">
-        /// Indicates whether to look for byte order marks at the beginning of the file.
-        /// </param>
-        public CsvReader(string path, Encoding encoding, bool detectEncodingFromByteOrderMarks)
-            : this()
-        {
-            _textReader = new StreamReader(path, encoding, detectEncodingFromByteOrderMarks);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CsvReader"/> class for the specified file name.
-        /// </summary>
-        /// <param name="path">The complete file path to be read.</param>
-        /// <param name="encoding">The character encoding to use.</param>
-        /// <param name="detectEncodingFromByteOrderMarks">
-        /// Indicates whether to look for byte order marks at the beginning of the file.
-        /// </param>
-        /// <param name="bufferSize">The minimum buffer size.</param>
-        public CsvReader(string path, Encoding encoding, bool detectEncodingFromByteOrderMarks, int bufferSize)
-            : this()
-        {
-            _textReader = new StreamReader(path, encoding, detectEncodingFromByteOrderMarks, bufferSize);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CsvReader"/> class for the specified text string.
-        /// </summary>
-        /// <param name="content">The complete text content to be read.</param>
-        public CsvReader(string content)
-            : this()
-        {
-            _textReader = new StringReader(content);
-        }
-
-        /// <summary>
-        /// Private constructor as base for other constructors
-        /// </summary>
-        private CsvReader()
+        /// <param name="textReader">The text reader to be used.</param>
+        /// <param name="configuration">Configuration parameters</param>
+        public CsvReader(TextReader textReader, CsvConfiguration configuration)
         {
             _buffer = new char[_bufferSize];
-            _csvParser = new CsvParser(ThrowException);
+            _csvParser = new CsvParser(configuration, ThrowException);
+            _textReader = textReader;
         }
 
         /// <summary>
@@ -163,15 +60,6 @@ namespace Enbrea.Csv
         public CsvConfiguration Configuration 
         { 
             get { return _csvParser.Configuration; } 
-            set { _csvParser.Configuration = value; }  
-        }
-
-        /// <summary>
-        /// Closes the internal text reader.
-        /// </summary>
-        public void Dispose()
-        {
-            _textReader.Close();
         }
 
         /// <summary>
@@ -189,12 +77,14 @@ namespace Enbrea.Csv
                 throw new ArgumentNullException(nameof(valueAction));
             }
 
+            char nextCharAction() => NextChar();
+
             var valueCount = 0;
             do
             {
-                if (_csvParser.NextToken(() => NextChar()))
+                if (_csvParser.NextToken(nextCharAction))
                 {
-                    valueAction(valueCount, _csvParser.Token.ToString());
+                    valueAction(valueCount, _csvParser.GetToken());
                     valueCount++;
                 }
             }
@@ -210,24 +100,28 @@ namespace Enbrea.Csv
         /// field value the given action.
         /// </summary>
         /// <param name="valueAction">Action with one string parameter.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>A task that represents the asynchronous operation. The value of the TResult
         /// parameter contains the number of parsed values.</returns>
         /// <returns>
-        public async Task<int> ReadLineAsync(Action<int, string> valueAction)
+        public async Task<int> ReadLineAsync(Action<int, string> valueAction, CancellationToken cancellationToken = default)
         {
             if (valueAction == null)
             {
                 throw new ArgumentNullException(nameof(valueAction));
             }
 
+            ValueTask<char> nextCharAction() => NextCharAsync();
+
             var valueCount = 0;
             do
             {
-                if (await _csvParser.NextTokenAsync(() => NextCharAsync()))
+                if (await _csvParser.NextTokenAsync(nextCharAction))
                 {
-                    valueAction(valueCount, _csvParser.Token.ToString());
+                    valueAction(valueCount, _csvParser.GetToken());
                     valueCount++;
                 }
+                cancellationToken.ThrowIfCancellationRequested();
             }
             while (_csvParser.State != CsvParser.TokenizerState.IsEndOfLine);
 
@@ -240,6 +134,7 @@ namespace Enbrea.Csv
         /// Asks for the next character from the CSV source.
         /// </summary>
         /// <returns>The next character from the CSV source or EoF if nothing to read.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private char NextChar()
         {
             if (_bufferPosition >= _bufferEnd - 1)

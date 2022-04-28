@@ -1,9 +1,9 @@
 ﻿
-#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
+#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
@@ -15,7 +15,7 @@ using System.Globalization;
 namespace Enbrea.Csv
 {
     /// <summary>
-    /// Implementation of a UInt32 converter to or from CSV
+    /// Implementation of a <see cref="uint"/> converter to or from CSV
     /// </summary>
     public class CsvUInt32Converter : CsvDefaultNumberConverter
     {

@@ -1,8 +1,8 @@
-﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -29,86 +30,189 @@ namespace Enbrea.Csv
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvTableWriter"/> class.
         /// </summary>
-        public CsvTableWriter(CsvWriter csvWriter)
+        /// <param name="textWriter">The text writer to be used.</param>
+        public CsvTableWriter(TextWriter textWriter)
             : base()
         {
-            _csvWriter = csvWriter;
+            _csvWriter = new CsvWriter(textWriter);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvTableWriter"/> class.
         /// </summary>
-        /// <param name="csvWriter">The <see cref="CsvWriter"/> as source</param>
+        /// <param name="textWriter">The text writer to be used.</param>
+        /// <param name="configuration">Configuration parameters</param>
+        public CsvTableWriter(TextWriter textWriter, CsvConfiguration configuration)
+            : base()
+        {
+            _csvWriter = new CsvWriter(textWriter, configuration);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvTableWriter"/> class.
+        /// </summary>
+        /// <param name="textWriter">The text writer to be used.</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableWriter(TextWriter textWriter, CsvHeaders headers)
+            : base(headers)
+        {
+            _csvWriter = new CsvWriter(textWriter);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvTableWriter"/> class.
+        /// </summary>
+        /// <param name="textWriter">The text writer to be used.</param>
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableWriter(TextWriter textWriter, CsvConfiguration configuration, CsvHeaders headers)
+            : base(headers)
+        {
+            _csvWriter = new CsvWriter(textWriter, configuration);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvTableWriter"/> class.
+        /// </summary>
+        /// <param name="textWriter">The text writer to be used.</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableWriter(TextWriter textWriter, params string[] headers)
+            : this(textWriter, new CsvHeaders(headers))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvTableWriter"/> class.
+        /// </summary>
+        /// <param name="textWriter">The text writer to be used.</param>
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableWriter(TextWriter textWriter, CsvConfiguration configuration, params string[] headers)
+            : this(textWriter, configuration, new CsvHeaders(headers))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvTableWriter"/> class.
+        /// </summary>
+        /// <param name="textWriter">The text writer to be used.</param>
         /// <param name="csvHeaders">List of csv headers</param>
-        public CsvTableWriter(CsvWriter csvWriter, CsvHeaders csvHeaders)
-            : base(csvHeaders)
-        {
-            _csvWriter = csvWriter;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CsvTableWriter"/> class.
-        /// </summary>
-        /// <param name="csvWriter">The <see cref="CsvWriter"/> as source</param>
-        /// <param name="csvHeaders">List of csv headers</param>
-        public CsvTableWriter(CsvWriter csvWriter, params string[] csvHeaders)
-            : this(csvWriter, new CsvHeaders(csvHeaders))
+        public CsvTableWriter(TextWriter textWriter, IList<string> csvHeaders)
+            : this(textWriter, new CsvHeaders(csvHeaders))
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvTableWriter"/> class.
         /// </summary>
-        /// <param name="csvWriter">The <see cref="CsvWriter"/> as source</param>
-        /// <param name="csvHeaders">List of csv headers</param>
-        public CsvTableWriter(CsvWriter csvWriter, IList<string> csvHeaders)
-            : this(csvWriter, new CsvHeaders(csvHeaders))
+        /// <param name="textWriter">The text writer to be used.</param>
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableWriter(TextWriter textWriter, CsvConfiguration configuration, IList<string> headers)
+            : this(textWriter, configuration, new CsvHeaders(headers))
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvTableWriter"/> class.
         /// </summary>
-        /// <param name="csvWriter">The <see cref="CsvWriter"/> as source</param>
-        /// <param name="csvConverterResolver">Your own implementation of a value converter resolver</param>
-        public CsvTableWriter(CsvWriter csvWriter, ICsvConverterResolver csvConverterResolver)
-            : base(csvConverterResolver)
+        /// <param name="textWriter">The text writer to be used.</param>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        public CsvTableWriter(TextWriter textWriter, ICsvConverterResolver converterResolver)
+            : base(converterResolver)
         {
-            _csvWriter = csvWriter;
+            _csvWriter = new CsvWriter(textWriter);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvTableWriter"/> class.
         /// </summary>
-        /// <param name="csvWriter">The <see cref="CsvWriter"/> as source</param>
-        /// <param name="csvConverterResolver">Your own implementation of a value converter resolver</param>
-        /// <param name="csvHeaders">List of csv headers</param>
-        public CsvTableWriter(CsvWriter csvWriter, ICsvConverterResolver csvConverterResolver, CsvHeaders csvHeaders)
-            : base(csvHeaders, csvConverterResolver)
+        /// <param name="textWriter">The text writer to be used.</param>
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        public CsvTableWriter(TextWriter textWriter, CsvConfiguration configuration, ICsvConverterResolver converterResolver)
+            : base(converterResolver)
         {
-            _csvWriter = csvWriter;
+            _csvWriter = new CsvWriter(textWriter, configuration);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvTableWriter"/> class.
         /// </summary>
-        /// <param name="csvWriter">The <see cref="CsvWriter"/> as source</param>
-        /// <param name="csvConverterResolver">Your own implementation of a value converter resolver</param>
-        /// <param name="csvHeaders">List of csv headers</param>
-        public CsvTableWriter(CsvWriter csvWriter, ICsvConverterResolver csvConverterResolver, params string[] csvHeaders)
-            : this(csvWriter, csvConverterResolver, new CsvHeaders(csvHeaders))
+        /// <param name="textWriter">The text writer to be used.</param>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableWriter(TextWriter textWriter, ICsvConverterResolver converterResolver, CsvHeaders headers)
+            : base(headers, converterResolver)
+        {
+            _csvWriter = new CsvWriter(textWriter);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvTableWriter"/> class.
+        /// </summary>
+        /// <param name="textWriter">The text writer to be used.</param>
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableWriter(TextWriter textWriter, CsvConfiguration configuration, ICsvConverterResolver converterResolver, CsvHeaders headers)
+            : base(headers, converterResolver)
+        {
+            _csvWriter = new CsvWriter(textWriter, configuration);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvTableWriter"/> class.
+        /// </summary>
+        /// <param name="textWriter">The text writer to be used.</param>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableWriter(TextWriter textWriter, ICsvConverterResolver converterResolver, params string[] headers)
+            : this(textWriter, converterResolver, new CsvHeaders(headers))
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvTableWriter"/> class.
         /// </summary>
-        /// <param name="csvWriter">The <see cref="CsvWriter"/> as source</param>
-        /// <param name="csvConverterResolver">Your own implementation of a value converter resolver</param>
-        /// <param name="csvHeaders">List of csv headers</param>
-        public CsvTableWriter(CsvWriter csvWriter, ICsvConverterResolver csvConverterResolver, IList<string> csvHeaders)
-            : this(csvWriter, csvConverterResolver, new CsvHeaders(csvHeaders))
+        /// <param name="textWriter">The text writer to be used.</param>
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableWriter(TextWriter textWriter, CsvConfiguration configuration, ICsvConverterResolver converterResolver, params string[] headers)
+            : this(textWriter, configuration, converterResolver, new CsvHeaders(headers))
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvTableWriter"/> class.
+        /// </summary>
+        /// <param name="textWriter">The text writer to be used.</param>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableWriter(TextWriter textWriter, ICsvConverterResolver converterResolver, IList<string> headers)
+            : this(textWriter, converterResolver, new CsvHeaders(headers))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvTableWriter"/> class.
+        /// </summary>
+        /// <param name="textWriter">The text writer to be used.</param>
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        /// <param name="headers">List of csv headers</param>
+        public CsvTableWriter(TextWriter textWriter, CsvConfiguration configuration, ICsvConverterResolver converterResolver, IList<string> headers)
+            : this(textWriter, configuration, converterResolver, new CsvHeaders(headers))
+        {
+        }
+
+        /// <summary>
+        /// Configuration parameter
+        /// </summary>
+        public CsvConfiguration Configuration
+        {
+            get { return _csvWriter.Configuration; }
         }
 
         /// <summary>
@@ -236,7 +340,7 @@ namespace Enbrea.Csv
         {
             if (entity == null)
             {
-                throw new ArgumentNullException("entity");
+                throw new ArgumentNullException(nameof(entity));
             }
 
             int c = 0;

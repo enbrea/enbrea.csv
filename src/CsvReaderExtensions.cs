@@ -1,8 +1,8 @@
-﻿#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Enbrea.Csv
@@ -66,10 +67,7 @@ namespace Enbrea.Csv
         /// </returns>
         public static IEnumerable<string> ReadAllLines(this CsvReader csvReader)
         {
-            var csvLineBuilder = new CsvLineBuilder()
-            {
-                Configuration = csvReader.Configuration
-            };
+            var csvLineBuilder = new CsvLineBuilder(csvReader.Configuration);
 
             while (csvReader.ReadLine((i, s) => { csvLineBuilder.Append(s); }) > 0)
             {
@@ -88,10 +86,7 @@ namespace Enbrea.Csv
         /// </returns>
         public static async IAsyncEnumerable<string> ReadAllLinesAsync(this CsvReader csvReader)
         {
-            var csvLineBuilder = new CsvLineBuilder()
-            {
-                Configuration = csvReader.Configuration
-            };
+            var csvLineBuilder = new CsvLineBuilder(csvReader.Configuration);
 
             while (await csvReader.ReadLineAsync((i, s) => { csvLineBuilder.Append(s); }) > 0)
             {
@@ -122,15 +117,37 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
+        /// Reads out the next row out of the current CSV stream and fills the values
+        /// of a given string array.
+        /// </summary>
+        /// <param name="csvReader">The <see cref="CsvReader"/></param>
+        /// <param name="values">Array of parsed values.</param>
+        /// <returns>
+        /// Number of parsed values
+        /// <returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static int ReadLine(this CsvReader csvReader, string[] values)
+        {
+            if (values == null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            return csvReader.ReadLine((i, s) => { if (i < values.Length) values[i] = s; });
+        }
+
+        /// <summary>
         /// Reads out the next row out of the current CSV stream and gives back the values
         /// as string collection.
         /// </summary>
         /// <param name="csvReader">The <see cref="CsvReader"/></param>
         /// <param name="values">List of parsed values.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>A task that represents the asynchronous operation. The value of the TResult
         //  parameter contains the number of parsed values.
         /// <returns>
-        public static async Task<int> ReadLineAsync(this CsvReader csvReader, ICollection<string> values)
+        /// <exception cref="ArgumentNullException"></exception>
+        public static async Task<int> ReadLineAsync(this CsvReader csvReader, ICollection<string> values, CancellationToken cancellationToken = default)
         {
             if (values == null)
             {
@@ -139,7 +156,28 @@ namespace Enbrea.Csv
 
             values.Clear();
 
-            return await csvReader.ReadLineAsync((i, s) => { values.Add(s); });
+            return await csvReader.ReadLineAsync((i, s) => { values.Add(s); }, cancellationToken);
+        }
+
+        /// <summary>
+        /// Reads out the next row out of the current CSV stream and fills the values
+        /// of a given string array.
+        /// </summary>
+        /// <param name="csvReader">The <see cref="CsvReader"/></param>
+        /// <param name="values">Array of parsed values.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
+        /// <returns>A task that represents the asynchronous operation. The value of the TResult
+        /// parameter contains the number of parsed values.</returns>
+        /// <returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static async Task<int> ReadLineAsync(this CsvReader csvReader, string[] values, CancellationToken cancellationToken = default)
+        {
+            if (values == null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            return await csvReader.ReadLineAsync((i, s) => { if (i < values.Length) values[i] = s; }, cancellationToken);
         }
     }
 }

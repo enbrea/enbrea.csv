@@ -1,14 +1,15 @@
-#region ENBREA.CSV - Copyright (C) 2021 STÜBER SYSTEMS GmbH
+#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2021 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
  * 
  */
 #endregion
 
+using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Running;
 
 namespace Enbrea.Csv.Tests
@@ -17,7 +18,13 @@ namespace Enbrea.Csv.Tests
     {
         public static void Main()
         {
-            _ = BenchmarkRunner.Run<CsvReaderBenchmark>();
+            IConfig config = null;
+#if DEBUG
+            config = new DebugInProcessConfig();
+#else
+            config = null;
+#endif            
+            _ = BenchmarkRunner.Run<CsvReaderBenchmark>(config);
         }
     }
 }
