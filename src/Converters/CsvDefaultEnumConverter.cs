@@ -18,7 +18,7 @@ namespace Enbrea.Csv
     /// <summary>
     /// Implementation of a enum converter to or from CSV
     /// </summary>
-    public class CsvDefaultEnumConverter : CsvDefaultFormattableConverter
+    public class CsvDefaultEnumConverter : CsvDefaultConverter
     {
         public CsvDefaultEnumConverter(Type conversionType)
             : base(conversionType)
@@ -30,16 +30,9 @@ namespace Enbrea.Csv
         {
         }
 
-        public CsvDefaultEnumConverter(Type conversionType, CultureInfo cultureInfo, string[] formats)
+        public CsvDefaultEnumConverter(Type conversionType, CultureInfo cultureInfo, bool ignoreCase)
             : base(conversionType, cultureInfo)
         {
-            Formats = formats;
-        }
-
-        public CsvDefaultEnumConverter(Type conversionType, CultureInfo cultureInfo, string[] formats, bool ignoreCase)
-            : base(conversionType, cultureInfo)
-        {
-            Formats = formats;
             IgnoreCase = ignoreCase;
         }
 
