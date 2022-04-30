@@ -14,7 +14,7 @@
     <Version>0.2.0</Version>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/stuebersystems/enbrea.csv</RepositoryUrl>
+    <RepositoryUrl>https://github.com/enbrea/enbrea.csv</RepositoryUrl>
     <PackageTags>enbrea;csv;parser;builder;reader;writer</PackageTags>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
