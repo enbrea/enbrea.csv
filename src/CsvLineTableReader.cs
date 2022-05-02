@@ -369,6 +369,7 @@ namespace Enbrea.Csv
         {
             return converter.FromString(this[index]);
         }
+
         /// <summary>
         /// Parses a CSV text line and stores the values
         /// </summary>

@@ -31,7 +31,7 @@ namespace Enbrea.Csv.Tests
 
             using var strReader = new StringReader(csvData);
 
-            var csvTableReader = new CsvTableReader(strReader);
+            var csvTableReader = new CsvTableReader(strReader, new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvTableReader);
 
@@ -67,7 +67,7 @@ namespace Enbrea.Csv.Tests
 
             using var strReader = new StringReader(csvData);
 
-            var csvTableReader = new CsvTableReader(strReader);
+            var csvTableReader = new CsvTableReader(strReader, new CsvConfiguration { Separator = ';' });
 
             csvTableReader.SetFormats<DateTime>("dd.MM.yyyy");
             csvTableReader.SetTrueFalseString<bool>("true", "false");
@@ -104,7 +104,7 @@ namespace Enbrea.Csv.Tests
 
             using var strReader = new StringReader(csvData);
 
-            var csvTableReader = new CsvTableReader(strReader);
+            var csvTableReader = new CsvTableReader(strReader, new CsvConfiguration { Separator = ';' });
 
             csvTableReader.SetFormats<DateTime>("dd.MM.yyyy");
             csvTableReader.SetTrueFalseString<bool>("true", "false");
@@ -133,7 +133,7 @@ namespace Enbrea.Csv.Tests
 
             using var strReader = new StringReader(csvData);
 
-            var csvTableReader = new CsvTableReader(strReader);
+            var csvTableReader = new CsvTableReader(strReader, new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvTableReader);
 
@@ -167,7 +167,7 @@ namespace Enbrea.Csv.Tests
 
             using var strReader = new StringReader(csvData);
 
-            var csvTableReader = new CsvTableReader(strReader);
+            var csvTableReader = new CsvTableReader(strReader, new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvTableReader);
 
@@ -207,7 +207,7 @@ namespace Enbrea.Csv.Tests
 
             using var strReader = new StringReader(csvData);
 
-            var csvTableReader = new CsvTableReader(strReader);
+            var csvTableReader = new CsvTableReader(strReader, new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvTableReader);
 
@@ -256,7 +256,7 @@ namespace Enbrea.Csv.Tests
 
             using var strReader = new StringReader(csvData);
 
-            var csvTableReader = new CsvTableReader(strReader);
+            var csvTableReader = new CsvTableReader(strReader, new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvTableReader);
 

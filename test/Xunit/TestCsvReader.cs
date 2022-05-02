@@ -33,7 +33,8 @@ namespace Enbrea.Csv.Tests
                 "a2;b2;c2# No comment";
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
+            
+            var csvReader = new CsvReader(strReader, new CsvConfiguration { Separator = ';' });
 
             csvReader.Configuration.AllowComments = true;
 
@@ -70,7 +71,8 @@ namespace Enbrea.Csv.Tests
                 "aaa3;bbb3";
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
+            
+            var csvReader = new CsvReader(strReader, new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvReader);
 
@@ -106,7 +108,8 @@ namespace Enbrea.Csv.Tests
             var fields = new List<string>();
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
+
+            var csvReader = new CsvReader(strReader, new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvReader);
 
@@ -127,7 +130,8 @@ namespace Enbrea.Csv.Tests
                 "aaa2;bbb2;ccc2";
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
+
+            var csvReader = new CsvReader(strReader, new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvReader);
 
@@ -160,7 +164,8 @@ namespace Enbrea.Csv.Tests
                 "%a%%a%%a%;%b;b;b%;%c c c%";
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
+
+            var csvReader = new CsvReader(strReader, new CsvConfiguration { Separator = ';' });
 
             csvReader.Configuration.Quote = '%';
 
@@ -194,7 +199,8 @@ namespace Enbrea.Csv.Tests
                 "aaa2;bbb2;ccc2";
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
+
+            var csvReader = new CsvReader(strReader, new CsvConfiguration { Separator = ';' });
 
             csvReader.Configuration.AllowComments = true;
 
@@ -217,12 +223,14 @@ namespace Enbrea.Csv.Tests
         [Fact]
         public async Task SupportQuotedFields()
         {
+
             var csvData =
                 "\"a a a\";\"b b b\";\"c c c\"" + Environment.NewLine +
                 "\"a\"\"a\"\"a\";\"b;b;b\";\"c c c\"";
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
+
+            var csvReader = new CsvReader(strReader, new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvReader);
 
@@ -252,7 +260,8 @@ namespace Enbrea.Csv.Tests
                 "   ";
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
+
+            var csvReader = new CsvReader(strReader, new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvReader);
 
@@ -291,7 +300,8 @@ namespace Enbrea.Csv.Tests
             var fields = new List<string>();
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
+
+            var csvReader = new CsvReader(strReader, new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvReader);
 
@@ -316,7 +326,8 @@ namespace Enbrea.Csv.Tests
                 " ;  ;   ";
 
             using var strReader = new StringReader(csvData);
-            var csvReader = new CsvReader(strReader);
+
+            var csvReader = new CsvReader(strReader, new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvReader);
 

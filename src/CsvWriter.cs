@@ -9,9 +9,7 @@
  */
 #endregion
 
-using System;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Enbrea.Csv
@@ -45,12 +43,13 @@ namespace Enbrea.Csv
         public CsvWriter(TextWriter textWriter, CsvConfiguration configuration)
         {
             _textWriter = textWriter;
+            Configuration = configuration;
         }
 
         /// <summary>
         /// Configuration parameter
         /// </summary>
-        public CsvConfiguration Configuration { get; } = new CsvConfiguration();
+        public CsvConfiguration Configuration { get; }
 
         /// <summary>
         /// Writes a comment row to the CSV stream

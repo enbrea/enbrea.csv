@@ -26,7 +26,7 @@ namespace Enbrea.Csv.Tests
             var csvLine2 = "a1;b1;c1";
             var csvLine3 = "a2;b2;c2";
 
-            var csvTableReader = new CsvLineTableReader();
+            var csvTableReader = new CsvLineTableReader(new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvTableReader);
 
@@ -58,7 +58,7 @@ namespace Enbrea.Csv.Tests
             var csvLine2 = "42;\"{\"\"IntValue\"\":42,\"\"StrValue\"\":\"\"Forty-Two\"\"}\"";
             var csvLine3 = "5;\"{\"\"IntValue\"\":5,\"\"StrValue\"\":\"\"Five\"\"}\"";
 
-            var csvTableReader = new CsvLineTableReader("A","B");
+            var csvTableReader = new CsvLineTableReader(new CsvConfiguration { Separator = ';' }, "A","B");
 
             Assert.NotNull(csvTableReader);
 
@@ -90,7 +90,7 @@ namespace Enbrea.Csv.Tests
             var csvLine2 = "a1;b1;c1";
             var csvLine3 = "a2;b2;c2";
 
-            var csvTableReader = new CsvLineTableReader();
+            var csvTableReader = new CsvLineTableReader(new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvTableReader);
 
@@ -129,7 +129,7 @@ namespace Enbrea.Csv.Tests
             var csvLine3 = "-31;A long text;false;20.01.2050";
             var csvLine4 = "55;\"A text with ;\";;31.07.1971";
 
-            var csvTableReader = new CsvLineTableReader();
+            var csvTableReader = new CsvLineTableReader(new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvTableReader);
 

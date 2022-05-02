@@ -28,7 +28,7 @@ namespace Enbrea.Csv.Tests
             var sb = new StringBuilder();
 
             using var strWriter = new StringWriter(sb);
-            var csvWriter = new CsvWriter(strWriter);
+            var csvWriter = new CsvWriter(strWriter, new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvWriter);
 
@@ -53,7 +53,7 @@ namespace Enbrea.Csv.Tests
             var sb = new StringBuilder();
 
             using var strWriter = new StringWriter(sb);
-            var csvWriter = new CsvWriter(strWriter);
+            var csvWriter = new CsvWriter(strWriter, new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvWriter);
 

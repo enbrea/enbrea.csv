@@ -25,7 +25,7 @@ namespace Enbrea.Csv.Tests
         {
             var textLine = "aaa1;bbb1;ccc1";
 
-            var csvParser = new CsvLineParser();
+            var csvParser = new CsvLineParser(new CsvConfiguration { Separator = ';' });
             {
                 Assert.NotNull(csvParser);
 
@@ -43,7 +43,7 @@ namespace Enbrea.Csv.Tests
         {
             var textLine = "aaa1;bbb1;ccc1";
 
-            var csvParser = new CsvLineParser();
+            var csvParser = new CsvLineParser(new CsvConfiguration { Separator = ';' });
             {
                 Assert.NotNull(csvParser);
 
@@ -63,7 +63,7 @@ namespace Enbrea.Csv.Tests
         {
             var textLine = "";
 
-            var csvParser = new CsvLineParser();
+            var csvParser = new CsvLineParser(new CsvConfiguration { Separator = ';' });
             {
                 Assert.NotNull(csvParser);
 

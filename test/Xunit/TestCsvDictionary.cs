@@ -34,7 +34,7 @@ namespace Enbrea.Csv.Tests
 
             using var strWriter = new StringWriter(sb);
 
-            var csvDictionary = new CsvDictionary();
+            var csvDictionary = new CsvDictionary(new CsvConfiguration { Separator = ';' });
 
             csvDictionary["A"] = "a";
             csvDictionary["B"] = "b";
@@ -62,7 +62,7 @@ namespace Enbrea.Csv.Tests
 
             using var strReader = new StringReader(csvData);
 
-            var csvDictionary = new CsvDictionary();
+            var csvDictionary = new CsvDictionary(new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvDictionary);
 
@@ -85,7 +85,7 @@ namespace Enbrea.Csv.Tests
 
             using var strWriter = new StringWriter(sb);
 
-            var csvDictionary = new CsvDictionary();
+            var csvDictionary = new CsvDictionary(new CsvConfiguration { Separator = ';' });
 
             csvDictionary.SetFormats<DateTime>("dd.MM.yyyy");
             csvDictionary.SetTrueFalseString<bool>("true", "false");
@@ -122,7 +122,7 @@ namespace Enbrea.Csv.Tests
 
             using var strReader = new StringReader(csvData);
 
-            var csvDictionary = new CsvDictionary();
+            var csvDictionary = new CsvDictionary(new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvDictionary);
 
@@ -148,7 +148,7 @@ namespace Enbrea.Csv.Tests
 
             using var strWriter = new StringWriter(sb);
 
-            var csvDictionary = new CsvDictionary();
+            var csvDictionary = new CsvDictionary(new CsvConfiguration { Separator = ';' });
 
             csvDictionary.SetFormats<DateTime>("dd.MM.yyyy");
             csvDictionary.SetTrueFalseString<bool>("true", "false");
@@ -173,7 +173,7 @@ namespace Enbrea.Csv.Tests
 
             using var strReader = new StringReader(csvData);
 
-            var csvDictionary = new CsvDictionary();
+            var csvDictionary = new CsvDictionary(new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvDictionary);
 
@@ -199,7 +199,7 @@ namespace Enbrea.Csv.Tests
 
             using var strReader = new StringReader(csvData);
 
-            var csvDictionary = new CsvDictionary();
+            var csvDictionary = new CsvDictionary(new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvDictionary);
 

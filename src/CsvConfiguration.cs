@@ -50,6 +50,6 @@ namespace Enbrea.Csv
         /// <summary>
         /// Specifies the character for separating values
         /// </summary>
-        public char Separator { get; set; } = ';';
+        public char Separator { get; set; } = ',';
     }
 }

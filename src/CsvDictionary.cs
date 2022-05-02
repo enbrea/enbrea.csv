@@ -22,23 +22,49 @@ namespace Enbrea.Csv
     /// </summary>
     public class CsvDictionary : CsvAccess, IEnumerable<KeyValuePair<string, string>>
     {
-        private readonly List<KeyValuePair<string, string>> _keyValuePairs = new List<KeyValuePair<string, string>>(); 
+        private readonly List<KeyValuePair<string, string>> _keyValuePairs = new List<KeyValuePair<string, string>>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvDictionary"/> class.
         /// </summary>
         public CsvDictionary()
+            : this(new CsvConfiguration())
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvDictionary"/> class.
         /// </summary>
-        /// <param name="csvConverterResolver">Your own implementation of a value converter resolver</param>
-        public CsvDictionary(ICsvConverterResolver csvConverterResolver)
-            : base(csvConverterResolver)
+        /// <param name="configuration">Configuration parameters</param>
+        public CsvDictionary(CsvConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvDictionary"/> class.
+        /// </summary>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        public CsvDictionary(ICsvConverterResolver converterResolver)
+            : this(new CsvConfiguration(), converterResolver)
         {
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CsvDictionary"/> class.
+        /// </summary>
+        /// <param name="configuration">Configuration parameters</param>
+        /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
+        public CsvDictionary(CsvConfiguration configuration, ICsvConverterResolver converterResolver)
+            : base(converterResolver)
+        {
+            Configuration = configuration;
+        }
+
+        /// <summary>
+        /// Configuration parameter
+        /// </summary>
+        public CsvConfiguration Configuration { get; }
 
         /// <summary>
         /// Number of key/value pairs 
@@ -204,8 +230,7 @@ namespace Enbrea.Csv
 
             var c = 0;
             var csvValues = new List<string>();
-
-            var csvReader = new CsvReader(textReader);
+            var csvReader = new CsvReader(textReader, Configuration);
 
             while (csvReader.ReadLine(csvValues) > 0)
             {
@@ -236,8 +261,7 @@ namespace Enbrea.Csv
 
             var c = 0;
             var csvValues = new List<string>();
-
-            var csvReader = new CsvReader(textReader);
+            var csvReader = new CsvReader(textReader, Configuration);
 
             while (await csvReader.ReadLineAsync(csvValues) > 0)
             {
@@ -261,7 +285,6 @@ namespace Enbrea.Csv
         {
             SetValue(key, value, ConverterResolver.GetConverter<T>());
         }
-
         /// <summary>
         /// Sets the value of the specified key.
         /// </summary>
@@ -326,7 +349,8 @@ namespace Enbrea.Csv
 
             var c = 0;
             var wasPreviousWrite = false;
-            var csvWriter = new CsvWriter(textWriter);
+            var csvWriter = new CsvWriter(textWriter, Configuration);
+
             foreach (var keyValuePair in _keyValuePairs)
             {
                 if (wasPreviousWrite)
@@ -355,7 +379,8 @@ namespace Enbrea.Csv
 
             var c = 0;
             var wasPreviousWrite = false;
-            var csvWriter = new CsvWriter(textWriter);
+            var csvWriter = new CsvWriter(textWriter, Configuration);
+
             foreach (var keyValuePair in _keyValuePairs)
             {
                 if (wasPreviousWrite)

@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace Enbrea.Csv
 {
     /// <summary>
-    /// A raw stream based CSV parser/reader.
+    /// Implementation of a raw CSV Reader.
     /// </summary>
     /// <remarks>
     /// Common Format and MIME Type for Comma-Separated Values (CSV) Files: https://www.ietf.org/rfc/rfc4180.txt

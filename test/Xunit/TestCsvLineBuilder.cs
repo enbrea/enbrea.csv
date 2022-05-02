@@ -25,7 +25,7 @@ namespace Enbrea.Csv.Tests
         {
             var fields = new string[] { "aaa1", "bbb1", "ccc1" };
 
-            var csvBuilder = new CsvLineBuilder();
+            var csvBuilder = new CsvLineBuilder(new CsvConfiguration { Separator = ';' });
             {
                 Assert.NotNull(csvBuilder);
 
@@ -40,7 +40,7 @@ namespace Enbrea.Csv.Tests
         {
             var fields = new List<string>() { "aaa1", "bbb1", "ccc1" };
 
-            var csvBuilder = new CsvLineBuilder();
+            var csvBuilder = new CsvLineBuilder(new CsvConfiguration { Separator = ';' });
             {
                 Assert.NotNull(csvBuilder);
 
