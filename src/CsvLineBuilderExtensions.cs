@@ -22,36 +22,36 @@ namespace Enbrea.Csv
         /// <summary>
         /// Converts a list of string values to a CSV text line
         /// </summary>
-        /// <param name="csvLineWriter">The <see cref="CsvLineBuilder"/></param>
+        /// <param name="csvLineBuilder">The <see cref="CsvLineBuilder"/></param>
         /// <param name="values">List of string values</param>
         /// <returns>
         /// A CSV formated text line
         /// </returns>
-        public static string Write(this CsvLineBuilder csvLineWriter, IEnumerable<string> values)
+        public static string ToString(this CsvLineBuilder csvLineBuilder, IEnumerable<string> values)
         {
             if (values == null)
             {
                 throw new ArgumentNullException(nameof(values));
             }
-            csvLineWriter.Clear();
+            csvLineBuilder.Clear();
             foreach (string value in values)
             {
-                csvLineWriter.Append(value);
+                csvLineBuilder.Append(value);
             }
-            return csvLineWriter.ToString();
+            return csvLineBuilder.ToString();
         }
 
         /// <summary>
         /// Converts a list of string values to a CSV text line
         /// </summary>
-        /// <param name="csvLineWriter">The <see cref="CsvLineBuilder"/></param>
+        /// <param name="csvLineBuilder">The <see cref="CsvLineBuilder"/></param>
         /// <param name="values">List of string values</param>
         /// <returns>
         /// A CSV formated text line
         /// </returns>
-        public static string Write(this CsvLineBuilder csvLineWriter, params string[] values)
+        public static string ToString(this CsvLineBuilder csvLineBuilder, params string[] values)
         {
-            return csvLineWriter.Write(values as IEnumerable<string>);
+            return csvLineBuilder.ToString(values as IEnumerable<string>);
         }
     }
 }

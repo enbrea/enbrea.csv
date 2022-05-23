@@ -69,11 +69,8 @@ namespace Enbrea.Csv
         public TokenizerState State { get; private set; }
 
         /// <summary>
-        /// Creates an exception which describes an error that occur during CSV parsing. 
+        /// Delegate creating an exception which describes an error that occur during CSV parsing. 
         /// </summary>
-        /// <param name="message">The message that describes the error.</param>
-        /// <returns>The newly craeted Exception instance</returns>
-        /// <remarks>This method must be overwritten in derived classes.</remarks>
         public Func<string, Exception> ThrowException { get; }
         
         /// <summary>

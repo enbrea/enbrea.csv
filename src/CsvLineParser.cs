@@ -70,7 +70,7 @@ namespace Enbrea.Csv
         /// <returns>
         /// Number of parsed values
         /// </returns>
-        public int Read(string line, Action<int, string> valueAction)
+        public int Parse(string line, Action<int, string> valueAction)
         {
             if (valueAction == null)
             {
@@ -104,7 +104,7 @@ namespace Enbrea.Csv
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private char NextChar()
         {
-            if (_position < _line.Length)
+            if (_line != null && _position < _line.Length)
             {
                 _position++;
                 return _line[_position - 1];
