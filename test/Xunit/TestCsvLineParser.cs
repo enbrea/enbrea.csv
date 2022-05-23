@@ -29,7 +29,7 @@ namespace Enbrea.Csv.Tests
             {
                 Assert.NotNull(csvParser);
 
-                var fields = csvParser.Read(textLine);
+                var fields = csvParser.Parse(textLine);
 
                 Assert.Equal(3, fields.Count());
                 Assert.Equal("aaa1", fields[0]);
@@ -49,7 +49,7 @@ namespace Enbrea.Csv.Tests
 
                 var fields = new List<string>();
 
-                csvParser.Read(textLine, fields);
+                csvParser.Parse(textLine, fields);
 
                 Assert.Equal(3, fields.Count);
                 Assert.Equal("aaa1", fields[0]);
@@ -67,11 +67,11 @@ namespace Enbrea.Csv.Tests
             {
                 Assert.NotNull(csvParser);
 
-                var fieldsArray = csvParser.Read(textLine);
+                var fieldsArray = csvParser.Parse(textLine);
                 Assert.Single(fieldsArray);
 
                 var fieldsList = new List<string>();
-                csvParser.Read(textLine, fieldsList);
+                csvParser.Parse(textLine, fieldsList);
                 Assert.Single(fieldsList);
             }
         }

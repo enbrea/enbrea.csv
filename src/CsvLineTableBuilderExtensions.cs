@@ -14,55 +14,55 @@ using System.Collections.Generic;
 namespace Enbrea.Csv
 {
     /// <summary>
-    /// Extensions for <see cref="CsvLineTableWriter"/>
+    /// Extensions for <see cref="CsvLineTableBuilder"/>
     /// </summary>
-    public static class CsvLineTableWriterExtensions
+    public static class CsvLineTableBuilderExtensions
     {
         /// <summary>
-        /// Writes values directly to the csv line.
+        /// Converts values directly to a csv text line.
         /// </summary>
-        /// <param name="csvLineTableWriter">The <see cref="CsvLineTableWriter"/></param>
+        /// <param name="csvLineTableBuilder">The <see cref="CsvLineTableBuilder"/></param>
         /// <param name="values">List of values</param>
         /// <returns>
         /// A CSV formatted string if values are available; otherwise null.
         /// </returns>
-        public static string Write(this CsvLineTableWriter csvLineTableWriter, IEnumerable<object> values)
+        public static string ToString(this CsvLineTableBuilder csvLineTableBuilder, IEnumerable<object> values)
         {
             int i = 0;
             foreach (var value in values)
             {
-                csvLineTableWriter.SetValue(i, value);
+                csvLineTableBuilder.SetValue(i, value);
                 i++;
             }
-            return csvLineTableWriter.Write();
+            return csvLineTableBuilder.ToString();
         }
 
         /// <summary>
-        /// Writes values directly to the csv line.
+        /// Converts values directly to a csv text line.
         /// </summary>
-        /// <param name="csvLineTableWriter">The <see cref="CsvLineTableWriter"/></param>
+        /// <param name="csvLineTableBuilder">The <see cref="CsvLineTableBuilder"/></param>
         /// <param name="values">List of values</param>
         /// <returns>
         /// A CSV formatted string if values are available; otherwise null.
         /// </returns>
-        public static string Write(this CsvLineTableWriter csvLineTableWriter, params object[] values)
+        public static string ToString(this CsvLineTableBuilder csvLineTableBuilder, params object[] values)
         {
-            return csvLineTableWriter.Write((IEnumerable<object>)values);
+            return csvLineTableBuilder.ToString((IEnumerable<object>)values);
         }
 
         /// <summary>
-        /// Writes a custom csv object directly to the csv line.
+        /// Converts values directly to a csv text line.
         /// </summary>
         /// <typeparam name="TEntity">The custom csv object type</typeparam>
-        /// <param name="csvTableWriter">The <see cref="CsvTableWriter"/></param>
+        /// <param name="csvLineTableBuilder">The <see cref="CsvLineTableBuilder"/></param>
         /// <param name="entity">The csv object</param>
         /// <returns>
         /// A CSV formatted string if values are available; otherwise null.
         /// </returns>
-        public static string Write<TEntity>(this CsvLineTableWriter csvLineTableWriter, TEntity entity)
+        public static string ToString<TEntity>(this CsvLineTableBuilder csvLineTableBuilder, TEntity entity)
         {
-            csvLineTableWriter.SetValues(entity);
-            return csvLineTableWriter.Write();
+            csvLineTableBuilder.SetValues(entity);
+            return csvLineTableBuilder.ToString();
         }
     }
 }

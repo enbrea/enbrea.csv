@@ -29,7 +29,7 @@ namespace Enbrea.Csv.Tests
             {
                 Assert.NotNull(csvBuilder);
 
-                var textLine = csvBuilder.Write(fields);
+                var textLine = csvBuilder.ToString(fields);
 
                 Assert.Equal("aaa1;bbb1;ccc1", textLine);
             }
@@ -44,7 +44,7 @@ namespace Enbrea.Csv.Tests
             {
                 Assert.NotNull(csvBuilder);
 
-                var textLine = csvBuilder.Write(fields);
+                var textLine = csvBuilder.ToString(fields);
 
                 Assert.Equal("aaa1;bbb1;ccc1", textLine);
             }

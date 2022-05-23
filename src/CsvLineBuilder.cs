@@ -21,7 +21,7 @@ namespace Enbrea.Csv
     /// </remarks>
     public class CsvLineBuilder
     {
-        private readonly char[] _charsToBeQuoted = new char[] { '\"', '\n', '\r' };
+        private readonly char[] _charsToBeQuoted = new char[] { '\n', '\r' };
         private readonly StringBuilder _strBuilder;
         private bool _wasPreviousToken;
 
@@ -65,7 +65,52 @@ namespace Enbrea.Csv
         /// <param name="values">The value</param>
         public void Append(string value)
         {
-            Write(value);
+            if (_wasPreviousToken)
+            {
+                _strBuilder.Append(Configuration.Separator);
+            }
+
+            if (!string.IsNullOrEmpty(value))
+            {
+                if (value.IndexOfAny(_charsToBeQuoted) != -1 || value.IndexOf(Configuration.Quote) != -1)
+                {
+                    _strBuilder.Append(Configuration.Quote);
+
+                    foreach (char c in value)
+                    {
+                        if (c == Configuration.Quote)
+                        {
+                            _strBuilder.Append(Configuration.Quote);
+                            _strBuilder.Append(Configuration.Quote);
+                        }
+                        else
+                        {
+                            _strBuilder.Append(c);
+                        }
+                    }
+
+                    _strBuilder.Append(Configuration.Quote);
+                }
+                else if ((Configuration.ForceQuotes) || (value.Contains(Configuration.Separator)))
+                {
+                    _strBuilder.Append(Configuration.Quote);
+                    _strBuilder.Append(value);
+                    _strBuilder.Append(Configuration.Quote);
+                }
+                else
+                {
+                    _strBuilder.Append(value);
+                }
+            }
+            else
+            {
+                if (Configuration.ForceQuotes)
+                {
+                    _strBuilder.Append(Configuration.Quote);
+                }
+            }
+
+            _wasPreviousToken = true;
         }
 
         /// <summary>
@@ -85,59 +130,5 @@ namespace Enbrea.Csv
         {
             return _strBuilder.ToString();
         }
-
-        /// <summary>
-        /// Appends a token to the internal StringBuilder
-        /// </summary>
-        /// <param name="token">The token to be appended</param>
-        private void Write(string token)
-        {
-            if (_wasPreviousToken)
-            {
-                _strBuilder.Append(Configuration.Separator);
-            }
-
-            if (!string.IsNullOrEmpty(token))
-            {
-                if (token.IndexOfAny(_charsToBeQuoted) != -1)
-                {
-                    _strBuilder.Append("\"");
-
-                    foreach (char c in token)
-                    {
-                        if (c == '"')
-                        {
-                            _strBuilder.Append("\"\"");
-                        }
-                        else
-                        {
-                            _strBuilder.Append(c);
-                        }
-                    }
-
-                    _strBuilder.Append("\"");
-                }
-                else if ((Configuration.ForceQuotes) || (token.Contains(Configuration.Separator)))
-                {
-                    _strBuilder.Append("\"");
-                    _strBuilder.Append(token);
-                    _strBuilder.Append("\"");
-                }
-                else
-                {
-                    _strBuilder.Append(token);
-                }
-            }
-            else
-            {
-                if (Configuration.ForceQuotes)
-                {
-                    _strBuilder.Append("\"\"");
-                }
-            }
-
-            _wasPreviousToken = true;
-        }
-
     }
 }
