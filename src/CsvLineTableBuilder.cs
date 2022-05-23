@@ -261,7 +261,7 @@ namespace Enbrea.Csv
         {
             Headers.Replace(csvHeaders);
             Array.Resize(ref _csvValues, csvHeaders.Count());
-            return AssignHeaders();
+            return HeadersToString();
         }
 
         /// <summary>
