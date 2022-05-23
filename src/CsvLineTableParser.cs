@@ -438,6 +438,23 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
+        /// Tries to read the value of the current csv record at the posiiton of the specified header name. 
+        /// </summary>
+        /// <param name="name">Name of a header</param>
+        /// <param name="value">If position within the cuurent csv record was found, contains the value. If not contains null</param>
+        /// <returns>true if position within the cuurent csv record was found; otherwise, false.</returns>
+        public bool TryGetValue(string name, out string value)
+        {
+            var i = Headers.IndexOf(x => x.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            if (i != -1)
+            {
+                return TryGetValue(i, out value);
+            }
+            value = null;
+            return false;
+        }
+
+        /// <summary>
         /// Tries to read the typed value of the current csv record at the posiiton of the specified header name. 
         /// </summary>
         /// <typeparam name="T">The type</typeparam>

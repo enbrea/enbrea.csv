@@ -251,24 +251,7 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Writes the csv headers to the stream.
-        /// </summary>
-        /// <returns>
-        /// A CSV formatted string if headers are available; otherwise null.
-        /// </returns>
-        public string AssignHeaders()
-        {
-            int i = 0;
-            foreach (var value in Headers)
-            {
-                SetValue(i, value);
-                i++;
-            }
-            return ToString();
-        }
-
-        /// <summary>
-        /// Writes the csv headers to the stream.
+        /// Assigns the csv headers to the builder.
         /// </summary>
         /// <param name="csvHeaders">List of csv headers</param>
         /// <returns>
@@ -282,7 +265,7 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Writes the csv header values to the stream.
+        /// Assigns the csv headers to the builder.
         /// </summary>
         /// <param name="csvHeaders">List of csv headers</param>
         /// <returns>
@@ -294,7 +277,7 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Writes the csv header values to the stream.
+        /// Assigns the csv headers to the builder.
         /// </summary>
         /// <param name="csvHeaders">List of csv headers as expression lambda</param>
         /// <returns>
@@ -303,6 +286,23 @@ namespace Enbrea.Csv
         public void AssignHeaders<TEntity>(Expression<Func<TEntity, object>> csvHeaders)
         {
             AssignHeaders(new CsvHeaders<TEntity>(csvHeaders));
+        }
+
+        /// <summary>
+        /// Gives back the headers as CSV text line.
+        /// </summary>
+        /// <returns>
+        /// A CSV formatted string if headers are available; otherwise null.
+        /// </returns>
+        public string HeadersToString()
+        {
+            int i = 0;
+            foreach (var value in Headers)
+            {
+                SetValue(i, value);
+                i++;
+            }
+            return ToString();
         }
 
         /// <summary>
@@ -401,7 +401,7 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Writes the current csv record to the stream and clears its content
+        /// Gives back the current csv record as csv text string clears the internal buffer
         /// </summary>
         /// <returns>
         /// A CSV formatted string if values are available; otherwise null.
