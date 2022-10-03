@@ -100,11 +100,10 @@ namespace Enbrea.Csv
         /// field value the given action.
         /// </summary>
         /// <param name="valueAction">Action with one string parameter.</param>
-        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>A task that represents the asynchronous operation. The value of the TResult
         /// parameter contains the number of parsed values.</returns>
         /// <returns>
-        public async Task<int> ReadLineAsync(Action<int, string> valueAction, CancellationToken cancellationToken = default)
+        public async Task<int> ReadLineAsync(Action<int, string> valueAction)
         {
             if (valueAction == null)
             {
@@ -116,12 +115,11 @@ namespace Enbrea.Csv
             var valueCount = 0;
             do
             {
-                if (await _csvParser.NextTokenAsync(nextCharAction))
+                if (await _csvParser.NextTokenAsync(nextCharAction).ConfigureAwait(false))
                 {
                     valueAction(valueCount, _csvParser.GetToken());
                     valueCount++;
                 }
-                cancellationToken.ThrowIfCancellationRequested();
             }
             while (_csvParser.State != CsvParser.TokenizerState.IsEndOfLine);
 
@@ -166,7 +164,7 @@ namespace Enbrea.Csv
         {
             if (_bufferPosition >= _bufferEnd - 1)
             {
-                _bufferEnd = await _textReader.ReadAsync(_buffer, 0, _bufferSize);
+                _bufferEnd = await _textReader.ReadAsync(_buffer, 0, _bufferSize).ConfigureAwait(false);
                 if (_bufferEnd > 0)
                 {
                     _bufferPosition = 0;

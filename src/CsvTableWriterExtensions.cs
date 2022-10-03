@@ -102,9 +102,8 @@ namespace Enbrea.Csv
             foreach (var entity in entities)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-
                 csvTableWriter.SetValues(entity);
-                await csvTableWriter.WriteAsync();
+                await csvTableWriter.WriteAsync().ConfigureAwait(false);
             }
         }
 
@@ -127,7 +126,7 @@ namespace Enbrea.Csv
                 csvTableWriter.SetValue(i, value);
                 i++;
             }
-            await csvTableWriter.WriteAsync();
+            await csvTableWriter.WriteAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -138,7 +137,7 @@ namespace Enbrea.Csv
         /// <returns>A task that represents the asynchronous write operation.</returns>
         public static async Task WriteAsync(this CsvTableWriter csvTableWriter, params object[] values)
         {
-            await csvTableWriter.WriteAsync((IEnumerable<object>)values);
+            await csvTableWriter.WriteAsync((IEnumerable<object>)values).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -151,7 +150,7 @@ namespace Enbrea.Csv
         public static async Task WriteAsync<TEntity>(this CsvTableWriter csvTableWriter, TEntity entity)
         {
             csvTableWriter.SetValues(entity);
-            await csvTableWriter.WriteAsync();
+            await csvTableWriter.WriteAsync().ConfigureAwait(false);
         }
     }
 }

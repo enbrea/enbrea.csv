@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Enbrea.Csv
@@ -428,7 +429,7 @@ namespace Enbrea.Csv
         public async Task<int> ReadAsync()
         {
             _csvValues.Clear();
-            return await _csvReader.ReadLineAsync((i, s) => { _csvValues.Add(s); });
+            return await _csvReader.ReadLineAsync((i, s) => { _csvValues.Add(s); }).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -465,7 +466,7 @@ namespace Enbrea.Csv
         public async Task<int> ReadHeadersAsync()
         {
             Headers.Clear();
-            return await _csvReader.ReadLineAsync((i, s) => Headers.Add(s));
+            return await _csvReader.ReadLineAsync((i, s) => Headers.Add(s)).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -479,7 +480,7 @@ namespace Enbrea.Csv
         public async Task<int> ReadHeadersAsync(Func<string, string> transform)
         {
             Headers.Clear();
-            return await _csvReader.ReadLineAsync((i, s) => Headers.Add(transform(s)));
+            return await _csvReader.ReadLineAsync((i, s) => Headers.Add(transform(s))).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -505,7 +506,7 @@ namespace Enbrea.Csv
             _csvValues.Clear();
             for (int c = 0; c < count; c++)
             {
-                await _csvReader.ReadLineAsync((i, s) => {});
+                await _csvReader.ReadLineAsync((i, s) => {}).ConfigureAwait(false);
             }
         }
 

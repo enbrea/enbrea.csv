@@ -10,6 +10,8 @@
 #endregion
 
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace Enbrea.Csv
 {
@@ -39,11 +41,13 @@ namespace Enbrea.Csv
         /// </summary>
         /// <typeparam name="TEntity">The custom csv object type</typeparam>
         /// <param name="csvTableReader">The <see cref="CsvTableReader"/></param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>An async enumerator of custom csv object instances</returns>
-        public static async IAsyncEnumerable<TEntity> ReadAllAsync<TEntity>(this CsvTableReader csvTableReader)
+        public static async IAsyncEnumerable<TEntity> ReadAllAsync<TEntity>(this CsvTableReader csvTableReader, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            while (await csvTableReader.ReadAsync() > 0)
+            while (await csvTableReader.ReadAsync().ConfigureAwait(false) > 0)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 yield return csvTableReader.Get<TEntity>();
             }
         }

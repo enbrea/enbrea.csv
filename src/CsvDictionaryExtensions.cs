@@ -10,6 +10,7 @@
 #endregion
 
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Enbrea.Csv
@@ -47,9 +48,9 @@ namespace Enbrea.Csv
         /// <param name="csvDictionary">The <see cref="CsvDictionary"/></param>
         /// <param name="textReader">A <see cref="TextReader"/></param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public static async Task<TEntity> LoadAsync<TEntity>(this CsvDictionary csvDictionary, TextReader textReader)
+        public static async Task<TEntity> LoadAsync<TEntity>(this CsvDictionary csvDictionary, TextReader textReader, CancellationToken cancellationToken = default)
         {
-            if (await csvDictionary.LoadAsync(textReader) > 0)
+            if (await csvDictionary.LoadAsync(textReader, cancellationToken).ConfigureAwait(false) > 0)
             {
                 return csvDictionary.CreateAndGetValues<TEntity>();
             }
@@ -82,10 +83,10 @@ namespace Enbrea.Csv
         /// <param name="textWriter">A <see cref="TextWriter"/></param>
         /// <param name="entity">The object instance</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public static async Task StoreAsync<TEntity>(this CsvDictionary csvDictionary, TextWriter textWriter, TEntity entity)
+        public static async Task StoreAsync<TEntity>(this CsvDictionary csvDictionary, TextWriter textWriter, TEntity entity, CancellationToken cancellationToken = default)
         {
             csvDictionary.SetValues(entity);
-            await csvDictionary.StoreAsync(textWriter);
+            await csvDictionary.StoreAsync(textWriter, cancellationToken).ConfigureAwait(false);
         }
 
     }

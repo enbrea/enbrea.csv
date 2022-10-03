@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Enbrea.Csv
@@ -49,8 +50,8 @@ namespace Enbrea.Csv
         /// <returns>A task that represents the asynchronous write operation.</returns>
         public static async Task WriteLineValuesAsync(this CsvWriter csvWriter, IEnumerable<string> values)
         {
-            await csvWriter.WriteValuesAsync(values);
-            await csvWriter.WriteLineAsync();
+            await csvWriter.WriteValuesAsync(values).ConfigureAwait(false);
+            await csvWriter.WriteLineAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -61,7 +62,7 @@ namespace Enbrea.Csv
         /// <returns>A task that represents the asynchronous write operation.</returns>
         public static async Task WriteLineValuesAsync(this CsvWriter csvWriter, params string[] values)
         {
-            await csvWriter.WriteLineValuesAsync((IEnumerable<string>)values);
+            await csvWriter.WriteLineValuesAsync((IEnumerable<string>)values).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -105,7 +106,7 @@ namespace Enbrea.Csv
             }
             foreach (string value in values)
             {
-                await csvWriter.WriteValueAsync(value, false);
+                await csvWriter.WriteValueAsync(value, false).ConfigureAwait(false);
             }
         }
 
@@ -117,7 +118,7 @@ namespace Enbrea.Csv
         /// <returns>A task that represents the asynchronous write operation.</returns>
         public static async Task WriteValuesAsync(this CsvWriter csvWriter, params string[] values)
         {
-            await csvWriter.WriteValuesAsync((IEnumerable<string>)values);
+            await csvWriter.WriteValuesAsync((IEnumerable<string>)values).ConfigureAwait(false);
         }
     }
 }

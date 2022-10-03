@@ -135,7 +135,7 @@ namespace Enbrea.Csv
             _tokenHash = 3074457345618258791ul;
             while (true)
             {
-                switch (Parse(await nextCharAsync()))
+                switch (Parse(await nextCharAsync().ConfigureAwait(false)))
                 {
                     case TokenizerWorkflow.IgnoreToken:
                         return false;

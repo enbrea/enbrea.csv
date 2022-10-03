@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -42,15 +43,17 @@ namespace Enbrea.Csv
         /// <summary>
         /// Reads all csv records out of the stream and gives back an enumerator. 
         /// </summary>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>
         /// An async enumerator of csv records. Each record is an array of parsed values.
         /// <returns>
-        public async static IAsyncEnumerable<string[]> ReadAllAsync(this CsvReader csvReader)
+        public async static IAsyncEnumerable<string[]> ReadAllAsync(this CsvReader csvReader, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             var values = new List<string>();
 
             while (await csvReader.ReadLineAsync((i, s) => { values.Add(s); }) > 0)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 yield return values.ToArray();
                 values.Clear();
             }
@@ -81,15 +84,17 @@ namespace Enbrea.Csv
         /// This method can be used as a line by line syntax checker.
         /// </summary>
         /// <param name="csvReader">The <see cref="CsvReader"/></param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>
         /// An async enumerator of newly encoded csv strings
         /// </returns>
-        public static async IAsyncEnumerable<string> ReadAllLinesAsync(this CsvReader csvReader)
+        public static async IAsyncEnumerable<string> ReadAllLinesAsync(this CsvReader csvReader, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             var csvLineBuilder = new CsvLineBuilder(csvReader.Configuration);
 
             while (await csvReader.ReadLineAsync((i, s) => { csvLineBuilder.Append(s); }) > 0)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 yield return csvLineBuilder.ToString();
                 csvLineBuilder.Clear();
             }
@@ -142,12 +147,11 @@ namespace Enbrea.Csv
         /// </summary>
         /// <param name="csvReader">The <see cref="CsvReader"/></param>
         /// <param name="values">List of parsed values.</param>
-        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>A task that represents the asynchronous operation. The value of the TResult
         //  parameter contains the number of parsed values.
         /// <returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static async Task<int> ReadLineAsync(this CsvReader csvReader, ICollection<string> values, CancellationToken cancellationToken = default)
+        public static async Task<int> ReadLineAsync(this CsvReader csvReader, ICollection<string> values)
         {
             if (values == null)
             {
@@ -156,7 +160,7 @@ namespace Enbrea.Csv
 
             values.Clear();
 
-            return await csvReader.ReadLineAsync((i, s) => { values.Add(s); }, cancellationToken);
+            return await csvReader.ReadLineAsync((i, s) => { values.Add(s); }).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -165,19 +169,18 @@ namespace Enbrea.Csv
         /// </summary>
         /// <param name="csvReader">The <see cref="CsvReader"/></param>
         /// <param name="values">Array of parsed values.</param>
-        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>A task that represents the asynchronous operation. The value of the TResult
         /// parameter contains the number of parsed values.</returns>
         /// <returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static async Task<int> ReadLineAsync(this CsvReader csvReader, string[] values, CancellationToken cancellationToken = default)
+        public static async Task<int> ReadLineAsync(this CsvReader csvReader, string[] values)
         {
             if (values == null)
             {
                 throw new ArgumentNullException(nameof(values));
             }
 
-            return await csvReader.ReadLineAsync((i, s) => { if (i < values.Length) values[i] = s; }, cancellationToken);
+            return await csvReader.ReadLineAsync((i, s) => { if (i < values.Length) values[i] = s; }).ConfigureAwait(false);
         }
     }
 }

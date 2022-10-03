@@ -13,6 +13,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Enbrea.Csv
@@ -248,9 +249,10 @@ namespace Enbrea.Csv
         /// Reads the csv dictionary out of a CSV source
         /// </summary>
         /// <param name="textReader">The text reader to be used.</param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>A task that represents the asynchronous operation. The value of the TResult
         //  parameter contains the number of key/value pairs read.</returns>
-        public async Task<int> LoadAsync(TextReader textReader)
+        public async Task<int> LoadAsync(TextReader textReader, CancellationToken cancellationToken = default)
         {
             if (textReader == null)
             {
@@ -263,8 +265,10 @@ namespace Enbrea.Csv
             var csvValues = new List<string>();
             var csvReader = new CsvReader(textReader, Configuration);
 
-            while (await csvReader.ReadLineAsync(csvValues) > 0)
+            while (await csvReader.ReadLineAsync(csvValues).ConfigureAwait(false) > 0)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (csvValues.Count > 1)
                 {
                     this[csvValues[0]] = csvValues[1];
@@ -368,9 +372,10 @@ namespace Enbrea.Csv
         /// Writes the csv dictionary to a CSV target
         /// </summary>
         /// <param name="textWriter">A <see cref="TextWriter"/></param>
+        /// <param name="cancellationToken">The token to monitor for cancellation requests.</param>
         /// <returns>A task that represents the asynchronous operation. The value of the TResult
         //  parameter contains the number of key/value pairs written.</returns>
-        public async Task<int> StoreAsync(TextWriter textWriter)
+        public async Task<int> StoreAsync(TextWriter textWriter, CancellationToken cancellationToken = default)
         {
             if (textWriter == null)
             {
@@ -383,12 +388,14 @@ namespace Enbrea.Csv
 
             foreach (var keyValuePair in _keyValuePairs)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (wasPreviousWrite)
                 {
-                    await csvWriter.WriteLineAsync();
+                    await csvWriter.WriteLineAsync().ConfigureAwait(false);
                 }
                 wasPreviousWrite = true;
-                await csvWriter.WriteValuesAsync(keyValuePair.Key, keyValuePair.Value);
+                await csvWriter.WriteValuesAsync(keyValuePair.Key, keyValuePair.Value).ConfigureAwait(false);
                 c++;
             }
             return c;
