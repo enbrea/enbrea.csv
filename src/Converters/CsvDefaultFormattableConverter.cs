@@ -25,13 +25,13 @@ namespace Enbrea.Csv
         {
         }
 
-        public CsvDefaultFormattableConverter(Type conversionType, CultureInfo cultureInfo)
-            : base(conversionType, cultureInfo)
+        public CsvDefaultFormattableConverter(Type conversionType, IFormatProvider formatProvider)
+            : base(conversionType, formatProvider)
         {
         }
 
-        public CsvDefaultFormattableConverter(Type conversionType, CultureInfo cultureInfo, string[] formats)
-            : base(conversionType, cultureInfo)
+        public CsvDefaultFormattableConverter(Type conversionType, IFormatProvider formatProvider, string[] formats)
+            : base(conversionType, formatProvider)
         {
             Formats = formats;
         }
@@ -42,7 +42,7 @@ namespace Enbrea.Csv
         {
             if ((value != null) && (Formats != null) && (Formats.Length > 0) && (typeof(IFormattable).IsAssignableFrom(_conversionType)))
             {
-                return (value as IFormattable).ToString(Formats[0], CultureInfo);
+                return (value as IFormattable).ToString(Formats[0], FormatProvider);
             }
             else
             {

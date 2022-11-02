@@ -24,13 +24,13 @@ namespace Enbrea.Csv
         {
         }
 
-        public CsvDefaultNumberConverter(Type conversionType, CultureInfo cultureInfo, string[] formats)
-            : base(conversionType, cultureInfo, formats)
+        public CsvDefaultNumberConverter(Type conversionType, IFormatProvider formatProvider, string[] formats)
+            : base(conversionType, formatProvider, formats)
         {
         }
 
-        public CsvDefaultNumberConverter(Type conversionType, CultureInfo cultureInfo, string[] formats, NumberStyles numberStyle)
-            : base(conversionType, cultureInfo, formats)
+        public CsvDefaultNumberConverter(Type conversionType, IFormatProvider formatProvider, string[] formats, NumberStyles numberStyle)
+            : base(conversionType, formatProvider, formats)
         {
             NumberStyle = numberStyle;
         }

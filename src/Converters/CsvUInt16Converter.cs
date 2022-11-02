@@ -43,11 +43,11 @@ namespace Enbrea.Csv
             {
                 if (NumberStyle != null)
                 {
-                    return ushort.Parse(value, (NumberStyles)NumberStyle, CultureInfo);
+                    return ushort.Parse(value, (NumberStyles)NumberStyle, FormatProvider);
                 }
                 else
                 {
-                    return ushort.Parse(value, CultureInfo);
+                    return ushort.Parse(value, FormatProvider);
                 }
             }
         }

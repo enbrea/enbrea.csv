@@ -24,13 +24,13 @@ namespace Enbrea.Csv
         {
         }
 
-        public CsvTimeOnlyConverter(CultureInfo cultureInfo, string[] formats)
-            : base(typeof(TimeOnly), cultureInfo, formats)
+        public CsvTimeOnlyConverter(IFormatProvider formatProvider, string[] formats)
+            : base(typeof(TimeOnly), formatProvider, formats)
         {
         }
 
-        public CsvTimeOnlyConverter(CultureInfo cultureInfo, string[] formats, DateTimeStyles dateTimeStyle)
-            : base(typeof(TimeOnly), cultureInfo, formats)
+        public CsvTimeOnlyConverter(IFormatProvider formatProvider, string[] formats, DateTimeStyles dateTimeStyle)
+            : base(typeof(TimeOnly), formatProvider, formats)
         {
             DateTimeStyle = dateTimeStyle;
         }
@@ -49,22 +49,22 @@ namespace Enbrea.Csv
                 {
                     if (DateTimeStyle != null)
                     {
-                        return TimeOnly.ParseExact(value, Formats, CultureInfo, (DateTimeStyles)DateTimeStyle);
+                        return TimeOnly.ParseExact(value, Formats, FormatProvider, (DateTimeStyles)DateTimeStyle);
                     }
                     else
                     {
-                        return TimeOnly.ParseExact(value, Formats, CultureInfo);
+                        return TimeOnly.ParseExact(value, Formats, FormatProvider);
                     }
                 }
                 else 
                 {
                     if (DateTimeStyle != null)
                     {
-                        return TimeOnly.Parse(value, CultureInfo, (DateTimeStyles)DateTimeStyle);
+                        return TimeOnly.Parse(value, FormatProvider, (DateTimeStyles)DateTimeStyle);
                     }
                     else
                     {
-                        return TimeOnly.Parse(value, CultureInfo);
+                        return TimeOnly.Parse(value, FormatProvider);
                     }
                 }
             }

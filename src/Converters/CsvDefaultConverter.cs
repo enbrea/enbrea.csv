@@ -23,17 +23,17 @@ namespace Enbrea.Csv
 
         public CsvDefaultConverter(Type conversionType)
         {
-            CultureInfo = CultureInfo.InvariantCulture;
+            FormatProvider = CultureInfo.InvariantCulture;
             _conversionType = conversionType;
         }
 
-        public CsvDefaultConverter(Type conversionType, CultureInfo cultureInfo)
+        public CsvDefaultConverter(Type conversionType, IFormatProvider formatProvider)
         {
-            CultureInfo = cultureInfo;
+            FormatProvider = formatProvider;
             _conversionType = conversionType;
         }
 
-        public CultureInfo CultureInfo { get; set; }
+        public IFormatProvider FormatProvider { get; set; }
         
         public virtual object FromString(string value)
         {
@@ -43,7 +43,7 @@ namespace Enbrea.Csv
             }
             else 
             {
-                return Convert.ChangeType(value, _conversionType, CultureInfo);
+                return Convert.ChangeType(value, _conversionType, FormatProvider);
             }
         }
 
