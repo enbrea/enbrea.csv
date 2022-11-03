@@ -10,6 +10,7 @@
 #endregion
 
 using System;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -93,10 +94,10 @@ namespace Enbrea.Csv.Tests
         public async Task TestStronglyTypedValues()
         {
             var csvData =
-                "A;B;C;D" + Environment.NewLine +
-                "22;Text;true;01.01.2010" + Environment.NewLine +
-                "-31;A long text;false;20.01.2050" + Environment.NewLine +
-                "55;\"A text with ;\";;31.07.1971";
+                "A;B;C;D;E" + Environment.NewLine +
+                "22;Text;true;01.01.2010;8.776840100000001" + Environment.NewLine +
+                "-31;A long text;false;20.01.2050;8.7728449" + Environment.NewLine +
+                "55;\"A text with ;\";;31.07.1971;";
 
             var sb = new StringBuilder();
 
@@ -106,15 +107,17 @@ namespace Enbrea.Csv.Tests
 
             csvTableWriter.SetFormats<DateTime>("dd.MM.yyyy");
             csvTableWriter.SetTrueFalseString<bool>("true", "false");
+            csvTableWriter.SetFormatProvider<double>(new NumberFormatInfo() { NumberDecimalSeparator = "." });
 
-            await csvTableWriter.WriteHeadersAsync("A", "B", "C", "D");
+            await csvTableWriter.WriteHeadersAsync("A", "B", "C", "D", "E");
 
-            Assert.Equal(4, csvTableWriter.Headers.Count);
+            Assert.Equal(5, csvTableWriter.Headers.Count);
 
             csvTableWriter.SetValue("A", 22);
             csvTableWriter.SetValue("B", "Text");
             csvTableWriter.SetValue("C", true);
             csvTableWriter.SetValue("D", new DateTime(2010, 1, 1));
+            csvTableWriter.SetValue("E", (double)8.776840100000001);
 
             await csvTableWriter.WriteAsync();
 
@@ -122,6 +125,7 @@ namespace Enbrea.Csv.Tests
             csvTableWriter.SetValue("B", "A long text");
             csvTableWriter.SetValue("C", false);
             csvTableWriter.SetValue("D", new DateTime(2050, 1, 20));
+            csvTableWriter.SetValue("E", (double)8.7728449);
 
             await csvTableWriter.WriteAsync();
 
@@ -129,6 +133,7 @@ namespace Enbrea.Csv.Tests
             Assert.True(csvTableWriter.TrySetValue("B", "A text with ;"));
             Assert.True(csvTableWriter.TrySetValue("C", null));
             Assert.True(csvTableWriter.TrySetValue("D", new DateTime(1971, 7, 31)));
+            Assert.True(csvTableWriter.TrySetValue("E", (double?)null));
 
             await csvTableWriter.WriteAsync();
 

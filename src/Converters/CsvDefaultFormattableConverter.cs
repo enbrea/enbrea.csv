@@ -11,7 +11,6 @@
 #endregion
 
 using System;
-using System.Globalization;
 
 namespace Enbrea.Csv
 {
@@ -40,9 +39,9 @@ namespace Enbrea.Csv
 
         public override string ToString(object value)
         {
-            if ((value != null) && (Formats != null) && (Formats.Length > 0) && (typeof(IFormattable).IsAssignableFrom(_conversionType)))
+            if ((value != null) && (typeof(IFormattable).IsAssignableFrom(_conversionType)))
             {
-                return (value as IFormattable).ToString(Formats[0], FormatProvider);
+                return (value as IFormattable).ToString(((Formats != null) && (Formats.Length > 0)) ? Formats[0] : null, FormatProvider);
             }
             else
             {
