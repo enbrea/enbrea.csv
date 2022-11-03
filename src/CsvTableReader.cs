@@ -516,7 +516,19 @@ namespace Enbrea.Csv
         /// <returns>List of values</returns>
         public List<string> ToList()
         {
-            return _csvValues.ToList();
+            return _csvValues;
+        }
+
+
+        /// <summary>
+        /// Gives back the current csv line as string
+        /// </summary>
+        /// <returns>Current csv line</returns>
+        public override string ToString()
+        {
+            var csvLineBuilder = new CsvLineBuilder(Configuration);
+            ToList().ForEach(x => csvLineBuilder.Append(x));
+            return csvLineBuilder.ToString();
         }
 
         /// <summary>

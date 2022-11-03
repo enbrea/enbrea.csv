@@ -158,6 +158,32 @@ namespace Enbrea.Csv.Tests
         }
 
         [Fact]
+        public async Task TestToString()
+        {
+            var csvLine1 = "22;Text;true;01.01.2010";
+            var csvLine2 = "55;\"A text with ;\";;31.07.1971";
+            var csvData = "A;B;C;D" + Environment.NewLine + csvLine1 + Environment.NewLine + csvLine2;
+
+            using var strReader = new StringReader(csvData);
+
+            var csvTableReader = new CsvTableReader(strReader, new CsvConfiguration { Separator = ';' });
+
+            Assert.NotNull(csvTableReader);
+
+            csvTableReader.SetFormats<DateTime>("dd.MM.yyyy");
+
+            await csvTableReader.ReadHeadersAsync();
+
+            await csvTableReader.ReadAsync();
+
+            Assert.Equal(csvLine1, csvTableReader.ToString());
+
+            await csvTableReader.ReadAsync();
+
+            Assert.Equal(csvLine2, csvTableReader.ToString());
+        }
+
+        [Fact]
         public async Task TestTryGetValue()
         {
             var csvData =
@@ -196,6 +222,7 @@ namespace Enbrea.Csv.Tests
             Assert.False(csvTableReader.TryGetValue("D", out string v8));
             Assert.Null(v8);
         }
+
         [Fact]
         public async Task TestTypedValues()
         {

@@ -163,5 +163,39 @@ namespace Enbrea.Csv.Tests
 
             Assert.Equal(csvData, sb.ToString());
         }
+
+        [Fact]
+        public async Task TestToString()
+        {
+            var csvLine1 = "22;Text;true;01.01.2010";
+            var csvLine2 = "55;\"A text with ;\";;31.07.1971";
+
+            var sb = new StringBuilder();
+
+            using var strWriter = new StringWriter(sb);
+
+            var csvTableWriter = new CsvTableWriter(strWriter, new CsvConfiguration { Separator = ';' });
+
+            csvTableWriter.SetFormats<DateTime>("dd.MM.yyyy");
+            csvTableWriter.SetTrueFalseString<bool>("true", "false");
+
+            await csvTableWriter.WriteHeadersAsync(new string[] { "A", "B", "C", "D" });
+
+            Assert.Equal(4, csvTableWriter.Headers.Count);
+
+            csvTableWriter.SetValue("A", 22);
+            csvTableWriter.SetValue("B", "Text");
+            csvTableWriter.SetValue("C", true);
+            csvTableWriter.SetValue("D", new DateTime(2010, 1, 1));
+
+            Assert.Equal(csvLine1, csvTableWriter.ToString());
+
+            csvTableWriter.SetValue("A", 55);
+            csvTableWriter.SetValue("B", "A text with ;");
+            csvTableWriter.SetValue("C", (string)null);
+            csvTableWriter.SetValue("D", new DateTime(1971, 7, 31));
+
+            Assert.Equal(csvLine2, csvTableWriter.ToString());
+        }
     }
 }
