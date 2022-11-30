@@ -48,22 +48,22 @@ namespace Enbrea.Csv
                 {
                     if (DateTimeStyle != null)
                     {
-                        return DateTime.ParseExact(value, Formats, CultureInfo, (DateTimeStyles)DateTimeStyle);
+                        return DateTime.ParseExact(value, Formats, FormatProvider, (DateTimeStyles)DateTimeStyle);
                     }
                     else
                     {
-                        return DateTime.ParseExact(value, Formats, CultureInfo);
+                        return DateTime.ParseExact(value, Formats, FormatProvider);
                     }
                 }
                 else 
                 {
                     if (DateTimeStyle != null)
                     {
-                        return DateTime.Parse(value, CultureInfo, (DateTimeStyles)DateTimeStyle);
+                        return DateTime.Parse(value, FormatProvider, (DateTimeStyles)DateTimeStyle);
                     }
                     else
                     {
-                        return DateTime.Parse(value, CultureInfo);
+                        return DateTime.Parse(value, FormatProvider);
                     }
                 }
             }

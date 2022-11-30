@@ -24,15 +24,6 @@ namespace Enbrea.Csv
             csvAccess.ConverterResolver.AddConverter<T>(valueConverter);
         }
 
-        public static void SetCultureInfo<T>(this CsvAccess csvAccess, CultureInfo cultureInfo)
-        {
-            var converter = csvAccess.ConverterResolver.GetConverter<T>();
-            if (converter is CsvDefaultConverter valueConverter)
-            {
-                valueConverter.CultureInfo = cultureInfo;
-            }
-        }
-
         public static void SetDateTimeStyle<T>(this CsvAccess csvAccess, DateTimeStyles dateTimeStyle)
         {
             var converter = csvAccess.ConverterResolver.GetConverter<T>();
@@ -62,6 +53,15 @@ namespace Enbrea.Csv
             if (converter is CsvDefaultFormattableConverter formatableConverter)
             {
                 formatableConverter.Formats = formats;
+            }
+        }
+
+        public static void SetFormatProvider<T>(this CsvAccess csvAccess, IFormatProvider formatProvider)
+        {
+            var converter = csvAccess.ConverterResolver.GetConverter<T>();
+            if (converter is CsvDefaultConverter valueConverter)
+            {
+                valueConverter.FormatProvider = formatProvider;
             }
         }
 

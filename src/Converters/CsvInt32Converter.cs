@@ -10,6 +10,7 @@
  */
 #endregion
 
+using System;
 using System.Globalization;
 
 namespace Enbrea.Csv
@@ -23,13 +24,13 @@ namespace Enbrea.Csv
         {
         }
 
-        public CsvInt32Converter(CultureInfo cultureInfo, string[] formats)
-            : base(typeof(int), cultureInfo, formats)
+        public CsvInt32Converter(IFormatProvider formatProvider, string[] formats)
+            : base(typeof(int), formatProvider, formats)
         {
         }
 
-        public CsvInt32Converter(CultureInfo cultureInfo, string[] formats, NumberStyles numberStyle)
-            : base(typeof(int), cultureInfo, formats, numberStyle)
+        public CsvInt32Converter(IFormatProvider formatProvider, string[] formats, NumberStyles numberStyle)
+            : base(typeof(int), formatProvider, formats, numberStyle)
         {
         }
 
@@ -43,11 +44,11 @@ namespace Enbrea.Csv
             {
                 if (NumberStyle != null)
                 {
-                    return int.Parse(value, (NumberStyles)NumberStyle, CultureInfo);
+                    return int.Parse(value, (NumberStyles)NumberStyle, FormatProvider);
                 }
                 else
                 {
-                    return int.Parse(value, CultureInfo);
+                    return int.Parse(value, FormatProvider);
                 }
             }
         }

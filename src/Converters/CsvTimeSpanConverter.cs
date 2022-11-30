@@ -43,16 +43,16 @@ namespace Enbrea.Csv
                 {
                     if (TimeSpanStyle != null)
                     {
-                        return TimeSpan.ParseExact(value, Formats, CultureInfo, (TimeSpanStyles)TimeSpanStyle);
+                        return TimeSpan.ParseExact(value, Formats, FormatProvider, (TimeSpanStyles)TimeSpanStyle);
                     }
                     else
                     {
-                        return TimeSpan.ParseExact(value, Formats, CultureInfo);
+                        return TimeSpan.ParseExact(value, Formats, FormatProvider);
                     }
                 }
                 else
                 {
-                    return TimeSpan.Parse(value, CultureInfo);
+                    return TimeSpan.Parse(value, FormatProvider);
                 }
             }
         }

@@ -10,6 +10,7 @@
 #endregion
 
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Enbrea.Csv
@@ -72,10 +73,10 @@ namespace Enbrea.Csv
         {
             if (_wasPreviousToken)
             {
-                await WriteLineAsync();
+                await WriteLineAsync().ConfigureAwait(false);
             }
-            await WriteAsync(Configuration.Comment + text);
-            await WriteLineAsync();
+            await WriteAsync($"{Configuration.Comment}{text}").ConfigureAwait(false);
+            await WriteLineAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -94,7 +95,7 @@ namespace Enbrea.Csv
         public async Task WriteLineAsync()
         {
             _wasPreviousToken = false;
-            await _textWriter.WriteLineAsync();
+            await _textWriter.WriteLineAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -117,7 +118,7 @@ namespace Enbrea.Csv
         public async Task WriteValueAsync(string value, bool endOfLine = false)
         {
             await WriteAsync(value);
-            if (endOfLine) await WriteLineAsync();
+            if (endOfLine) await WriteLineAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -184,25 +185,25 @@ namespace Enbrea.Csv
         {
             if (_wasPreviousToken)
             {
-                await _textWriter.WriteAsync(Configuration.Separator);
+                await _textWriter.WriteAsync(Configuration.Separator).ConfigureAwait(false);
             }
 
             if (!string.IsNullOrEmpty(token))
             {
                 if (token.IndexOfAny(_charsToBeQuoted) != -1 || token.IndexOf(Configuration.Quote) != -1)
                 {
-                    await _textWriter.WriteAsync(Configuration.Quote);
+                    await _textWriter.WriteAsync(Configuration.Quote).ConfigureAwait(false);
 
                     foreach (char c in token)
                     {
                         if (c == Configuration.Quote)
                         {
-                            await _textWriter.WriteAsync(Configuration.Quote);
-                            await _textWriter.WriteAsync(Configuration.Quote);
+                            await _textWriter.WriteAsync(Configuration.Quote).ConfigureAwait(false);
+                            await _textWriter.WriteAsync(Configuration.Quote).ConfigureAwait(false);
                         }
                         else
                         {
-                            await _textWriter.WriteAsync(c);
+                            await _textWriter.WriteAsync(c).ConfigureAwait(false);
                         }
                     }
 
@@ -210,21 +211,21 @@ namespace Enbrea.Csv
                 }
                 else if ((Configuration.ForceQuotes) || (token.Contains(Configuration.Separator)))
                 {
-                    await _textWriter.WriteAsync(Configuration.Quote);
-                    await _textWriter.WriteAsync(token);
-                    await _textWriter.WriteAsync(Configuration.Quote);
+                    await _textWriter.WriteAsync(Configuration.Quote).ConfigureAwait(false);
+                    await _textWriter.WriteAsync(token).ConfigureAwait(false);
+                    await _textWriter.WriteAsync(Configuration.Quote).ConfigureAwait(false);
                 }
                 else
                 {
-                    await _textWriter.WriteAsync(token);
+                    await _textWriter.WriteAsync(token).ConfigureAwait(false);
                 }
             }
             else
             {
                 if (Configuration.ForceQuotes)
                 {
-                    await _textWriter.WriteAsync(Configuration.Quote);
-                    await _textWriter.WriteAsync(Configuration.Quote);
+                    await _textWriter.WriteAsync(Configuration.Quote).ConfigureAwait(false);
+                    await _textWriter.WriteAsync(Configuration.Quote).ConfigureAwait(false);
                 }
             }
 

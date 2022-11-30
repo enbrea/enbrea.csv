@@ -366,6 +366,17 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
+        /// Gives back the current csv line as string
+        /// </summary>
+        /// <returns>Current csv line</returns>
+        public override string ToString()
+        {
+            var csvLineBuilder = new CsvLineBuilder(Configuration);
+            ToList().ForEach(x => csvLineBuilder.Append(x));
+            return csvLineBuilder.ToString();
+        }
+
+        /// <summary>
         /// Tries to set the value of the current csv record at the position of the specified header name.
         /// </summary>
         /// <param name="name">Name of a header</param>
@@ -451,9 +462,9 @@ namespace Enbrea.Csv
         {
             if (_wasPreviousWrite)
             {
-                await _csvWriter.WriteLineAsync();
+                await _csvWriter.WriteLineAsync().ConfigureAwait(false);
             }
-            await _csvWriter.WriteValuesAsync(_csvValues);
+            await _csvWriter.WriteValuesAsync(_csvValues).ConfigureAwait(false);
             _wasPreviousWrite = true;
             Array.Fill(_csvValues, null);
         }
@@ -522,7 +533,7 @@ namespace Enbrea.Csv
                 SetValue(i, value);
                 i++;
             }
-            await WriteAsync();
+            await WriteAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -534,7 +545,7 @@ namespace Enbrea.Csv
         {
             Headers.Replace(csvHeaders);
             Array.Resize(ref _csvValues, csvHeaders.Count());
-            await WriteHeadersAsync();
+            await WriteHeadersAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -544,7 +555,7 @@ namespace Enbrea.Csv
         /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task WriteHeadersAsync(params string[] csvHeaders)
         {
-            await WriteHeadersAsync((IEnumerable<string>)csvHeaders);
+            await WriteHeadersAsync((IEnumerable<string>)csvHeaders).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -554,7 +565,7 @@ namespace Enbrea.Csv
         /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task WriteHeadersAsync<TEntity>()
         {
-            await WriteHeadersAsync(new CsvHeaders<TEntity>());
+            await WriteHeadersAsync(new CsvHeaders<TEntity>()).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -564,7 +575,7 @@ namespace Enbrea.Csv
         /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task WriteHeadersAsync<TEntity>(Expression<Func<TEntity, object>> csvHeaders)
         {
-            await WriteHeadersAsync(new CsvHeaders<TEntity>(csvHeaders));
+            await WriteHeadersAsync(new CsvHeaders<TEntity>(csvHeaders)).ConfigureAwait(false);
         }
     }
 }

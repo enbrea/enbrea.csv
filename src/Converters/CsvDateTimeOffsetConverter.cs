@@ -23,13 +23,13 @@ namespace Enbrea.Csv
         {
         }
 
-        public CsvDateTimeOffsetConverter(CultureInfo cultureInfo, string[] formats)
-            : base(typeof(DateTimeOffset), cultureInfo, formats)
+        public CsvDateTimeOffsetConverter(IFormatProvider formatProvider, string[] formats)
+            : base(typeof(DateTimeOffset), formatProvider, formats)
         {
         }
 
-        public CsvDateTimeOffsetConverter(CultureInfo cultureInfo, string[] formats, DateTimeStyles dateTimeStyle)
-            : base(typeof(DateTimeOffset), cultureInfo, formats)
+        public CsvDateTimeOffsetConverter(IFormatProvider formatProvider, string[] formats, DateTimeStyles dateTimeStyle)
+            : base(typeof(DateTimeOffset), formatProvider, formats)
         {
             DateTimeStyle = dateTimeStyle;
         }
@@ -48,22 +48,22 @@ namespace Enbrea.Csv
                 {
                     if (DateTimeStyle != null)
                     {
-                        return DateTimeOffset.ParseExact(value, Formats, CultureInfo, (DateTimeStyles)DateTimeStyle);
+                        return DateTimeOffset.ParseExact(value, Formats, FormatProvider, (DateTimeStyles)DateTimeStyle);
                     }
                     else
                     {
-                        return DateTimeOffset.ParseExact(value, Formats, CultureInfo);
+                        return DateTimeOffset.ParseExact(value, Formats, FormatProvider);
                     }
                 }
                 else 
                 {
                     if (DateTimeStyle != null)
                     {
-                        return DateTimeOffset.Parse(value, CultureInfo, (DateTimeStyles)DateTimeStyle);
+                        return DateTimeOffset.Parse(value, FormatProvider, (DateTimeStyles)DateTimeStyle);
                     }
                     else
                     {
-                        return DateTimeOffset.Parse(value, CultureInfo);
+                        return DateTimeOffset.Parse(value, FormatProvider);
                     }
                 }
             }
