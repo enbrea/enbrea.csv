@@ -10,6 +10,7 @@
 #endregion
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace Enbrea.Csv
@@ -19,7 +20,7 @@ namespace Enbrea.Csv
     /// </summary>
     public class CsvDefaultClassMapperResolver : ICsvClassMapperResolver
     {
-        private readonly Dictionary<Type, ICsvClassMapper> _mappers = new Dictionary<Type, ICsvClassMapper>();
+        private readonly ConcurrentDictionary<Type, ICsvClassMapper> _mappers = new ConcurrentDictionary<Type, ICsvClassMapper>();
 
         /// <summary>
         /// Registers a class mapper for a specifc type
@@ -42,7 +43,7 @@ namespace Enbrea.Csv
             if (!_mappers.TryGetValue(type, out mapper))
             {
                 mapper = new CsvDefaultClassMapper(type);
-                _mappers.Add(type, mapper);
+                _mappers.TryAdd(type, mapper);
             }
             return mapper;
         }
@@ -61,7 +62,7 @@ namespace Enbrea.Csv
         /// <param name="type">The type</param>
         public void RemoveMapper(Type type)
         {
-            _mappers.Remove(type);
+            _mappers.TryRemove(type, out _);
         }
     }
 }
