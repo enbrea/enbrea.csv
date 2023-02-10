@@ -1,11 +1,10 @@
-﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2023 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2023 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
- * 
  */
 #endregion
 
@@ -15,9 +14,9 @@ using Xunit;
 namespace Enbrea.Csv.Tests
 {
     /// <summary>
-    /// Unit tests for <see cref="CsvLineTableBuilder"/>.
+    /// Unit tests for <see cref="CsvTableLineBuilder"/>.
     /// </summary>
-    public class TestcsvLineTableBuilder
+    public class TestCsvTableLineBuilder
     {
         [Fact]
         public void SmokeTest()
@@ -26,7 +25,7 @@ namespace Enbrea.Csv.Tests
             var csvLine2 = "a1;b1;c1";
             var csvLine3 = "a2;b2;c2";
 
-            var csvTableBuilder = new CsvLineTableBuilder(new CsvConfiguration { Separator = ';' });
+            var csvTableBuilder = new CsvTableLineBuilder(new CsvConfiguration { Separator = ';' });
 
             Assert.Equal(csvLine1, csvTableBuilder.AssignHeaders("A", "B", "C"));
 
@@ -51,7 +50,7 @@ namespace Enbrea.Csv.Tests
             var csvLine2 = "42;\"{\"\"IntValue\"\":42,\"\"StrValue\"\":\"\"Forty-Two\"\"}\"";
             var csvLine3 = "5;\"{\"\"IntValue\"\":5,\"\"StrValue\"\":\"\"Five\"\"}\"";
 
-            var csvTableBuilder = new CsvLineTableBuilder(new CsvConfiguration() { Separator = ';'}, "A", "B");
+            var csvTableBuilder = new CsvTableLineBuilder(new CsvConfiguration() { Separator = ';'}, "A", "B");
 
             csvTableBuilder.AddConverter<CustomType>(new CustomTypeConverter());
 
@@ -76,7 +75,7 @@ namespace Enbrea.Csv.Tests
             var csvLine3 = "-31;A long text;false;20.01.2050";
             var csvLine4 = "55;\"A text with ;\";;31.07.1971";
 
-            var csvTableBuilder = new CsvLineTableBuilder(new CsvConfiguration { Separator = ';' });
+            var csvTableBuilder = new CsvTableLineBuilder(new CsvConfiguration { Separator = ';' });
 
 #if NET6_0_OR_GREATER
             csvTableBuilder.SetFormats<DateOnly>("dd.MM.yyyy");

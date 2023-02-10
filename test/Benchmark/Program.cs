@@ -1,11 +1,10 @@
-#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
+#region ENBREA.CSV - Copyright (C) 2023 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2023 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
- * 
  */
 #endregion
 
