@@ -1,11 +1,10 @@
-﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2023 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2023 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
- * 
  */
 #endregion
 
@@ -159,7 +158,7 @@ namespace Enbrea.Csv.Tests
             csvTableWriter.SetTrueFalseString<bool>("true", "false");
 
             await csvTableWriter.WriteHeadersAsync<SampleObject>(x => new { x.A, x.B, x.C, x.D });
-
+            
             Assert.Equal(4, csvTableWriter.Headers.Count);
 
             await csvTableWriter.WriteAsync(new SampleObject() { A = 22, B = "Text", C = true, D = new DateTime(2010, 1, 1) });

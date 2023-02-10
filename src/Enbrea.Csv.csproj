@@ -5,7 +5,7 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>STÜBER SYSTEMS GmbH</Authors>
     <Company>STÜBER SYSTEMS GmbH</Company>
-    <Copyright>© 2022 STÜBER SYSTEMS GmbH</Copyright>
+    <Copyright>© 2023 STÜBER SYSTEMS GmbH</Copyright>
     <Product>ENBREA CSV</Product>
     <Description>High performance CSV Parser and Builder classes for .NET</Description>
     <PackageLicenseUrl></PackageLicenseUrl>

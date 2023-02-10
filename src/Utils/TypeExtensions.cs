@@ -1,11 +1,10 @@
-﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2023 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2023 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
- * 
  */
 #endregion
 
@@ -51,9 +50,10 @@ namespace Enbrea.Csv
                                 }
                                 break;
                             case MemberTypes.Property:
-                                if (((PropertyInfo)memberInfo).GetSetMethod().IsPublic)
+                                if ((((PropertyInfo)memberInfo).GetSetMethod() != null && ((PropertyInfo)memberInfo).GetSetMethod().IsPublic) ||
+                                    (((PropertyInfo)memberInfo).GetGetMethod() != null && ((PropertyInfo)memberInfo).GetGetMethod().IsPublic))
                                 {
-                                    action(memberInfo.Name, memberInfo, false);
+                                        action(memberInfo.Name, memberInfo, false);
                                 }
                                 break;
                         };

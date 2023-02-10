@@ -1,19 +1,18 @@
-﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
-/*    Copyright (C) 2022 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2023 STÜBER SYSTEMS GmbH
+/*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2023 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
- * 
  */
 #endregion
 
 namespace Enbrea.Csv
 {
     /// <summary>
-    /// An abstract base class for <see cref="CsvTableReader"/> <see cref="CsvTableWriter"/>, <see cref="CsvLineTableParser"/>,
-    /// <see cref="CsvLineTableBuilder"/> and <see cref="CsvDictionary"/>
+    /// An abstract base class for <see cref="CsvTableReader"/> <see cref="CsvTableWriter"/>, <see cref="CsvTableLineParser"/>,
+    /// <see cref="CsvTableLineBuilder"/> and <see cref="CsvDictionary"/>
     /// </summary>
     public abstract class CsvTableAccess : CsvAccess
     {

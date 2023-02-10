@@ -1,11 +1,10 @@
-﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2023 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2023 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
- * 
  */
 #endregion
 
@@ -19,35 +18,35 @@ namespace Enbrea.Csv
     /// <summary>
     /// A CSV table builder which generates CSV data line by line
     /// </summary>
-    public class CsvLineTableBuilder : CsvTableAccess
+    public class CsvTableLineBuilder : CsvTableAccess
     {
         private readonly CsvLineBuilder _csvLineBuilder;
         private string[] _csvValues = new string[0];
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvLineTableBuilder"/> class.
+        /// Initializes a new instance of the <see cref="CsvTableLineBuilder"/> class.
         /// </summary>
-        public CsvLineTableBuilder()
+        public CsvTableLineBuilder()
             : base()
         {
             _csvLineBuilder = new CsvLineBuilder();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvLineTableBuilder"/> class.
+        /// Initializes a new instance of the <see cref="CsvTableLineBuilder"/> class.
         /// </summary>
         /// <param name="configuration">Configuration parameters</param>
-        public CsvLineTableBuilder(CsvConfiguration configuration)
+        public CsvTableLineBuilder(CsvConfiguration configuration)
             : base()
         {
             _csvLineBuilder = new CsvLineBuilder(configuration);
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvLineTableBuilder"/> class.
+        /// Initializes a new instance of the <see cref="CsvTableLineBuilder"/> class.
         /// </summary>
         /// <param name="headers">List of csv headers</param>
-        public CsvLineTableBuilder(CsvHeaders headers)
+        public CsvTableLineBuilder(CsvHeaders headers)
             : base(headers)
         {
             _csvLineBuilder = new CsvLineBuilder();
@@ -55,11 +54,11 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvLineTableBuilder"/> class.
+        /// Initializes a new instance of the <see cref="CsvTableLineBuilder"/> class.
         /// </summary>
         /// <param name="configuration">Configuration parameters</param>
         /// <param name="headers">List of csv headers</param>
-        public CsvLineTableBuilder(CsvConfiguration configuration, CsvHeaders headers)
+        public CsvTableLineBuilder(CsvConfiguration configuration, CsvHeaders headers)
             : base(headers)
         {
             _csvLineBuilder = new CsvLineBuilder(configuration);
@@ -67,70 +66,70 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvLineTableBuilder"/> class.
+        /// Initializes a new instance of the <see cref="CsvTableLineBuilder"/> class.
         /// </summary>
         /// <param name="headers">List of csv headers</param>
-        public CsvLineTableBuilder(params string[] headers)
+        public CsvTableLineBuilder(params string[] headers)
             : this(new CsvHeaders(headers))
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvLineTableBuilder"/> class.
+        /// Initializes a new instance of the <see cref="CsvTableLineBuilder"/> class.
         /// </summary>
         /// <param name="configuration">Configuration parameters</param>
         /// <param name="headers">List of csv headers</param>
-        public CsvLineTableBuilder(CsvConfiguration configuration, params string[] headers)
+        public CsvTableLineBuilder(CsvConfiguration configuration, params string[] headers)
             : this(configuration, new CsvHeaders(headers))
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvLineTableBuilder"/> class.
+        /// Initializes a new instance of the <see cref="CsvTableLineBuilder"/> class.
         /// </summary>
         /// <param name="headers">List of csv headers</param>
-        public CsvLineTableBuilder(IList<string> headers)
+        public CsvTableLineBuilder(IList<string> headers)
             : this(new CsvHeaders(headers))
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvLineTableBuilder"/> class.
+        /// Initializes a new instance of the <see cref="CsvTableLineBuilder"/> class.
         /// </summary>
         /// <param name="configuration">Configuration parameters</param>
         /// <param name="headers">List of csv headers</param>
-        public CsvLineTableBuilder(CsvConfiguration configuration, IList<string> headers)
+        public CsvTableLineBuilder(CsvConfiguration configuration, IList<string> headers)
             : this(configuration, new CsvHeaders(headers))
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvLineTableBuilder"/> class.
+        /// Initializes a new instance of the <see cref="CsvTableLineBuilder"/> class.
         /// </summary>
         /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
-        public CsvLineTableBuilder(ICsvConverterResolver converterResolver)
+        public CsvTableLineBuilder(ICsvConverterResolver converterResolver)
             : base(converterResolver)
         {
             _csvLineBuilder = new CsvLineBuilder();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvLineTableBuilder"/> class.
+        /// Initializes a new instance of the <see cref="CsvTableLineBuilder"/> class.
         /// </summary>
         /// <param name="configuration">Configuration parameters</param>
         /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
-        public CsvLineTableBuilder(CsvConfiguration configuration, ICsvConverterResolver converterResolver)
+        public CsvTableLineBuilder(CsvConfiguration configuration, ICsvConverterResolver converterResolver)
             : base(converterResolver)
         {
             _csvLineBuilder = new CsvLineBuilder(configuration);
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvLineTableBuilder"/> class.
+        /// Initializes a new instance of the <see cref="CsvTableLineBuilder"/> class.
         /// </summary>
         /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
         /// <param name="headers">List of csv headers</param>
-        public CsvLineTableBuilder(ICsvConverterResolver converterResolver, CsvHeaders headers)
+        public CsvTableLineBuilder(ICsvConverterResolver converterResolver, CsvHeaders headers)
             : base(headers, converterResolver)
         {
             _csvLineBuilder = new CsvLineBuilder();
@@ -138,12 +137,12 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvLineTableBuilder"/> class.
+        /// Initializes a new instance of the <see cref="CsvTableLineBuilder"/> class.
         /// </summary>
         /// <param name="configuration">Configuration parameters</param>
         /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
         /// <param name="headers">List of csv headers</param>
-        public CsvLineTableBuilder(CsvConfiguration configuration, ICsvConverterResolver converterResolver, CsvHeaders headers)
+        public CsvTableLineBuilder(CsvConfiguration configuration, ICsvConverterResolver converterResolver, CsvHeaders headers)
             : base(headers, converterResolver)
         {
             _csvLineBuilder = new CsvLineBuilder(configuration);
@@ -151,43 +150,43 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvLineTableBuilder"/> class.
+        /// Initializes a new instance of the <see cref="CsvTableLineBuilder"/> class.
         /// </summary>
         /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
         /// <param name="headers">List of csv headers</param>
-        public CsvLineTableBuilder(ICsvConverterResolver converterResolver, params string[] headers)
+        public CsvTableLineBuilder(ICsvConverterResolver converterResolver, params string[] headers)
             : this(converterResolver, new CsvHeaders(headers))
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvLineTableBuilder"/> class.
+        /// Initializes a new instance of the <see cref="CsvTableLineBuilder"/> class.
         /// </summary>
         /// <param name="configuration">Configuration parameters</param>
         /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
         /// <param name="headers">List of csv headers</param>
-        public CsvLineTableBuilder(CsvConfiguration configuration, ICsvConverterResolver converterResolver, params string[] headers)
+        public CsvTableLineBuilder(CsvConfiguration configuration, ICsvConverterResolver converterResolver, params string[] headers)
             : this(configuration, converterResolver, new CsvHeaders(headers))
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvLineTableBuilder"/> class.
+        /// Initializes a new instance of the <see cref="CsvTableLineBuilder"/> class.
         /// </summary>
         /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
         /// <param name="headers">List of csv headers</param>
-        public CsvLineTableBuilder(ICsvConverterResolver converterResolver, IList<string> headers)
+        public CsvTableLineBuilder(ICsvConverterResolver converterResolver, IList<string> headers)
             : this(converterResolver, new CsvHeaders(headers))
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CsvLineTableBuilder"/> class.
+        /// Initializes a new instance of the <see cref="CsvTableLineBuilder"/> class.
         /// </summary>
         /// <param name="configuration">Configuration parameters</param>
         /// <param name="converterResolver">Your own implementation of a value converter resolver</param>
         /// <param name="headers">List of csv headers</param>
-        public CsvLineTableBuilder(CsvConfiguration configuration, ICsvConverterResolver converterResolver, IList<string> headers)
+        public CsvTableLineBuilder(CsvConfiguration configuration, ICsvConverterResolver converterResolver, IList<string> headers)
             : this(configuration, converterResolver, new CsvHeaders(headers))
         {
         }
@@ -286,6 +285,14 @@ namespace Enbrea.Csv
         public void AssignHeaders<TEntity>(Expression<Func<TEntity, object>> csvHeaders)
         {
             AssignHeaders(new CsvHeaders<TEntity>(csvHeaders));
+        }
+
+        /// <summary>
+        /// Sets all internal values to null.
+        /// </summary>
+        public void Clear()
+        {
+            Array.Fill(_csvValues, null);
         }
 
         /// <summary>
@@ -392,7 +399,7 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// The current csv record as list of values
+        /// The current csv record as list of values.
         /// </summary>
         /// <returns>List of values</returns>
         public List<string> ToList()
@@ -401,16 +408,14 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Gives back the current csv record as csv text string clears the internal buffer
+        /// Gives back the current csv record as csv text string.
         /// </summary>
         /// <returns>
         /// A CSV formatted string if values are available; otherwise null.
         /// </returns>
         public override string ToString()
         {
-            var line = _csvLineBuilder.ToString(_csvValues);
-            Array.Fill(_csvValues, null);
-            return line;
+            return _csvLineBuilder.ToString(_csvValues);
         }
 
         /// <summary>

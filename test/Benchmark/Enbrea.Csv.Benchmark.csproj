@@ -5,7 +5,7 @@
     <IsPackable>false</IsPackable>
     <Authors>STÜBER SYSTEMS GmbH</Authors>
     <Company>STÜBER SYSTEMS GmbH</Company>
-    <Copyright>© 2022 STÜBER SYSTEMS GmbH</Copyright>
+    <Copyright>© 2023 STÜBER SYSTEMS GmbH</Copyright>
     <Product>ENBREA CSV</Product>
     <Description>Benchmarks for the ENBREA CSV library</Description>
     <Version>0.9.0</Version>
@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.13.2" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.13.4" />
     <PackageReference Include="CsvHelper" Version="30.0.1" />
   </ItemGroup>
 

@@ -1,11 +1,10 @@
-﻿#region ENBREA.CSV - Copyright (C) 2022 STÜBER SYSTEMS GmbH
+﻿#region ENBREA.CSV - Copyright (C) 2023 STÜBER SYSTEMS GmbH
 /*    
  *    ENBREA.CSV 
  *    
- *    Copyright (C) 2022 STÜBER SYSTEMS GmbH
+ *    Copyright (C) 2023 STÜBER SYSTEMS GmbH
  *
  *    Licensed under the MIT License, Version 2.0. 
- * 
  */
 #endregion
 
@@ -15,9 +14,9 @@ using Xunit;
 namespace Enbrea.Csv.Tests
 {
     /// <summary>
-    /// Unit tests for <see cref="CsvLineTableParser"/>.
+    /// Unit tests for <see cref="CsvTableLineParser"/>.
     /// </summary>
-    public class TestCsvLineTableParser
+    public class TestCsvTableLineParser
     {
         [Fact]
         public void SmokeTest()
@@ -26,7 +25,7 @@ namespace Enbrea.Csv.Tests
             var csvLine2 = "a1;b1;c1";
             var csvLine3 = "a2;b2;c2";
 
-            var csvTableParser = new CsvLineTableParser(new CsvConfiguration { Separator = ';' });
+            var csvTableParser = new CsvTableLineParser(new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvTableParser);
 
@@ -58,7 +57,7 @@ namespace Enbrea.Csv.Tests
             var csvLine2 = "42;\"{\"\"IntValue\"\":42,\"\"StrValue\"\":\"\"Forty-Two\"\"}\"";
             var csvLine3 = "5;\"{\"\"IntValue\"\":5,\"\"StrValue\"\":\"\"Five\"\"}\"";
 
-            var csvTableParser = new CsvLineTableParser(new CsvConfiguration { Separator = ';' }, "A","B");
+            var csvTableParser = new CsvTableLineParser(new CsvConfiguration { Separator = ';' }, "A","B");
 
             Assert.NotNull(csvTableParser);
 
@@ -90,7 +89,7 @@ namespace Enbrea.Csv.Tests
             var csvLine2 = "a1;b1;c1";
             var csvLine3 = "a2;b2;c2";
 
-            var csvTableParser = new CsvLineTableParser(new CsvConfiguration { Separator = ';' });
+            var csvTableParser = new CsvTableLineParser(new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvTableParser);
 
@@ -129,7 +128,7 @@ namespace Enbrea.Csv.Tests
             var csvLine3 = "-31;A long text;false;20.01.2050";
             var csvLine4 = "55;\"A text with ;\";;31.07.1971";
 
-            var csvTableParser = new CsvLineTableParser(new CsvConfiguration { Separator = ';' });
+            var csvTableParser = new CsvTableLineParser(new CsvConfiguration { Separator = ';' });
 
             Assert.NotNull(csvTableParser);
 
