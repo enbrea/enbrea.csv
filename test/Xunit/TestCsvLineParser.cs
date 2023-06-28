@@ -74,5 +74,23 @@ namespace Enbrea.Csv.Tests
                 Assert.Single(fieldsList);
             }
         }
+
+        [Fact]
+        public void SupportConvertingEmptyFirstField()
+        {
+            var textLine = ";bbb1;ccc1";
+
+            var csvParser = new CsvLineParser(new CsvConfiguration { Separator = ';' });
+            {
+                Assert.NotNull(csvParser);
+
+                var fields = csvParser.Parse(textLine);
+
+                Assert.Equal(3, fields.Count());
+                Assert.Equal("", fields[0]);
+                Assert.Equal("bbb1", fields[1]);
+                Assert.Equal("ccc1", fields[2]);
+            }
+        }
     }
 }

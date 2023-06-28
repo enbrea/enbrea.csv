@@ -299,5 +299,33 @@ namespace Enbrea.Csv.Tests
             csvTableReader.UseValue("B", s => Assert.Equal("b2", s));
             csvTableReader.UseValue("C", s => Assert.Equal("c2", s));
         }
+
+        [Fact]
+        public async Task TestReadingMissingValues()
+        {
+            var csvData =
+                "A;B;C" + Environment.NewLine +
+                ";b1;c1";
+
+            using var strReader = new StringReader(csvData);
+
+            var csvTableReader = new CsvTableReader(strReader, new CsvConfiguration { Separator = ';' });
+
+            Assert.NotNull(csvTableReader);
+
+            await csvTableReader.ReadHeadersAsync();
+            Assert.Equal(3, csvTableReader.Headers.Count);
+            Assert.Equal("A", csvTableReader.Headers[0]);
+            Assert.Equal("B", csvTableReader.Headers[1]);
+            Assert.Equal("C", csvTableReader.Headers[2]);
+
+            await csvTableReader.ReadAsync();
+
+            Assert.Equal(3, csvTableReader.Headers.Count);
+
+            Assert.Equal("", csvTableReader[0]);
+            Assert.Equal("b1", csvTableReader[1]);
+            Assert.Equal("c1", csvTableReader[2]);
+        }
     }
 }
