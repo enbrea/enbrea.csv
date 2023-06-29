@@ -257,6 +257,7 @@ namespace Enbrea.Csv
                                 State = TokenizerState.IsInQuoted;
                                 return TokenizerWorkflow.Continue;
                             case CharCategory.IsSeparator:
+                                State = TokenizerState.IsSeekingStart;
                                 return TokenizerWorkflow.ConsumeToken;
                             case CharCategory.IsComment:
                                 State = TokenizerState.IsInComment;
