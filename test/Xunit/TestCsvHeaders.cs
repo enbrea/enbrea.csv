@@ -9,7 +9,9 @@
 #endregion
 
 using System;
+using System.IO;
 using System.Linq;
+using System.Text;
 using Xunit;
 
 namespace Enbrea.Csv.Tests
@@ -36,6 +38,29 @@ namespace Enbrea.Csv.Tests
             var csvHeaders2 = new CsvHeaders<SampleObject>(x => new { x.A, x.E });
 
             Assert.True(csvHeaders1.SequenceEqual(csvHeaders2));
+        }
+
+        [Fact]
+        public void TestNoHeaderInFile()
+        {
+            var csvData =
+                "a1;b1;c1";
+
+            var sb = new StringBuilder();
+
+            using var strWriter = new StringWriter(sb);
+
+            var csvTableWriter = new CsvTableWriter(strWriter, new CsvConfiguration { Separator = ';' }, "A", "B", "C");
+
+            Assert.Equal(3, csvTableWriter.Headers.Count);
+
+            csvTableWriter.SetValue("A", "a1");
+            csvTableWriter.SetValue("B", "b1");
+            csvTableWriter.SetValue("C", "c1");
+
+            csvTableWriter.Write();
+
+            Assert.Equal(csvData, sb.ToString());
         }
     }
 }

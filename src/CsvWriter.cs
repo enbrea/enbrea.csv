@@ -23,7 +23,7 @@ namespace Enbrea.Csv
     public class CsvWriter
     {
         private readonly char[] _charsToBeQuoted = new char[] { '\n', '\r' };
-        private TextWriter _textWriter;
+        private readonly TextWriter _textWriter;
         private bool _wasPreviousToken = false;
 
         /// <summary>

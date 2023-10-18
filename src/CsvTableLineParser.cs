@@ -20,7 +20,7 @@ namespace Enbrea.Csv
     public class CsvTableLineParser : CsvTableAccess
     {
         private readonly CsvLineParser _csvLineParser;
-        private readonly List<string> _csvValues = new List<string>();
+        private readonly List<string> _csvValues = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvTableLineParser"/> class.
