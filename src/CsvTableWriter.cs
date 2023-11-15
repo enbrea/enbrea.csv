@@ -23,7 +23,7 @@ namespace Enbrea.Csv
     public class CsvTableWriter : CsvTableAccess
     {
         private readonly CsvWriter _csvWriter;
-        private string[] _csvValues = new string[0];
+        private string[] _csvValues = Array.Empty<string>();
         private bool _wasPreviousWrite = false;
 
         /// <summary>
@@ -56,6 +56,7 @@ namespace Enbrea.Csv
             : base(headers)
         {
             _csvWriter = new CsvWriter(textWriter);
+            Array.Resize(ref _csvValues, headers.Count);
         }
 
         /// <summary>
@@ -68,6 +69,7 @@ namespace Enbrea.Csv
             : base(headers)
         {
             _csvWriter = new CsvWriter(textWriter, configuration);
+            Array.Resize(ref _csvValues, headers.Count);
         }
 
         /// <summary>
@@ -145,6 +147,7 @@ namespace Enbrea.Csv
             : base(headers, converterResolver)
         {
             _csvWriter = new CsvWriter(textWriter);
+            Array.Resize(ref _csvValues, headers.Count);
         }
 
         /// <summary>
@@ -158,6 +161,7 @@ namespace Enbrea.Csv
             : base(headers, converterResolver)
         {
             _csvWriter = new CsvWriter(textWriter, configuration);
+            Array.Resize(ref _csvValues, headers.Count);
         }
 
         /// <summary>

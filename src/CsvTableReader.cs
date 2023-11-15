@@ -22,7 +22,7 @@ namespace Enbrea.Csv
     public class CsvTableReader : CsvTableAccess
     {
         private readonly CsvReader _csvReader;
-        private readonly List<string> _csvValues = new List<string>();
+        private readonly List<string> _csvValues = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvTableReader"/> class.
@@ -423,7 +423,7 @@ namespace Enbrea.Csv
         /// Reads the next csv record out of the stream.
         /// </summary>
         /// <returns>A task that represents the asynchronous operation. The value of the TResult
-        //  parameter contains the number of values of the current record.</returns>
+        /// parameter contains the number of values of the current record.</returns>
         public async Task<int> ReadAsync()
         {
             _csvValues.Clear();
@@ -460,7 +460,7 @@ namespace Enbrea.Csv
         /// Reads the next csv record out of the stream and stores the values as headers.
         /// </summary>
         /// <returns>A task that represents the asynchronous operation. The value of the TResult
-        //  parameter contains the number of headers.</returns>
+        /// parameter contains the number of headers.</returns>
         public async Task<int> ReadHeadersAsync()
         {
             Headers.Clear();
@@ -473,7 +473,7 @@ namespace Enbrea.Csv
         /// <param name="transform">Method which is called for every value, which gives you 
         /// the possiblity to change the header name</param>
         /// <returns>A task that represents the asynchronous operation. The value of the TResult
-        //  parameter contains the number of headers.</returns>
+        /// parameter contains the number of headers.</returns>
         /// <summary>
         public async Task<int> ReadHeadersAsync(Func<string, string> transform)
         {

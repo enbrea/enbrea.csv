@@ -22,7 +22,7 @@ namespace Enbrea.Csv
     /// </summary>
     public class CsvDictionary : CsvAccess, IEnumerable<KeyValuePair<string, string>>
     {
-        private readonly List<KeyValuePair<string, string>> _keyValuePairs = new List<KeyValuePair<string, string>>();
+        private readonly List<KeyValuePair<string, string>> _keyValuePairs = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvDictionary"/> class.

@@ -21,7 +21,7 @@ namespace Enbrea.Csv
     public class CsvTableLineBuilder : CsvTableAccess
     {
         private readonly CsvLineBuilder _csvLineBuilder;
-        private string[] _csvValues = new string[0];
+        private string[] _csvValues = Array.Empty<string>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvTableLineBuilder"/> class.
