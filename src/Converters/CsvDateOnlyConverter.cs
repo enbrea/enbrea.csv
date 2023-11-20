@@ -14,7 +14,6 @@ using System.Globalization;
 
 namespace Enbrea.Csv
 {
-#if NET6_0_OR_GREATER
     /// <summary>
     /// Implementation of a <see cref="DateOnly"/> converter to or from CSV
     /// </summary>
@@ -70,5 +69,4 @@ namespace Enbrea.Csv
             }
         }
     }
-#endif
 }

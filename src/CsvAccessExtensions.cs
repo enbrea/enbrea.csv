@@ -34,7 +34,6 @@ namespace Enbrea.Csv
             {
                 dateTimeOffsetConverter.DateTimeStyle = dateTimeStyle;
             }
-#if NET6_0_OR_GREATER
             else if (converter is CsvDateOnlyConverter dateOnlyConverter)
             {
                 dateOnlyConverter.DateTimeStyle = dateTimeStyle;
@@ -43,7 +42,6 @@ namespace Enbrea.Csv
             {
                 timeOnlyConverter.DateTimeStyle = dateTimeStyle;
             }
-#endif
         }
 
         public static void SetFormats<T>(this CsvAccess csvAccess, params string[] formats)
