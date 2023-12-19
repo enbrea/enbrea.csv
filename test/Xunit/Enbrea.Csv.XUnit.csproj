@@ -10,6 +10,7 @@
     <Product>ENBREA CSV</Product>
     <Description>Unit tests for ENBREA CSV</Description>
     <Version>0.9.0</Version>
+    <LangVersion>latest</LangVersion>
     <RootNamespace>Enbrea.Csv.XUnit</RootNamespace>
     <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
   </PropertyGroup>
