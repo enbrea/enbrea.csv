@@ -213,6 +213,11 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
+        /// Function for filtering raw values
+        /// </summary>
+        public Func<string, string, string> ValueFilter { set; get; } = null;
+
+        /// <summary>
         /// Gets the value of the current csv record at the specified index.
         /// </summary>
         /// <param name="i">Index of the value</param>
@@ -223,7 +228,7 @@ namespace Enbrea.Csv
             {
                 if (i < _csvValues.Count)
                 {
-                    return _csvValues[i];
+                    return ApplyValueFilter(Headers[i], _csvValues[i]);
                 }
                 else
                 {
@@ -246,7 +251,7 @@ namespace Enbrea.Csv
                 {
                     if (i < _csvValues.Count)
                     {
-                        return _csvValues[i];
+                        return ApplyValueFilter(name, _csvValues[i]);
                     }
                     else
                     {
@@ -712,6 +717,17 @@ namespace Enbrea.Csv
             {
                 useAction(value);
             }
+        }
+
+        /// <summary>
+        /// Apply the value filter function
+        /// </summary>
+        /// <param name="header">A csv header</param>
+        /// <param name="value">Raw string value</param>
+        /// <returns></returns>
+        private string ApplyValueFilter(string header, string value)
+        {
+            return ValueFilter == null ? value : ValueFilter(header, value);
         }
     }
 }

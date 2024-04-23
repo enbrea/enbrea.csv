@@ -325,5 +325,43 @@ namespace Enbrea.Csv.Tests
             csvTableReader.UseValue("B", s => Assert.Equal("b2", s));
             csvTableReader.UseValue("C", s => Assert.Equal("c2", s));
         }
+
+        [Fact]
+        public async Task TestValueFilter()
+        {
+            var csvData =
+                "A;B;C" + Environment.NewLine +
+                "a1;b1;c1" + Environment.NewLine +
+                "a2;b2;c2";
+
+            using var strReader = new StringReader(csvData);
+
+            var csvTableReader = new CsvTableReader(strReader, new CsvConfiguration { Separator = ';' })
+            {
+                ValueFilter = (header, value) => { return header == "B" && value == "b2" ? null : value; }
+            };
+
+            Assert.NotNull(csvTableReader);
+
+            await csvTableReader.ReadHeadersAsync();
+            Assert.Equal(3, csvTableReader.Headers.Count);
+            Assert.Equal("A", csvTableReader.Headers[0]);
+            Assert.Equal("B", csvTableReader.Headers[1]);
+            Assert.Equal("C", csvTableReader.Headers[2]);
+
+            await csvTableReader.ReadAsync();
+
+            Assert.Equal(3, csvTableReader.Headers.Count);
+            Assert.Equal("a1", csvTableReader[0]);
+            Assert.Equal("b1", csvTableReader[1]);
+            Assert.Equal("c1", csvTableReader[2]);
+
+            await csvTableReader.ReadAsync();
+
+            Assert.Equal(3, csvTableReader.Headers.Count);
+            Assert.Equal("a2", csvTableReader["A"]);
+            Assert.Null(csvTableReader["B"]);
+            Assert.Equal("c2", csvTableReader["C"]);
+        }
     }
 }
