@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Enbrea.Csv
 {
@@ -23,7 +24,7 @@ namespace Enbrea.Csv
     public class CsvTableWriter : CsvTableAccess
     {
         private readonly CsvWriter _csvWriter;
-        private string[] _csvValues = Array.Empty<string>();
+        private string[] _csvValues = [];
         private bool _wasPreviousWrite = false;
 
         /// <summary>
@@ -219,6 +220,11 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
+        /// Function for filtering out certain values
+        /// </summary>
+        public Func<string, string, bool> IgnoreValue { set; get; } = null;
+
+        /// <summary>
         /// Gets and sets the value of the current csv record at the specified index.
         /// </summary>
         /// <param name="i">Index of the value</param>
@@ -231,7 +237,10 @@ namespace Enbrea.Csv
             }
             set
             {
-                _csvValues[i] = value;
+                if (NotToBeIgnored(Headers[i], value))
+                {
+                    _csvValues[i] = value;
+                }
             }
         }
 
@@ -256,14 +265,17 @@ namespace Enbrea.Csv
             }
             set
             {
-                var i = Headers.IndexOf(x => x == name);
-                if (i != -1)
+                if (NotToBeIgnored(name, value))
                 {
-                    _csvValues[i] = value;
-                }
-                else
-                {
-                    throw new CsvHeaderNotFoundException($"CSV Header \"{name}\" not found");
+                    var i = Headers.IndexOf(x => x == name);
+                    if (i != -1)
+                    {
+                        _csvValues[i] = value;
+                    }
+                    else
+                    {
+                        throw new CsvHeaderNotFoundException($"CSV Header \"{name}\" not found");
+                    }
                 }
             }
         }
@@ -579,6 +591,17 @@ namespace Enbrea.Csv
         public async Task WriteHeadersAsync<TEntity>(Expression<Func<TEntity, object>> csvHeaders)
         {
             await WriteHeadersAsync(new CsvHeaders<TEntity>(csvHeaders)).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Evaluation of the IgnoreValue filter function 
+        /// </summary>
+        /// <param name="header">A csv header</param>
+        /// <param name="value">Raw string value</param>
+        /// <returns></returns>
+        private bool NotToBeIgnored(string header, string value)
+        {
+            return IgnoreValue == null || !IgnoreValue(header, value);
         }
     }
 }

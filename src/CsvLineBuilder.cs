@@ -20,7 +20,7 @@ namespace Enbrea.Csv
     /// </remarks>
     public class CsvLineBuilder
     {
-        private readonly char[] _charsToBeQuoted = new char[] { '\n', '\r' };
+        private readonly char[] _charsToBeQuoted = ['\n', '\r'];
         private readonly StringBuilder _strBuilder;
         private bool _wasPreviousToken;
 

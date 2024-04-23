@@ -22,7 +22,7 @@ namespace Enbrea.Csv
     public class CsvTableReader : CsvTableAccess
     {
         private readonly CsvReader _csvReader;
-        private readonly List<string> _csvValues = new();
+        private readonly List<string> _csvValues = [];
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvTableReader"/> class.
