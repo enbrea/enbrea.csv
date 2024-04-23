@@ -57,6 +57,42 @@ namespace Enbrea.Csv.Tests
         }
 
         [Fact]
+        public async Task TestIgnoreValueFilter()
+        {
+            var csvData =
+                "A;B;C" + Environment.NewLine +
+                "a1;b1;c1" + Environment.NewLine +
+                "a2;;c2";
+
+            var sb = new StringBuilder();
+
+            using var strWriter = new StringWriter(sb);
+
+            var csvTableWriter = new CsvTableWriter(strWriter, new CsvConfiguration { Separator = ';' })
+            {
+                IgnoreValue = (header, value) => { return header == "B" && value == "b2"; }
+            };
+
+            await csvTableWriter.WriteHeadersAsync("A", "B", "C");
+
+            Assert.Equal(3, csvTableWriter.Headers.Count);
+
+            csvTableWriter[0] = "a1";
+            csvTableWriter[1] = "b1";
+            csvTableWriter[2] = "c1";
+
+            await csvTableWriter.WriteAsync();
+
+            csvTableWriter["A"] = "a2";
+            csvTableWriter["B"] = "b2";
+            csvTableWriter["C"] = "c2";
+
+            await csvTableWriter.WriteAsync();
+
+            Assert.Equal(csvData, sb.ToString());
+        }
+
+        [Fact]
         public async Task TestJsonValues()
         {
             var csvData =
@@ -183,7 +219,7 @@ namespace Enbrea.Csv.Tests
             csvTableWriter.SetFormats<DateTime>("dd.MM.yyyy");
             csvTableWriter.SetTrueFalseString<bool>("true", "false");
 
-            await csvTableWriter.WriteHeadersAsync(new string[] { "A", "B", "C", "D" });
+            await csvTableWriter.WriteHeadersAsync(["A", "B", "C", "D"]);
 
             Assert.Equal(4, csvTableWriter.Headers.Count);
 

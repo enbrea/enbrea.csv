@@ -21,7 +21,7 @@ namespace Enbrea.Csv
     public class CsvTableLineBuilder : CsvTableAccess
     {
         private readonly CsvLineBuilder _csvLineBuilder;
-        private string[] _csvValues = Array.Empty<string>();
+        private string[] _csvValues = [];
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvTableLineBuilder"/> class.
@@ -29,7 +29,7 @@ namespace Enbrea.Csv
         public CsvTableLineBuilder()
             : base()
         {
-            _csvLineBuilder = new CsvLineBuilder();
+            _csvLineBuilder = new();
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Enbrea.Csv
         public CsvTableLineBuilder(CsvConfiguration configuration)
             : base()
         {
-            _csvLineBuilder = new CsvLineBuilder(configuration);
+            _csvLineBuilder = new(configuration);
         }
 
         /// <summary>
@@ -49,8 +49,8 @@ namespace Enbrea.Csv
         public CsvTableLineBuilder(CsvHeaders headers)
             : base(headers)
         {
-            _csvLineBuilder = new CsvLineBuilder();
-            Array.Resize(ref _csvValues, headers.Count());
+            _csvLineBuilder = new();
+            Array.Resize(ref _csvValues, headers.Count);
         }
 
         /// <summary>
@@ -61,8 +61,8 @@ namespace Enbrea.Csv
         public CsvTableLineBuilder(CsvConfiguration configuration, CsvHeaders headers)
             : base(headers)
         {
-            _csvLineBuilder = new CsvLineBuilder(configuration);
-            Array.Resize(ref _csvValues, headers.Count());
+            _csvLineBuilder = new(configuration);
+            Array.Resize(ref _csvValues, headers.Count);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace Enbrea.Csv
         public CsvTableLineBuilder(ICsvConverterResolver converterResolver)
             : base(converterResolver)
         {
-            _csvLineBuilder = new CsvLineBuilder();
+            _csvLineBuilder = new();
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace Enbrea.Csv
         public CsvTableLineBuilder(CsvConfiguration configuration, ICsvConverterResolver converterResolver)
             : base(converterResolver)
         {
-            _csvLineBuilder = new CsvLineBuilder(configuration);
+            _csvLineBuilder = new(configuration);
         }
 
         /// <summary>
@@ -132,8 +132,8 @@ namespace Enbrea.Csv
         public CsvTableLineBuilder(ICsvConverterResolver converterResolver, CsvHeaders headers)
             : base(headers, converterResolver)
         {
-            _csvLineBuilder = new CsvLineBuilder();
-            Array.Resize(ref _csvValues, headers.Count());
+            _csvLineBuilder = new();
+            Array.Resize(ref _csvValues, headers.Count);
         }
 
         /// <summary>
@@ -145,8 +145,8 @@ namespace Enbrea.Csv
         public CsvTableLineBuilder(CsvConfiguration configuration, ICsvConverterResolver converterResolver, CsvHeaders headers)
             : base(headers, converterResolver)
         {
-            _csvLineBuilder = new CsvLineBuilder(configuration);
-            Array.Resize(ref _csvValues, headers.Count());
+            _csvLineBuilder = new(configuration);
+            Array.Resize(ref _csvValues, headers.Count);
         }
 
         /// <summary>

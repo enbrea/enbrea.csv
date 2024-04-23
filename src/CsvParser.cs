@@ -36,8 +36,8 @@ namespace Enbrea.Csv
         /// <param name="throwException">A method which generates a new Exception</param>
         public CsvParser(CsvConfiguration configuration, Func<string, Exception> throwException)
         {
-            _token = new StringBuilder();
-            _tokenCache = new Dictionary<ulong, string>();
+            _token = new();
+            _tokenCache = [];
             Configuration = configuration;
             ThrowException = throwException;
         }

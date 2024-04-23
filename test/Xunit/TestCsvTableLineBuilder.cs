@@ -77,11 +77,7 @@ namespace Enbrea.Csv.Tests
 
             var csvTableBuilder = new CsvTableLineBuilder(new CsvConfiguration { Separator = ';' });
 
-#if NET6_0_OR_GREATER
             csvTableBuilder.SetFormats<DateOnly>("dd.MM.yyyy");
-#else
-            csvTableBuilder.SetFormats<DateTime>("dd.MM.yyyy");
-#endif
             csvTableBuilder.SetTrueFalseString<bool>("true", "false");
 
             Assert.Equal(csvLine1, csvTableBuilder.AssignHeaders("A", "B", "C", "D"));
@@ -91,33 +87,21 @@ namespace Enbrea.Csv.Tests
             csvTableBuilder.SetValue("A", 22);
             csvTableBuilder.SetValue("B", "Text");
             csvTableBuilder.SetValue("C", true);
-#if NET6_0_OR_GREATER
             csvTableBuilder.SetValue("D", new DateOnly(2010, 1, 1));
-#else
-            csvTableBuilder.SetValue("D", new DateTime(2010, 1, 1));
-#endif
 
             Assert.Equal(csvLine2, csvTableBuilder.ToString());
 
             csvTableBuilder.SetValue("A", -31);
             csvTableBuilder.SetValue("B", "A long text");
             csvTableBuilder.SetValue("C", false);
-#if NET6_0_OR_GREATER
             csvTableBuilder.SetValue("D", new DateOnly(2050, 1, 20));
-#else
-            csvTableBuilder.SetValue("D", new DateTime(2050, 1, 20));
-#endif
 
             Assert.Equal(csvLine3, csvTableBuilder.ToString());
 
             Assert.True(csvTableBuilder.TrySetValue("A", 55));
             Assert.True(csvTableBuilder.TrySetValue("B", "A text with ;"));
             Assert.True(csvTableBuilder.TrySetValue("C", null));
-#if NET6_0_OR_GREATER
             Assert.True(csvTableBuilder.TrySetValue("D", new DateOnly(1971, 7, 31)));
-#else
-            Assert.True(csvTableBuilder.TrySetValue("D", new DateTime(1971, 7, 31)));
-#endif
 
             Assert.Equal(csvLine4, csvTableBuilder.ToString());
         }

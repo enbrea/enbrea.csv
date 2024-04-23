@@ -20,7 +20,7 @@ namespace Enbrea.Csv
     public class CsvTableLineParser : CsvTableAccess
     {
         private readonly CsvLineParser _csvLineParser;
-        private readonly List<string> _csvValues = new();
+        private readonly List<string> _csvValues = [];
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvTableLineParser"/> class.
@@ -28,7 +28,7 @@ namespace Enbrea.Csv
         public CsvTableLineParser()
             : base()
         {
-            _csvLineParser = new CsvLineParser();
+            _csvLineParser = new();
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Enbrea.Csv
         public CsvTableLineParser(CsvConfiguration configuration)
             : base()
         {
-            _csvLineParser = new CsvLineParser(configuration);
+            _csvLineParser = new(configuration);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Enbrea.Csv
         public CsvTableLineParser(CsvHeaders csvHeaders)
             : base(csvHeaders)
         {
-            _csvLineParser = new CsvLineParser();
+            _csvLineParser = new();
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Enbrea.Csv
         public CsvTableLineParser(CsvConfiguration configuration, CsvHeaders headers)
             : base(headers)
         {
-            _csvLineParser = new CsvLineParser(configuration);
+            _csvLineParser = new(configuration);
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace Enbrea.Csv
         public CsvTableLineParser(ICsvConverterResolver converterResolver)
             : base(converterResolver)
         {
-            _csvLineParser = new CsvLineParser();
+            _csvLineParser = new();
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace Enbrea.Csv
         public CsvTableLineParser(CsvConfiguration configuration, ICsvConverterResolver converterResolver)
             : base(converterResolver)
         {
-            _csvLineParser = new CsvLineParser(configuration); 
+            _csvLineParser = new(configuration); 
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace Enbrea.Csv
         public CsvTableLineParser(ICsvConverterResolver converterResolver, CsvHeaders headers)
             : base(headers, converterResolver)
         {
-            _csvLineParser = new CsvLineParser();
+            _csvLineParser = new();
         }
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace Enbrea.Csv
         public CsvTableLineParser(CsvConfiguration configuration, ICsvConverterResolver converterResolver, CsvHeaders headers)
             : base(headers, converterResolver)
         {
-            _csvLineParser = new CsvLineParser(configuration); 
+            _csvLineParser = new(configuration); 
         }
 
         /// <summary>

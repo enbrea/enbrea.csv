@@ -132,11 +132,7 @@ namespace Enbrea.Csv.Tests
 
             Assert.NotNull(csvTableParser);
 
-#if NET6_0_OR_GREATER
             csvTableParser.SetFormats<DateOnly>("dd.MM.yyyy");
-#else
-            csvTableParser.SetFormats<DateTime>("dd.MM.yyyy");
-#endif
 
             csvTableParser.ParseHeaders(csvLine1);
 
@@ -151,22 +147,14 @@ namespace Enbrea.Csv.Tests
             Assert.Equal(22, csvTableParser.GetValue<int>("A"));
             Assert.Equal("Text", csvTableParser.GetValue<string>("B"));
             Assert.True(csvTableParser.GetValue<bool>("C"));
-#if NET6_0_OR_GREATER
             Assert.Equal(new DateOnly(2010, 1, 1), csvTableParser.GetValue<DateOnly>("D"));
-#else
-            Assert.Equal(new DateTime(2010, 1, 1), csvTableParser.GetValue<DateTime>("D"));
-#endif
 
             csvTableParser.Parse(csvLine3);
 
             Assert.Equal(-31, csvTableParser.GetValue<int>("A"));
             Assert.Equal("A long text", csvTableParser.GetValue<string>("B"));
             Assert.False(csvTableParser.GetValue<bool>("C"));
-#if NET6_0_OR_GREATER
             Assert.Equal(new DateOnly(2050, 1, 20), csvTableParser.GetValue<DateOnly>("D"));
-#else
-            Assert.Equal(new DateTime(2050, 1, 20), csvTableParser.GetValue<DateTime>("D"));
-#endif
 
             csvTableParser.Parse(csvLine4);
 
@@ -176,13 +164,8 @@ namespace Enbrea.Csv.Tests
             Assert.Equal("A text with ;", b);
             Assert.True(csvTableParser.TryGetValue<bool?>("C", out var c));
             Assert.Null(c);
-#if NET6_0_OR_GREATER
             Assert.True(csvTableParser.TryGetValue<DateOnly>("D", out var d));
             Assert.Equal(new DateOnly(1971, 7, 31), d);
-#else
-            Assert.True(csvTableParser.TryGetValue<DateTime>("D", out var d));
-            Assert.Equal(new DateTime(1971, 7, 31), d);
-#endif
         }
     }
 }

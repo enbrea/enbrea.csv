@@ -22,7 +22,7 @@ namespace Enbrea.Csv
         public CsvTableAccess()
             : base()
         {
-            Headers = new CsvHeaders();
+            Headers = [];
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Enbrea.Csv
         public CsvTableAccess(ICsvConverterResolver csvConverterResolver)
             : base(csvConverterResolver)
         {
-            Headers = new CsvHeaders();
+            Headers = [];
         }
 
         /// <summary>

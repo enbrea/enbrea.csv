@@ -18,7 +18,7 @@ namespace Enbrea.Csv
     /// </summary>
     public class CsvHeaders<TEntity> : CsvHeaders
     {
-        private readonly CsvHeadersBuilder<TEntity> _csvHeadersBuilder = new CsvHeadersBuilder<TEntity>();
+        private readonly CsvHeadersBuilder<TEntity> _csvHeadersBuilder = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CsvHeaders{TEntity}"/> class.
