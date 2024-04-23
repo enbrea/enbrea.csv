@@ -220,9 +220,9 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Function for filtering out certain values
+        /// Function for filtering raw values
         /// </summary>
-        public Func<string, string, bool> IgnoreValue { set; get; } = null;
+        public Func<string, string, string> ValueFilter { set; get; } = null;
 
         /// <summary>
         /// Gets and sets the value of the current csv record at the specified index.
@@ -237,10 +237,7 @@ namespace Enbrea.Csv
             }
             set
             {
-                if (NotToBeIgnored(Headers[i], value))
-                {
-                    _csvValues[i] = value;
-                }
+                _csvValues[i] = ApplyValueFilter(Headers[i], value);
             }
         }
 
@@ -265,17 +262,14 @@ namespace Enbrea.Csv
             }
             set
             {
-                if (NotToBeIgnored(name, value))
+                var i = Headers.IndexOf(x => x == name);
+                if (i != -1)
                 {
-                    var i = Headers.IndexOf(x => x == name);
-                    if (i != -1)
-                    {
-                        _csvValues[i] = value;
-                    }
-                    else
-                    {
-                        throw new CsvHeaderNotFoundException($"CSV Header \"{name}\" not found");
-                    }
+                    _csvValues[i] = ApplyValueFilter(name, value);
+                }
+                else
+                {
+                    throw new CsvHeaderNotFoundException($"CSV Header \"{name}\" not found");
                 }
             }
         }
@@ -594,14 +588,14 @@ namespace Enbrea.Csv
         }
 
         /// <summary>
-        /// Evaluation of the IgnoreValue filter function 
+        /// Apply the value filter function
         /// </summary>
         /// <param name="header">A csv header</param>
         /// <param name="value">Raw string value</param>
         /// <returns></returns>
-        private bool NotToBeIgnored(string header, string value)
+        private string ApplyValueFilter(string header, string value)
         {
-            return IgnoreValue == null || !IgnoreValue(header, value);
+            return ValueFilter == null ? value : ValueFilter(header, value);
         }
     }
 }

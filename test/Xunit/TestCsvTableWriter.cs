@@ -57,42 +57,6 @@ namespace Enbrea.Csv.Tests
         }
 
         [Fact]
-        public async Task TestIgnoreValueFilter()
-        {
-            var csvData =
-                "A;B;C" + Environment.NewLine +
-                "a1;b1;c1" + Environment.NewLine +
-                "a2;;c2";
-
-            var sb = new StringBuilder();
-
-            using var strWriter = new StringWriter(sb);
-
-            var csvTableWriter = new CsvTableWriter(strWriter, new CsvConfiguration { Separator = ';' })
-            {
-                IgnoreValue = (header, value) => { return header == "B" && value == "b2"; }
-            };
-
-            await csvTableWriter.WriteHeadersAsync("A", "B", "C");
-
-            Assert.Equal(3, csvTableWriter.Headers.Count);
-
-            csvTableWriter[0] = "a1";
-            csvTableWriter[1] = "b1";
-            csvTableWriter[2] = "c1";
-
-            await csvTableWriter.WriteAsync();
-
-            csvTableWriter["A"] = "a2";
-            csvTableWriter["B"] = "b2";
-            csvTableWriter["C"] = "c2";
-
-            await csvTableWriter.WriteAsync();
-
-            Assert.Equal(csvData, sb.ToString());
-        }
-
-        [Fact]
         public async Task TestJsonValues()
         {
             var csvData =
@@ -194,7 +158,7 @@ namespace Enbrea.Csv.Tests
             csvTableWriter.SetTrueFalseString<bool>("true", "false");
 
             await csvTableWriter.WriteHeadersAsync<SampleObject>(x => new { x.A, x.B, x.C, x.D });
-            
+
             Assert.Equal(4, csvTableWriter.Headers.Count);
 
             await csvTableWriter.WriteAsync(new SampleObject() { A = 22, B = "Text", C = true, D = new DateTime(2010, 1, 1) });
@@ -236,6 +200,42 @@ namespace Enbrea.Csv.Tests
             csvTableWriter.SetValue("D", new DateTime(1971, 7, 31));
 
             Assert.Equal(csvLine2, csvTableWriter.ToString());
+        }
+
+        [Fact]
+        public async Task TestValueFilter()
+        {
+            var csvData =
+                "A;B;C" + Environment.NewLine +
+                "a1;b1;c1" + Environment.NewLine +
+                "a2;;c2";
+
+            var sb = new StringBuilder();
+
+            using var strWriter = new StringWriter(sb);
+
+            var csvTableWriter = new CsvTableWriter(strWriter, new CsvConfiguration { Separator = ';' })
+            {
+                ValueFilter = (header, value) => { return header == "B" && value == "b2" ? null : value; }
+            };
+
+            await csvTableWriter.WriteHeadersAsync("A", "B", "C");
+
+            Assert.Equal(3, csvTableWriter.Headers.Count);
+
+            csvTableWriter[0] = "a1";
+            csvTableWriter[1] = "b1";
+            csvTableWriter[2] = "c1";
+
+            await csvTableWriter.WriteAsync();
+
+            csvTableWriter["A"] = "a2";
+            csvTableWriter["B"] = "b2";
+            csvTableWriter["C"] = "c2";
+
+            await csvTableWriter.WriteAsync();
+
+            Assert.Equal(csvData, sb.ToString());
         }
     }
 }
