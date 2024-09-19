@@ -1,7 +1,7 @@
 [![NuGet Gallery](https://img.shields.io/badge/NuGet%20Gallery-enbrea.csv-blue.svg)](https://www.nuget.org/packages/Enbrea.Csv/)
 ![GitHub](https://img.shields.io/github/license/enbrea/enbrea.csv)
 
-# ENBREA CSV
+# Enbrea CSV
 
 A .NET library for parsing and building [CSV](https://tools.ietf.org/html/rfc4180) strings, streams and files:
 
@@ -12,6 +12,7 @@ A .NET library for parsing and building [CSV](https://tools.ietf.org/html/rfc418
 + Includes support for strongly typed values
 + Includes support for single csv strings
 + Includes support for csv dictionaries
++ Includes class for calculating the differences between 2 CSV files
 + Includes synchron and asynchron methods
 + Supports reading and writing of custom objects via reflection
 + Many helper methods and extensions 

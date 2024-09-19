@@ -6,8 +6,8 @@
     <Authors>STÜBER SYSTEMS GmbH</Authors>
     <Company>STÜBER SYSTEMS GmbH</Company>
     <Copyright>© 2024 STÜBER SYSTEMS GmbH</Copyright>
-    <Product>ENBREA CSV</Product>
-    <Description>Benchmarks for the ENBREA CSV library</Description>
+    <Product>Enbrea CSV</Product>
+    <Description>Benchmarks for the Enbrea CSV library</Description>
     <Version>0.9.0</Version>
     <OutputType>Exe</OutputType>
     <RootNamespace>Enbrea.Csv.Benchmark</RootNamespace>

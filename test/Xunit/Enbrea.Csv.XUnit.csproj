@@ -7,8 +7,8 @@
     <Authors>STÜBER SYSTEMS GmbH</Authors>
     <Company>STÜBER SYSTEMS GmbH</Company>
     <Copyright>© 2024 STÜBER SYSTEMS GmbH</Copyright>
-    <Product>ENBREA CSV</Product>
-    <Description>Unit tests for ENBREA CSV</Description>
+    <Product>Enbrea CSV</Product>
+    <Description>Unit tests for Enbrea CSV</Description>
     <Version>0.9.0</Version>
     <LangVersion>latest</LangVersion>
     <RootNamespace>Enbrea.Csv.XUnit</RootNamespace>
