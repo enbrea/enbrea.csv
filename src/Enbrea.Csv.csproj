@@ -6,7 +6,7 @@
     <Authors>STÜBER SYSTEMS GmbH</Authors>
     <Company>STÜBER SYSTEMS GmbH</Company>
     <Copyright>© 2024 STÜBER SYSTEMS GmbH</Copyright>
-    <Product>ENBREA CSV</Product>
+    <Product>Enbrea CSV</Product>
     <Description>High performance CSV Parser and Builder classes for .NET</Description>
     <PackageLicenseUrl></PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
