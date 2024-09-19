@@ -16,10 +16,12 @@ steps:
     secureFile: ClientCert.p12
 - task: SSMClientToolsSetup@1
   displayName: 'Setup DigiCert Tools'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
   inputs:
     APIKey: '$(SM_API_KEY)'
 - task: PowerShell@2
   displayName: 'Prepare DigiCert Code Signing'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
   inputs:
     targetType: 'inline'
     script: |
@@ -75,6 +77,7 @@ steps:
     arguments: '/p:Configuration=$(BuildConfiguration) /p:PackageVersion=$(SemVersion) --no-build'
 - task: NuGetCommand@2
   displayName: 'Sign'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
   env:
     SM_CLIENT_CERT_FILE : $(SM_CLIENT_CERT_FILE.secureFilePath)
   inputs:
