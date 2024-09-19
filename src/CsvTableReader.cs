@@ -228,7 +228,7 @@ namespace Enbrea.Csv
             {
                 if (i < _csvValues.Count)
                 {
-                    return ApplyValueFilter(Headers[i], _csvValues[i]);
+                    return ValueFilter == null ? _csvValues[i] : ValueFilter(Headers[i], _csvValues[i]);
                 }
                 else
                 {
@@ -251,7 +251,7 @@ namespace Enbrea.Csv
                 {
                     if (i < _csvValues.Count)
                     {
-                        return ApplyValueFilter(name, _csvValues[i]);
+                        return ValueFilter == null ? _csvValues[i] : ValueFilter(name, _csvValues[i]);
                     }
                     else
                     {
@@ -717,17 +717,6 @@ namespace Enbrea.Csv
             {
                 useAction(value);
             }
-        }
-
-        /// <summary>
-        /// Apply the value filter function
-        /// </summary>
-        /// <param name="header">A csv header</param>
-        /// <param name="value">Raw string value</param>
-        /// <returns></returns>
-        private string ApplyValueFilter(string header, string value)
-        {
-            return ValueFilter == null ? value : ValueFilter(header, value);
         }
     }
 }
