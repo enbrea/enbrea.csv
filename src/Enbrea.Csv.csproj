@@ -5,14 +5,14 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>STÜBER SYSTEMS GmbH</Authors>
     <Company>STÜBER SYSTEMS GmbH</Company>
-    <Copyright>© 2024 STÜBER SYSTEMS GmbH</Copyright>
+    <Copyright>© 2025 STÜBER SYSTEMS GmbH</Copyright>
     <Product>Enbrea CSV</Product>
     <Description>High performance CSV Parser and Builder classes for .NET</Description>
     <PackageLicenseUrl></PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <NeutralLanguage></NeutralLanguage>
     <LangVersion>latest</LangVersion>
-    <Version>0.9.0</Version>
+    <Version>0.11.0</Version>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/enbrea/enbrea.csv</RepositoryUrl>

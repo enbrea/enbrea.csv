@@ -318,7 +318,8 @@ namespace Enbrea.Csv
         /// <returns>A typed value</returns>
         public T GetValue<T>(int index, ICsvConverter converter)
         {
-            return (T)GetValue(index, converter);
+            var value = GetValue(index, converter);
+            return value != null ? (T)value : default;
         }
 
         /// <summary>
@@ -340,7 +341,8 @@ namespace Enbrea.Csv
         /// <returns>A typed value</returns>
         public T GetValue<T>(string name, ICsvConverter converter)
         {
-            return (T)GetValue(name, converter);
+            var value = GetValue(name, converter);
+            return value != null ? (T)value : default;
         }
 
         /// <summary>
@@ -363,6 +365,42 @@ namespace Enbrea.Csv
         public object GetValue(Type type, string name)
         {
             return GetValue(name, ConverterResolver.GetConverter(type));
+        }
+
+        /// <summary>
+        /// Tries to read the typed value of the current csv record at the posiiton of the specified header name. 
+        /// </summary>
+        /// <typeparam name="T">The type</typeparam>
+        /// <param name="name">Name of a header</param>
+        /// <returns>The value if the position was found in the current csv record; otherwise, type-dependent default value</returns>
+        public T GetValueOrDefault<T>(string name)
+        {
+            if (TryGetValue<T>(name, out var value))
+            {
+                return value;
+            }
+            else
+            {
+                return default;
+            }
+        }
+
+        /// <summary>
+        /// Tries to read the typed value of the current csv record at the specified index. 
+        /// </summary>
+        /// <typeparam name="T">The type</typeparam>
+        /// <param name="index">Index of a header</param>
+        /// <returns>The value if the position was found in the current csv record; otherwise, type-dependent default value</returns>
+        public T GetValueOrDefault<T>(int index)
+        {
+            if (TryGetValue<T>(index, out var value))
+            {
+                return value;
+            }
+            else
+            {
+                return default;
+            }
         }
 
         /// <summary>
@@ -446,7 +484,6 @@ namespace Enbrea.Csv
             Headers.Clear();
             return _csvReader.ReadLine((i, s) => Headers.Add(s));
         }
-
         /// <summary>
         /// Reads the next csv record out of the stream and stores the values as headers.
         /// </summary>
@@ -538,8 +575,8 @@ namespace Enbrea.Csv
         /// Tries to read the value of the current csv record at the posiiton of the specified header name. 
         /// </summary>
         /// <param name="name">Name of a header</param>
-        /// <param name="value">If position within the cuurent csv record was found, contains the value. If not contains null</param>
-        /// <returns>true if position within the cuurent csv record was found; otherwise, false.</returns>
+        /// <param name="value">If position within the current csv record was found, contains the value. If not contains null</param>
+        /// <returns>true if position within the current csv record was found; otherwise, false.</returns>
         public bool TryGetValue(string name, out string value)
         {
             var i = Headers.IndexOf(x => x.Equals(name, StringComparison.InvariantCultureIgnoreCase));
@@ -556,8 +593,8 @@ namespace Enbrea.Csv
         /// </summary>
         /// <typeparam name="T">The type</typeparam>
         /// <param name="name">Name of a header</param>
-        /// <param name="value">If position within the cuurent csv record was found, contains the value. If not contains null</param>
-        /// <returns>true if position within the cuurent csv record was found; otherwise, false.</returns>
+        /// <param name="value">If position within the current csv record was found, contains the value. If not contains null</param>
+        /// <returns>true if position within the current csv record was found; otherwise, false.</returns>
         public bool TryGetValue<T>(string name, out T value)
         {
             var i = Headers.IndexOf(x => x.Equals(name, StringComparison.InvariantCultureIgnoreCase));
@@ -574,8 +611,8 @@ namespace Enbrea.Csv
         /// </summary>
         /// <param name="type">Type of value</param>
         /// <param name="name">Name of a header</param>
-        /// <param name="value">If position within the cuurent csv record was found, contains the value. If not contains null</param>
-        /// <returns>true if position within the cuurent csv record was found; otherwise, false.</returns>
+        /// <param name="value">If position within the current csv record was found, contains the value. If not contains null</param>
+        /// <returns>true if position within the current csv record was found; otherwise, false.</returns>
         public bool TryGetValue(Type type, string name, out object value)
         {
             var i = Headers.IndexOf(x => x.Equals(name, StringComparison.InvariantCultureIgnoreCase));
