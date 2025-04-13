@@ -255,7 +255,8 @@ namespace Enbrea.Csv.Tests
                 "A;B;C;D;E" + Environment.NewLine +
                 "22;Text;true;01.01.2010;A" + Environment.NewLine +
                 "-31;A long text;false;20.01.2050;B" + Environment.NewLine +
-                "55;\"A text with ;\";;31.07.1971;C";
+                "55;\"A text with ;\";;31.07.1971;C" + Environment.NewLine +
+                "56;\"\";;;D";
 
             using var strReader = new StringReader(csvData);
 
@@ -296,6 +297,17 @@ namespace Enbrea.Csv.Tests
             Assert.Null(c);
             Assert.True(csvTableReader.TryGetValue<DateTime>("D", out var d));
             Assert.Equal(new DateTime(1971, 7, 31), d);
+
+            await csvTableReader.ReadAsync();
+            Assert.Equal(56, csvTableReader.GetValue<int>("A"));
+            Assert.Equal("", csvTableReader.GetValue<string>("B"));
+            Assert.False(csvTableReader.GetValueOrDefault<bool>("C"));
+            Assert.True(csvTableReader.TryGetValue<DateTime>("D", out var d2));
+            Assert.Equal(DateTime.MinValue, d2);
+            Assert.True(csvTableReader.TryGetValue<DateTime?>("D", out var d3));
+            Assert.Null(d3);
+            Assert.Equal(DateTime.MinValue, csvTableReader.GetValueOrDefault<DateTime>("D"));
+            Assert.Null(csvTableReader.GetValueOrDefault<DateTime?>("D"));
         }
 
         [Fact]
